@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT-RENTALS - Overdue Student List</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+        }
+
+        /* --- Global Navbar --- */
+        nav {
+            display: flex;
+            align-items: center;
+            padding: 10px 40px;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #fcfcfc;
+        }
+        .logo { height: 45px; margin-right: 40px; }
+        .nav-links { display: flex; list-style: none; margin: 0; padding: 0; flex-grow: 1; }
+        .nav-links li { margin: 0 20px; font-size: 18px; cursor: pointer; color: #333; }
+        .dropdown::after { content: ' ▼'; font-size: 10px; color: #888; }
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+
+        /* --- Content Container --- */
+        .container {
+            padding: 50px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 { 
+            font-size: 28px; 
+            margin-bottom: 30px; 
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* --- Data Table --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #efefef;
+            padding: 15px;
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 15px;
+            border: 1px solid #ddd;
+            color: #666;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 15px;
+        }
+
+        .text-left { text-align: left; padding-left: 20px; }
+
+        /* --- Status Pill --- */
+        .status-overdue {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .status-overdue::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        /* --- Red Overdue Date --- */
+        .overdue-date {
+            color: #ff4d4d;
+            font-weight: bold;
+        }
+
+        /* --- Action Icon --- */
+        .detail-icon {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #aaa;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <img src="https://via.placeholder.com/50x50?text=Logo" alt="Logo" class="logo">
+        <ul class="nav-links">
+            <li>Dashboard</li>
+            <li class="dropdown">Management</li>
+            <li>Penalty Page</li>
+            <li>Team Page</li>
+        </ul>
+        <div class="nav-right">
+            <span>Log Out</span>
+            <span style="font-size: 24px; color: #bbb;">🔔</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Overdue student list</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="8%">No.</th>
+                    <th width="18%">Equipment ID</th>
+                    <th width="25%">User name</th>
+                    <th width="18%">Status</th>
+                    <th width="20%">Overdue date</th>
+                    <th width="11%">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>35</td>
+                    <td class="text-left">Thundwitchar Pongsa</td>
+                    <td><span class="status-overdue">Overdue</span></td>
+                    <td class="overdue-date">27/02/2026</td>
+                    <td><button class="detail-icon">⇪</button></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>52</td>
+                    <td class="text-left">Arteria Pendragon</td>
+                    <td><span class="status-overdue">Overdue</span></td>
+                    <td class="overdue-date">5/03/2026</td>
+                    <td><button class="detail-icon">⇪</button></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>67</td>
+                    <td class="text-left">Sanji Winsmoke</td>
+                    <td><span class="status-overdue">Overdue</span></td>
+                    <td class="overdue-date">06/04/2026</td>
+                    <td><button class="detail-icon">⇪</button></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>32</td>
+                    <td class="text-left">Hungry Man</td>
+                    <td><span class="status-overdue">Overdue</span></td>
+                    <td class="overdue-date">15/03/2026</td>
+                    <td><button class="detail-icon">⇪</button></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>56</td>
+                    <td class="text-left">Billgate Studiotype</td>
+                    <td><span class="status-overdue">Overdue</span></td>
+                    <td class="overdue-date">2/03/2026</td>
+                    <td><button class="detail-icon">⇪</button></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>78</td>
+                    <td class="text-left">Elon Musk</td>
+                    <td><span class="status-overdue">Overdue</span></td>
+                    <td class="overdue-date">12/03/2026</td>
+                    <td><button class="detail-icon">⇪</button></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>96</td>
+                    <td class="text-left">Mark Suckkerberg</td>
+                    <td><span class="status-overdue">Overdue</span></td>
+                    <td class="overdue-date">19/03/2026</td>
+                    <td><button class="detail-icon">⇪</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

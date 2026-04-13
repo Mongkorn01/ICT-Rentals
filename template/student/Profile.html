@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT-RENTALS - Student Profile</title>
+    <style>
+        :root {
+            --nav-border: #e0e0e0;
+            --box-border: #dcdcdc;
+            --text-color: #333;
+            --label-color: #555;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: var(--text-color);
+        }
+
+        /* --- Navigation Bar --- */
+        nav {
+            display: flex;
+            align-items: center;
+            padding: 10px 40px;
+            border-bottom: 1px solid var(--nav-border);
+            height: 60px;
+        }
+        .logo { height: 40px; margin-right: 60px; }
+        .nav-links { display: flex; list-style: none; gap: 60px; flex-grow: 1; margin: 0; padding: 0; }
+        .nav-links li { cursor: pointer; font-size: 18px; }
+        
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .profile-trigger { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .profile-circle { width: 35px; height: 35px; border-radius: 50%; background: #eee; border: 1px solid #ccc; }
+        .dropdown-arrow { font-size: 12px; color: #888; }
+
+        /* --- Main Content --- */
+        .container {
+            max-width: 1000px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box {
+            border: 1px solid var(--box-border);
+            border-radius: 4px;
+            padding: 40px;
+            display: flex;
+            gap: 50px;
+            align-items: flex-start;
+        }
+
+        /* Left Side: Avatar */
+        .avatar-container {
+            flex-shrink: 0;
+            width: 180px;
+            display: flex;
+            justify-content: center;
+        }
+        .avatar-placeholder {
+            width: 150px;
+            height: 150px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .avatar-placeholder svg {
+            width: 100px;
+            height: 100px;
+            fill: #999;
+        }
+
+        /* Right Side: Info Fields */
+        .info-container {
+            flex-grow: 1;
+        }
+
+        .info-row {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 12px 0;
+            margin-bottom: 5px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-size: 16px;
+            color: var(--label-color);
+            margin-bottom: 4px;
+        }
+
+        .value {
+            font-size: 18px;
+            font-weight: 400;
+            min-height: 24px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <img src="https://via.placeholder.com/40x40?text=Logo" alt="Logo" class="logo">
+        <ul class="nav-links">
+            <li>Dashboard</li>
+            <li>Search</li>
+            <li>Rent</li>
+            <li>Team Page</li>
+        </ul>
+        <div class="nav-right">
+            <span style="font-size: 24px; color: #999; cursor: pointer;">🔔</span>
+            <div class="profile-trigger">
+                <div class="profile-circle"></div>
+                <span class="dropdown-arrow">▼</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="profile-box">
+            <div class="avatar-container">
+                <div class="avatar-placeholder">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="info-container">
+                <div class="info-row">
+                    <div class="label">ID:</div>
+                    <div class="value"></div>
+                </div>
+                <div class="info-row">
+                    <div class="label">Name:</div>
+                    <div class="value"></div>
+                </div>
+                <div class="info-row">
+                    <div class="label">Phone:</div>
+                    <div class="value"></div>
+                </div>
+                <div class="info-row">
+                    <div class="label">Email:</div>
+                    <div class="value"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

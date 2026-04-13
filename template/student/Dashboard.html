@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT-RENTALS - Student Dashboard</title>
+    <style>
+        :root {
+            --border-gray: #e0e0e0;
+            --text-light: #888;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fcfcfc;
+            color: #333;
+        }
+
+        /* --- Student Navbar --- */
+        nav {
+            display: flex;
+            align-items: center;
+            padding: 10px 40px;
+            background-color: white;
+            border-bottom: 1px solid var(--border-gray);
+            height: 60px;
+        }
+
+        .logo { height: 45px; margin-right: 50px; }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex-grow: 1;
+            gap: 40px;
+        }
+
+        .nav-links li {
+            font-size: 18px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .nav-links li.active { font-weight: 600; }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            width: 35px;
+            height: 35px;
+            background: #eee;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+        }
+
+        /* --- Dashboard Content --- */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1.main-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        /* --- Card Styles --- */
+        .dashboard-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-gray);
+            border-radius: 20px;
+            padding: 25px 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card-header h2 {
+            font-size: 22px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .pill-placeholder {
+            width: 150px;
+            height: 24px;
+            background-color: #f0f0f0;
+            border-radius: 12px;
+        }
+
+        /* --- Duedate Table --- */
+        .due-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .due-table th {
+            color: var(--text-light);
+            font-weight: 500;
+            text-align: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 16px;
+        }
+
+        .due-table td {
+            padding: 20px 10px;
+            text-align: center;
+            color: #555;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 16px;
+        }
+
+        .due-table tr:last-child td { border-bottom: none; }
+
+        /* --- Calendar Section --- */
+        .search-box {
+            width: 200px;
+            height: 30px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .calendar-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* Help Floating Button */
+        .help-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 45px;
+            height: 45px;
+            background-color: #d9d9d9;
+            color: #666;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <img src="https://via.placeholder.com/50x50?text=Logo" alt="ICT Logo" class="logo">
+        <ul class="nav-links">
+            <li class="active">Dashboard</li>
+            <li>Search</li>
+            <li>Rent</li>
+            <li>Team Page</li>
+        </ul>
+        <div class="nav-right">
+            <span style="font-size: 24px; color: #bbb; cursor: pointer;">🔔</span>
+            <div class="profile-section">
+                <div class="profile-icon"></div>
+                <span style="color: #bbb; font-size: 12px;">▼</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="main-title">Dashboard</h1>
+
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2>Duedate</h2>
+                <div class="pill-placeholder"></div>
+            </div>
+            
+            <table class="due-table">
+                <thead>
+                    <tr>
+                        <th width="30%">Name</th>
+                        <th width="20%">Amount</th>
+                        <th width="25%">Equipment ID</th>
+                        <th width="25%">Due</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>MacBook Pro</td>
+                        <td>24</td>
+                        <td>99</td>
+                        <td>27/02/2026</td>
+                    </tr>
+                    <tr>
+                        <td>iPhone13</td>
+                        <td>12</td>
+                        <td>107</td>
+                        <td>27/02/2026</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="dashboard-card">
+            <h2>Calendar</h2>
+            <div class="search-box"></div>
+            <div class="calendar-title">April 2026</div>
+            
+            <div style="height: 200px; display: flex; align-items: center; justify-content: center; color: #ccc; border: 1px dashed #ddd;">
+                [ Calendar Grid Component Goes Here ]
+            </div>
+        </div>
+    </div>
+
+    <div class="help-btn">?</div>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT-RENTALS - Search Filter</title>
+    <style>
+        :root {
+            --label-bg: #e0e0e0;
+            --btn-search: #d9d9d9;
+            --btn-clear: #f0f0f0;
+            --border-color: #ccc;
+            --nav-border: #e0e0e0;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fff;
+            color: #333;
+        }
+
+        /* --- Student Navbar --- */
+        nav {
+            display: flex;
+            align-items: center;
+            padding: 10px 40px;
+            background-color: white;
+            border-bottom: 1px solid var(--nav-border);
+            height: 60px;
+        }
+
+        .logo { height: 45px; margin-right: 50px; }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex-grow: 1;
+            gap: 50px;
+        }
+
+        .nav-links li {
+            font-size: 18px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .nav-links li.active { font-weight: 600; }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-icon {
+            width: 35px;
+            height: 35px;
+            background: #eee;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+        }
+
+        /* --- Search Filter Form --- */
+        .filter-container {
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 20px;
+        }
+
+        .label-block {
+            background-color: var(--label-bg);
+            width: 180px;
+            padding: 12px 20px;
+            font-size: 20px;
+            font-weight: 500;
+            box-sizing: border-box;
+        }
+
+        .input-field {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        /* Styled Dropdown for Status */
+        select.input-field {
+            border-radius: 20px; /* Matching the rounded dropdown in design */
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg%20xmlns="http://www.w3.org/2000/svg"%20width="14"%20height="14"%20viewBox="0%200%2024%2024" fill="none" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline%20points="6%209%2012%2015%2018%209"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+            padding-right: 40px;
+        }
+
+        /* --- Buttons --- */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            width: 160px;
+            padding: 12px;
+            font-size: 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-search { background-color: var(--btn-search); color: #333; }
+        .btn-clear { background-color: var(--btn-clear); color: #333; }
+        .btn:hover { opacity: 0.8; }
+
+        /* Floating Help Button */
+        .help-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 45px;
+            height: 45px;
+            background-color: #d9d9d9;
+            color: #666;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <img src="https://via.placeholder.com/50x50?text=Logo" alt="ICT Logo" class="logo">
+        <ul class="nav-links">
+            <li>Dashboard</li>
+            <li class="active">Search</li>
+            <li>Rent</li>
+            <li>Team Page</li>
+        </ul>
+        <div class="nav-right">
+            <span style="font-size: 24px; color: #bbb; cursor: pointer;">🔔</span>
+            <div class="profile-section">
+                <div class="profile-icon"></div>
+                <span style="color: #bbb; font-size: 12px; cursor: pointer;">▼</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="filter-container">
+        <div class="form-row">
+            <div class="label-block">Category</div>
+            <input type="text" class="input-field">
+        </div>
+
+        <div class="form-row">
+            <div class="label-block">Brand</div>
+            <input type="text" class="input-field">
+        </div>
+
+        <div class="form-row">
+            <div class="label-block">Name</div>
+            <input type="text" class="input-field">
+        </div>
+
+        <div class="form-row">
+            <div class="label-block">Status</div>
+            <select class="input-field">
+                <option value=""></option>
+                <option value="available">Available</option>
+                <option value="rented">Rented</option>
+                <option value="maintenance">Maintenance</option>
+            </select>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-search">Search</button>
+            <button class="btn btn-clear">Clear</button>
+        </div>
+    </div>
+
+    <div class="help-btn">?</div>
+
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT-RENTALS - Edit Category</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        /* --- Global Admin Navbar --- */
+        nav {
+            display: flex;
+            align-items: center;
+            padding: 10px 40px;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #ffffff;
+        }
+        .logo { height: 45px; margin-right: 40px; }
+        .nav-links { display: flex; list-style: none; margin: 0; padding: 0; flex-grow: 1; }
+        .nav-links li { margin: 0 20px; font-size: 18px; cursor: pointer; color: #444; }
+        .nav-links li.active { font-weight: 500; background-color: #fcfcfc; padding: 10px 15px; margin: -10px 5px; }
+        .dropdown::after { content: ' ▼'; font-size: 10px; color: #888; }
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+
+        /* --- Content Layout --- */
+        .container {
+            padding: 40px 10%;
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Circular Back Button */
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            width: 48px;
+            height: 48px;
+            background: #efefef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            font-size: 22px;
+            color: #999;
+            transition: background 0.2s;
+        }
+        .back-btn:hover { background: #e5e5e5; }
+
+        h1 { text-align: center; font-size: 32px; margin-bottom: 35px; color: #000; }
+
+        /* --- Form Card --- */
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 50px 70px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        .form-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .form-row label {
+            width: 180px;
+            font-size: 20px;
+            color: #333;
+            padding-top: 8px;
+        }
+
+        .form-row input[type="text"] {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid #999;
+            border-radius: 6px;
+            font-size: 18px;
+            outline: none;
+        }
+
+        /* Banner Picture Preview */
+        .banner-preview-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .banner-preview {
+            width: 180px;
+            height: 120px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+        }
+        .banner-preview img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .btn-change {
+            background: none;
+            border: 1px solid #ccc;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            width: fit-content;
+        }
+
+        /* --- Footer Section (Toggle & Actions) --- */
+        .form-footer {
+            margin-top: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-left: 20px;
+        }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 20px;
+        }
+
+        /* Switch UI */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 26px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #999;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px; width: 20px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #4CAF50; }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        .action-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            border: none;
+            padding: 10px 45px;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn:hover { opacity: 0.8; }
+
+        .btn-save {
+            background-color: #d9d9d9;
+            color: #333;
+        }
+
+        .btn-delete {
+            background-color: #fff1f1;
+            color: #d9534f;
+            border: 1px solid #d9534f;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <img src="https://via.placeholder.com/50x50?text=Logo" alt="Logo" class="logo">
+        <ul class="nav-links">
+            <li>Dashboard</li>
+            <li class="active dropdown">Management</li>
+            <li>Penalty Page</li>
+            <li>Team Page</li>
+        </ul>
+        <div class="nav-right">
+            <span style="cursor: pointer;">Log Out</span>
+            <span style="font-size: 24px; color: #bbb; cursor: pointer;">🔔</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <button class="back-btn">❮</button>
+        <h1>Edit category</h1>
+
+        <div class="form-card">
+            <div class="form-row">
+                <label>Category name :</label>
+                <input type="text" value="Computing">
+            </div>
+
+            <div class="form-row">
+                <label>Banner picture :</label>
+                <div class="banner-preview-container">
+                    <div class="banner-preview">
+                        <img src="https://via.placeholder.com/180x120?text=Computing+Devices" alt="Category Banner">
+                    </div>
+                    <button class="btn-change">Change Image</button>
+                </div>
+            </div>
+
+            <div class="form-footer">
+                <div class="toggle-group">
+                    <span>Open visible :</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="action-group">
+                    <button class="btn btn-delete">Delete</button>
+                    <button class="btn btn-save">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

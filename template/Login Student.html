@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT-RENTALS Student Login</title>
+    <style>
+        /* Base layout with background placeholder */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: url('https://images.unsplash.com/photo-1541339907198-e08756ebafe3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* The Sign-in Card */
+        .login-card {
+            background-color: white;
+            width: 440px;
+            padding: 40px 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+        }
+
+        /* Logo Styling */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #1a3a8a;
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            margin-right: 12px;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1a3a8a;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text span {
+            color: #5c78b5;
+            font-weight: 300;
+        }
+
+        /* Text Headers */
+        h1 {
+            font-size: 32px;
+            margin: 0;
+            color: #000;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+            margin: 5px 0 40px 0;
+        }
+
+        /* Form Inputs (Underline Style) */
+        .input-group {
+            position: relative;
+            margin-bottom: 35px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 18px;
+            border: none;
+            border-bottom: 1.5px solid #999;
+            outline: none;
+            transition: border-color 0.3s;
+            color: #333;
+        }
+
+        input::placeholder {
+            color: #aaa;
+            font-weight: 400;
+        }
+
+        input:focus {
+            border-bottom: 2px solid #1a3a8a;
+        }
+
+        /* Submit Button */
+        .btn-signin {
+            width: 100%;
+            background-color: #2a3e7a; /* Darker navy blue */
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-signin:hover {
+            background-color: #1a2a5a;
+        }
+
+        /* Links */
+        .forgot-password {
+            display: block;
+            margin-top: 15px;
+            color: #6c88c4;
+            text-decoration: none;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="logo-container">
+            <div class="logo-icon"></div>
+            <div class="logo-text">ICT<span>- RENTALS</span></div>
+        </div>
+
+        <h1>Sign in</h1>
+        <p class="subtitle">with your Mahidol University Accounts.</p>
+
+        <form>
+            <div class="input-group">
+                <input type="text" placeholder="Username" required>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="btn-signin">Sign in</button>
+        </form>
+
+        <a href="#" class="forgot-password">Forgot password?</a>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT-RENTALS - iPhone 13 Detail</title>
+    <style>
+        :root {
+            --nav-border: #e0e0e0;
+            --bg-light: #f9f9f9;
+            --label-bg: #eeeeee;
+            --accent-red: #ff4d4d;
+            --btn-gray: #e0e0e0;
+            --text-main: #333;
+            --text-muted: #666;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* --- Navigation Bar --- */
+        nav {
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            background-color: white;
+            border-bottom: 1px solid var(--nav-border);
+            height: 70px;
+            flex-shrink: 0;
+        }
+        .logo { height: 45px; margin-right: 50px; }
+        .nav-links { display: flex; list-style: none; margin: 0; padding: 0; flex-grow: 1; gap: 45px; }
+        .nav-links li { font-size: 18px; cursor: pointer; color: #333; }
+        .nav-links li.active { font-weight: 600; }
+        
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .profile-section { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        .profile-icon { width: 40px; height: 40px; background: #eee; border-radius: 50%; border: 1px solid #ddd; }
+
+        /* --- Main Content Layout --- */
+        .content-wrapper {
+            flex-grow: 1;
+            padding: 20px 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .top-action-bar {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-circle {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            font-size: 20px;
+            color: #ccc;
+        }
+
+        .cart-status { text-align: center; }
+        .cart-icon-circle {
+            width: 50px;
+            height: 50px;
+            background: #d9d9d9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+
+        /* --- Single Product Card --- */
+        .product-card {
+            background: white;
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 20px;
+            padding: 40px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .product-main { display: flex; gap: 40px; }
+
+        /* Left Side: Image & Tags */
+        .product-visuals { width: 320px; position: relative; }
+        .tag-row { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tag { background: var(--label-bg); padding: 5px 18px; border-radius: 4px; font-size: 14px; font-weight: 500; }
+        .product-image { width: 100%; height: auto; object-fit: contain; }
+
+        /* Right Side: Info */
+        .product-info { flex-grow: 1; }
+        .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+        .product-title { font-size: 32px; font-weight: 500; margin: 0; }
+        
+        .stock-container { width: 280px; }
+        .stock-label { font-size: 14px; margin-bottom: 5px; display: block; }
+        .stock-bar-bg { width: 100%; height: 24px; background: #f0f0f0; border-radius: 12px; overflow: hidden; }
+        .stock-bar-fill { 
+            width: 50%; height: 100%; background: #ffebeb; 
+            display: flex; align-items: center; justify-content: center; 
+            color: var(--accent-red); font-size: 13px; font-weight: 600; 
+        }
+
+        .description-box { margin: 25px 0; line-height: 1.6; }
+        .description-title { font-weight: bold; font-size: 16px; display: block; margin-bottom: 8px; }
+        .description-content { color: var(--text-muted); font-size: 15px; }
+
+        .specs-toggle { color: #333; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+
+        /* --- Footer Actions --- */
+        .card-footer {
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .due-date { font-size: 17px; font-weight: 500; }
+        
+        .interaction-group { display: flex; align-items: center; gap: 20px; }
+        .qty-label { font-size: 16px; }
+        .qty-selector { display: flex; border: 1px solid #ddd; border-radius: 5px; overflow: hidden; }
+        .qty-btn { width: 40px; height: 40px; border: none; background: white; font-size: 20px; cursor: pointer; color: #ccc; }
+        .qty-input { width: 50px; text-align: center; border-left: 1px solid #ddd; border-right: 1px solid #ddd; line-height: 40px; font-size: 16px; }
+
+        .btn { padding: 12px 35px; border-radius: 8px; border: none; font-size: 16px; font-weight: 500; cursor: pointer; transition: opacity 0.2s; }
+        .btn-cart { background: var(--btn-gray); color: #333; }
+        .btn-rent { background: var(--btn-gray); color: #333; }
+        .btn:hover { opacity: 0.8; }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <img src="https://via.placeholder.com/50x50?text=Logo" alt="ICT Logo" class="logo">
+        <ul class="nav-links">
+            <li>Dashboard</li>
+            <li>Search</li>
+            <li class="active">Rent</li>
+            <li>Team Page</li>
+        </ul>
+        <div class="nav-right">
+            <span style="font-size: 24px; color: #bbb; cursor: pointer;">🔔</span>
+            <div class="profile-section">
+                <div class="profile-icon"></div>
+                <span style="color: #bbb; font-size: 12px;">▼</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="content-wrapper">
+        
+        <div class="top-action-bar">
+            <div class="back-circle">⟨</div>
+            <div class="cart-status">
+                <div class="cart-icon-circle">🛒</div>
+                <div style="font-size: 14px; font-weight: 500;">In cart: 4</div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-main">
+                <div class="product-visuals">
+                    <div class="tag-row">
+                        <span class="tag">Computing</span>
+                        <span class="tag">Apple</span>
+                    </div>
+                    <img src="https://via.placeholder.com/300x350?text=iPhone+13" alt="iPhone 13" class="product-image">
+                </div>
+
+                <div class="product-info">
+                    <div class="header-row">
+                        <h1 class="product-title">iPhone 13</h1>
+                        <div class="stock-container">
+                            <span class="stock-label">left in stock</span>
+                            <div class="stock-bar-bg">
+                                <div class="stock-bar-fill">1 out of 2</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="description-box">
+                        <span class="description-title">Detail</span>
+                        <p class="description-content">
+                            The Apple iPhone 13 is a flagship-class smartphone from Apple's 2021 lineup known for strong performance, good battery life, and excellent camera features for everyday use. It balances power and usability with a sleek design and long software support.
+                        </p>
+                    </div>
+
+                    <div class="specs-toggle">▼ Specifications</div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <div class="due-date">Due date: 22/02/2026</div>
+                <div class="interaction-group">
+                    <span class="qty-label">Quantity</span>
+                    <div class="qty-selector">
+                        <button class="qty-btn">−</button>
+                        <div class="qty-input">1</div>
+                        <button class="qty-btn">+</button>
+                    </div>
+                    <button class="btn btn-cart">Add to cart</button>
+                    <button class="btn btn-rent">Rent now</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>

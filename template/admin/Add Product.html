@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT-RENTALS - Add Product</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        /* --- Navbar (Consistent with previous screens) --- */
+        nav {
+            display: flex;
+            align-items: center;
+            padding: 10px 40px;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #ffffff;
+        }
+        .logo { height: 45px; margin-right: 40px; }
+        .nav-links { display: flex; list-style: none; margin: 0; padding: 0; flex-grow: 1; }
+        .nav-links li { margin: 0 20px; font-size: 18px; cursor: pointer; color: #444; }
+        .nav-links li.active { font-weight: 500; background-color: #f8f8f8; padding: 10px 15px; margin: -10px 5px; }
+        .dropdown::after { content: ' ▼'; font-size: 10px; color: #888; }
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+
+        /* --- Main Content Layout --- */
+        .container {
+            padding: 30px 10%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 5%;
+            top: 40px;
+            width: 45px;
+            height: 45px;
+            background: #e8e8e8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            font-size: 20px;
+            color: #888;
+        }
+
+        h1 { text-align: center; font-size: 28px; margin-bottom: 30px; }
+
+        /* --- Form Card --- */
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px 60px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .form-row label {
+            width: 200px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .form-row input, .form-row select {
+            flex-grow: 1;
+            max-width: 500px;
+            padding: 10px 15px;
+            border: 1px solid #aaa;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        /* --- Picture Section --- */
+        .pic-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .pic-box {
+            width: 150px;
+            height: 150px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .pic-box.placeholder {
+            background-color: #d9d9d9;
+            font-size: 60px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .pic-box img { max-width: 90%; max-height: 90%; }
+
+        /* --- Rich Text Editor Mockup --- */
+        .editor-container {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            flex-grow: 1;
+            max-width: 600px;
+            overflow: hidden;
+        }
+
+        .editor-toolbar {
+            background: #fcfcfc;
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .toolbar-group {
+            display: flex;
+            border-right: 1px solid #ddd;
+            padding-right: 5px;
+            margin-right: 5px;
+        }
+
+        .editor-content {
+            height: 350px;
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 13px;
+            line-height: 1.4;
+            background: #fff;
+        }
+
+        .editor-footer {
+            background: #f1f1f1;
+            padding: 2px 10px;
+            font-size: 11px;
+            color: #777;
+            text-align: right;
+            border-top: 1px solid #ddd;
+        }
+
+        /* --- Footer Actions --- */
+        .form-footer {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 18px;
+        }
+
+        /* Switch Toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #888; }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        .btn-save {
+            background-color: #d9d9d9;
+            border: none;
+            padding: 8px 60px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <img src="https://via.placeholder.com/50x50?text=Logo" alt="Logo" class="logo">
+        <ul class="nav-links">
+            <li>Dashboard</li>
+            <li class="active dropdown">Management</li>
+            <li>Penalty Page</li>
+            <li>Team Page</li>
+        </ul>
+        <div class="nav-right">
+            <span>Log Out</span>
+            <span style="font-size: 22px; color: #ccc;">🔔</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <button class="back-btn">❮</button>
+        <h1>Add product</h1>
+
+        <div class="form-card">
+            <div class="form-row">
+                <label>Category :</label>
+                <select><option>Computing</option></select>
+            </div>
+
+            <div class="form-row">
+                <label>Brand :</label>
+                <input type="text" value="Apple">
+            </div>
+
+            <div class="form-row">
+                <label>Product name :</label>
+                <input type="text" value="Iphone13">
+            </div>
+
+            <div class="form-row">
+                <label>Quantity :</label>
+                <input type="number" value="22">
+            </div>
+
+            <div class="form-row" style="align-items: flex-start;">
+                <label>Product picture :</label>
+                <div class="pic-container">
+                    <div class="pic-box">
+                        <img src="https://via.placeholder.com/100x150?text=iPhone" alt="Preview">
+                    </div>
+                    <div class="pic-box placeholder">+</div>
+                </div>
+            </div>
+
+            <div class="form-row" style="align-items: flex-start;">
+                <label>Product Specification :</label>
+                <div class="editor-container">
+                    <div class="editor-toolbar">
+                        <div class="toolbar-group"><strong>B</strong> <em>I</em> <u>U</u></div>
+                        <div class="toolbar-group">Font ▼ Formatting ▼</div>
+                        <div>🔗 🖼️ 📋</div>
+                    </div>
+                    <div class="editor-content">
+                        <strong>▶ Specification</strong><br>
+                        Screen:<br>
+                        • Super Retina XDR display<br>
+                        • 6.1-inch OLED display<br>
+                        • 2532 x 1170 pixels at 460 ppi<br>
+                        • HDR display<br>
+                        Chip:<br>
+                        • A15 Bionic chip
+                    </div>
+                    <div class="editor-footer">Characters : 556 | Words : 14</div>
+                </div>
+            </div>
+
+            <div class="form-footer">
+                <div class="toggle-row">
+                    <span>Open visible :</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <button class="btn-save">Save</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT-RENTALS Product List</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+        }
+
+        /* --- Navbar (Consistent with previous screens) --- */
+        nav {
+            display: flex;
+            align-items: center;
+            padding: 10px 40px;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #fcfcfc;
+        }
+
+        .logo { height: 45px; margin-right: 40px; }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0; padding: 0;
+            flex-grow: 1;
+        }
+
+        .nav-links li { margin: 0 20px; font-size: 18px; cursor: pointer; }
+        .nav-links li.active { font-weight: 500; background-color: #f8f8f8; padding: 10px 15px; margin: -10px 5px; }
+        .dropdown::after { content: ' ▼'; font-size: 10px; color: #888; }
+
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+
+        /* --- Content Layout --- */
+        .container { padding: 40px 5%; max-width: 1400px; margin: 0 auto; }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 20px;
+        }
+
+        h1 { font-size: 28px; margin: 0 0 10px 0; }
+
+        .controls { color: #666; font-size: 18px; }
+        
+        select {
+            padding: 4px 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 0 5px;
+            font-size: 16px;
+        }
+
+        .btn-add {
+            background-color: #e0e0e0;
+            color: #888;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* --- Product Table --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #efefef;
+            padding: 15px;
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+            border: 1px solid #ddd;
+        }
+
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            color: #555;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .text-left { text-align: left; padding-left: 20px; }
+
+        /* Toggle Switch Styling */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #999;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        /* Action Icons */
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <img src="https://via.placeholder.com/50x50?text=Logo" alt="Logo" class="logo">
+        <ul class="nav-links">
+            <li>Dashboard</li>
+            <li class="active dropdown">Management</li>
+            <li>Penalty Page</li>
+            <li>Team Page</li>
+        </ul>
+        <div class="nav-right">
+            <span>Log Out</span>
+            <span style="font-size: 22px; color: #ccc;">🔔</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header-row">
+            <div>
+                <h1>Product List</h1>
+                <div class="controls">
+                    Show 
+                    <select>
+                        <option>8</option>
+                        <option>16</option>
+                    </select>
+                    Product
+                </div>
+            </div>
+            <button class="btn-add">Add product</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="5%">No.</th>
+                    <th width="35%">Product name</th>
+                    <th width="12%">Category</th>
+                    <th width="10%">Brand</th>
+                    <th width="8%">Quantity</th>
+                    <th width="10%">Visible</th>
+                    <th width="10%">Modify</th>
+                    <th width="10%">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td class="text-left">Iphone13</td>
+                    <td>Computing</td>
+                    <td>Apple</td>
+                    <td>10</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td><button class="icon-btn">📝</button></td>
+                    <td><button class="icon-btn">🗑️</button></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td class="text-left">A51</td>
+                    <td>Computing</td>
+                    <td>Android</td>
+                    <td>13</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td><button class="icon-btn">📝</button></td>
+                    <td><button class="icon-btn">🗑️</button></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td class="text-left">Android Galaxy Note 3</td>
+                    <td>Computing</td>
+                    <td>Android</td>
+                    <td>15</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td><button class="icon-btn">📝</button></td>
+                    <td><button class="icon-btn">🗑️</button></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td class="text-left">MacBook Pro</td>
+                    <td>Laptop</td>
+                    <td>Apple</td>
+                    <td>33</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td><button class="icon-btn">📝</button></td>
+                    <td><button class="icon-btn">🗑️</button></td>
+                </tr>
+                                <tr>
+                    <td>5</td>
+                    <td class="text-left">Asus TUF Gaming A16 FA607NUG-RL116W</td>
+                    <td>Laptop</td>
+                    <td>Asus</td>
+                    <td>34</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td><button class="icon-btn">📝</button></td>
+                    <td><button class="icon-btn">🗑️</button></td>
+                </tr>
+                                <tr>
+                    <td>6</td>
+                    <td class="text-left">Canon EOS 7D DSLR</td>
+                    <td>Camera</td>
+                    <td>Canon</td>
+                    <td>40</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td><button class="icon-btn">📝</button></td>
+                    <td><button class="icon-btn">🗑️</button></td>
+                </tr>
+                                <tr>
+                    <td>7</td>
+                    <td class="text-left">Green Screen</td>
+                    <td>Tools</td>
+                    <td>-</td>
+                    <td>30</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td><button class="icon-btn">📝</button></td>
+                    <td><button class="icon-btn">🗑️</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
