@@ -1,16 +1,35 @@
-// cp .env.example .env
 const express = require('express');
 const dotenv = require("dotenv");
 const path = require('path');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
+dotenv.config();
 const app = express();
 const router = express.Router();
+
+app.use(express.json()); // Essential for parsing JSON from your frontend
 app.use(express.urlencoded({ extended: true }));
 app.use('/', router);
-dotenv.config();
 
-/* --- Helper Function --- */
-// Allows passing an optional subfolder like 'admin' or 'student'
+/* --- Gemini Configuration --- */
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+/* --- AI Helper Route --- */
+// Use this to get AI assistance anywhere in your app
+router.post('/api/ai-assist', async (req, res) => {
+    try {
+        const { prompt } = req.body;
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        res.json({ success: true, text: response.text() });
+    } catch (error) {
+        console.error("Gemini Error:", error);
+        res.status(500).json({ success: false, error: "AI failed to respond" });
+    }
+});
+
+/* --- Helper Function for HTML --- */
 const serveHTML = (fileName, subfolder = '') => (req, res) => {
     res.sendFile(path.join(__dirname, 'template', subfolder, fileName));
 };

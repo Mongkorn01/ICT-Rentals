@@ -1,7 +1,7 @@
 {
   "name": "ict-rentals",
   "version": "1.0.0",
-  "description": "Version 1",
+  "description": "A web-based application for renting ICT equipments",
   "homepage": "https://github.com/Mongkorn01/ICT-Rentals#readme",
   "bugs": {
     "url": "https://github.com/Mongkorn01/ICT-Rentals/issues"
@@ -13,9 +13,9 @@
   "license": "ISC",
   "author": "ICT-Rentals",
   "type": "commonjs",
-  "main": "app1.js",
+  "main": "app2.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon app2.js"
   },
   "dependencies": {
     "dotenv": "^17.4.1",
