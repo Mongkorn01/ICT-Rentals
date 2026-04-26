@@ -142,10 +142,10 @@
     <nav>
         <img src="https://via.placeholder.com/50x50?text=Logo" alt="Logo" class="logo">
         <ul class="nav-links">
-            <li>Dashboard</li>
-            <li>Search</li>
-            <li style="font-weight: 600;">Rent</li>
-            <li>Team Page</li>
+            <li onclick="window.location.href='Dashboard.html'">Dashboard</li>
+            <li onclick="window.location.href='Search.html'">Search</li>
+            <li onclick="window.location.href='Rent.html'">Rent</li>
+            <li onclick="window.location.href='Team Page.html'">Team Page</li>
         </ul>
         <div class="nav-right">
             <span style="font-size: 24px; color: #bbb;">🔔</span>
@@ -160,8 +160,10 @@
         <div class="top-controls">
             <div class="back-btn">⟨</div>
             <div class="cart-box">
-                <div class="cart-icon">🛒</div>
-                <div style="font-size: 12px; margin-top: 5px;">In cart: 4</div>
+            <div class="cart-box" onclick="location.href='Cart Page.html'" style="cursor: pointer;">
+             <div class="cart-icon" style="pointer-events: none;">🛒</div>
+             <div style="font-size: 12px; margin-top: 5px; pointer-events: none;">In cart: 4</div>
+            </div>
             </div>
         </div>
 
@@ -200,8 +202,8 @@
                         <div class="qty-val">1</div>
                         <button class="qty-btn">+</button>
                     </div>
-                    <button class="btn btn-add">Add to cart</button>
-                    <button class="btn btn-rent">Rent now</button>
+                    <button class="btn btn-add" onclick="window.location.href='Cart Page.html'">Add to cart</button>
+                    <button class="btn btn-rent" onclick="window.location.href='Justification Page.html'">Rent now</button>
                 </div>
             </div>
         </div>
@@ -241,8 +243,8 @@
                         <div class="qty-val">1</div>
                         <button class="qty-btn">+</button>
                     </div>
-                    <button class="btn btn-add" style="background: white; border: 1px solid #ddd;">Add to cart</button>
-                    <button class="btn btn-rent">Rent now</button>
+                    <button class="btn btn-add" onclick="window.location.href='Cart Page.html'">Add to cart</button>
+                    <button class="btn btn-rent" onclick="window.location.href='Justification Page.html'">Rent now</button>
                 </div>
             </div>
         </div>
@@ -282,8 +284,8 @@
                         <div class="qty-val">1</div>
                         <button class="qty-btn">+</button>
                     </div>
-                    <button class="btn btn-add" style="background: white; border: 1px solid #ddd;">Add to cart</button>
-                    <button class="btn btn-rent">Rent now</button>
+                    <button class="btn btn-add" onclick="window.location.href='Cart Page.html'">Add to cart</button>
+                    <button class="btn btn-rent" onclick="window.location.href='Justification Page.html'">Rent now</button>
                 </div>
             </div>
         </div>
