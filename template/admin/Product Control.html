@@ -32,7 +32,7 @@
 
         .nav-links li { margin: 0 20px; font-size: 18px; cursor: pointer; }
         .nav-links li.active { font-weight: 500; background-color: #f8f8f8; padding: 10px 15px; margin: -10px 5px; }
-        .dropdown::after { content: ' ▼'; font-size: 10px; color: #888; }
+        .dropdown::after {font-size: 10px; color: #888; }
         .nav-links li.active {
             font-weight: 600;
         }        
@@ -134,162 +134,349 @@
             cursor: pointer;
             margin: 0 5px;
         }
+    
+        /* GEMINI HELPER */
+        .gemini-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #4285f4, #9b72cb);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            z-index: 1000;
+            transition: transform 0.2s;
+        }
+
+        .gemini-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .gemini-icon {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        .ai-modal {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            width: 350px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+            z-index: 1001;
+        }
+
+        .ai-header {
+            background: #1a3a8a; /* Matches your logo blue */
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ai-content {
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .ai-footer {
+            padding: 10px;
+            border-top: 1px solid #eee;
+            display: flex;
+        }
+
+        #ai-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .ai-footer button {
+            background: #7d97e2;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin-left: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        /* GEMINI HELPER */
     </style>
 </head>
 <body>
 
     <nav>
-        <img src="https://via.placeholder.com/50x50?text=Logo" alt="Logo" class="logo">
-        <ul class="nav-links">
-            <li onclick="window.location.href='Dashboard Admin.html'">Dashboard</li>
-            <li class="dropdown">Management</li>
-            <li onclick="window.location.href='Penalty Page.html'">Penalty Page</li>
-             <li onclick="window.location.href='Team Page Admin.html'">Team Page</li> 
+        <img src="https://via.placeholder.com/50x50?text=Logo" alt="ICT Rentals" class="logo">
+        <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
+            <li class="active"><a href="/admin/dashboard">Dashboard</a></li>
+            
+            <li class="dropdown" style="position: relative; cursor: pointer;">
+                <div onclick="toggleManagement(event)" style="display: flex; align-items: center;">
+                    Management <span id="mgmt-arrow" style="margin-left: 5px; font-size: 10px;">▼</span>
+                </div>
+                    <ul id="mgmt-menu" style="display: none; position: absolute; top: 100%; left: 0; background: white; list-style: none; padding: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 220px; z-index: 1000;">
+                        <li style="padding: 8px 20px; white-space: nowrap;">
+                            <a href="/admin/product-control" style="text-decoration: none; color: #333; display: block;">Product List</a>
+                        </li>
+                        <li style="padding: 8px 20px; white-space: nowrap;">
+                            <a href="/admin/category-control" style="text-decoration: none; color: #333; display: block;">Category List</a>
+                        </li>
+                        <li style="padding: 8px 20px; white-space: nowrap;">
+                            <a href="/admin/brand-control" style="text-decoration: none; color: #333; display: block;">Brand List</a>
+                        </li>
+                    </ul>
+            </li>
+
+            <li><a href="/admin/penalty">Penalty Page</a></li>
+            <li><a href="/admin/team">Team Page</a></li> 
         </ul>
         <div class="nav-right">
-            <div class="nav-right"onclick ="window.location.href='../Login Choice.html'">
-            <span style="font-size: 22px; color: #ccc;">🔔</span>
+            <a href="/" style="text-decoration: none; color: inherit; cursor: pointer;">Log Out</a>
+            <span class="notification-bell" style="cursor: pointer; margin-left: 15px;">🔔</span>
         </div>
     </nav>
 
-    <div class="container">
-        <div class="header-row">
-            <div>
-                <h1>Product List</h1>
-                <div class="controls">
-                    Show 
-                    <select>
-                        <option>8</option>
-                        <option>16</option>
-                    </select>
-                    Product
+    <main>
+        <div class="container">
+            <div class="header-row">
+                <div>
+                    <h1>Product List</h1>
+                    <div class="controls">
+                        Show 
+                        <select>
+                            <option>8</option>
+                            <option>16</option>
+                        </select>
+                        Product
+                    </div>
                 </div>
+                <button class="btn-add" onclick="window.location.href='Add Product.html'">Add product</button> 
             </div>
-            <button class="btn-add" onclick="window.location.href='Add Product.html'">Add product</button> 
-        </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th width="5%">No.</th>
-                    <th width="35%">Product name</th>
-                    <th width="12%">Category</th>
-                    <th width="10%">Brand</th>
-                    <th width="8%">Quantity</th>
-                    <th width="10%">Visible</th>
-                    <th width="10%">Modify</th>
-                    <th width="10%">Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td class="text-left">Iphone13</td>
-                    <td>Computing</td>
-                    <td>Apple</td>
-                    <td>10</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
-                    <td><button class="icon-btn">🗑️</button></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td class="text-left">A51</td>
-                    <td>Computing</td>
-                    <td>Android</td>
-                    <td>13</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
-                    <td><button class="icon-btn">🗑️</button></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td class="text-left">Android Galaxy Note 3</td>
-                    <td>Computing</td>
-                    <td>Android</td>
-                    <td>15</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
-                    <td><button class="icon-btn">🗑️</button></td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td class="text-left">MacBook Pro</td>
-                    <td>Laptop</td>
-                    <td>Apple</td>
-                    <td>33</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
-                    <td><button class="icon-btn">🗑️</button></td>
-                </tr>
-                                <tr>
-                    <td>5</td>
-                    <td class="text-left">Asus TUF Gaming A16 FA607NUG-RL116W</td>
-                    <td>Laptop</td>
-                    <td>Asus</td>
-                    <td>34</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
-                    <td><button class="icon-btn">🗑️</button></td>
-                </tr>
-                                <tr>
-                    <td>6</td>
-                    <td class="text-left">Canon EOS 7D DSLR</td>
-                    <td>Camera</td>
-                    <td>Canon</td>
-                    <td>40</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
-                    <td><button class="icon-btn">🗑️</button></td>
-                </tr>
-                                <tr>
-                    <td>7</td>
-                    <td class="text-left">Green Screen</td>
-                    <td>Tools</td>
-                    <td>-</td>
-                    <td>30</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
-                    <td><button class="icon-btn">🗑️</button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="5%">No.</th>
+                        <th width="35%">Product name</th>
+                        <th width="12%">Category</th>
+                        <th width="10%">Brand</th>
+                        <th width="8%">Quantity</th>
+                        <th width="10%">Visible</th>
+                        <th width="10%">Modify</th>
+                        <th width="10%">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td class="text-left">Iphone13</td>
+                        <td>Computing</td>
+                        <td>Apple</td>
+                        <td>10</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn">🗑️</button></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td class="text-left">A51</td>
+                        <td>Computing</td>
+                        <td>Android</td>
+                        <td>13</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn">🗑️</button></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td class="text-left">Android Galaxy Note 3</td>
+                        <td>Computing</td>
+                        <td>Android</td>
+                        <td>15</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn">🗑️</button></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td class="text-left">MacBook Pro</td>
+                        <td>Laptop</td>
+                        <td>Apple</td>
+                        <td>33</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn">🗑️</button></td>
+                    </tr>
+                                    <tr>
+                        <td>5</td>
+                        <td class="text-left">Asus TUF Gaming A16 FA607NUG-RL116W</td>
+                        <td>Laptop</td>
+                        <td>Asus</td>
+                        <td>34</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn">🗑️</button></td>
+                    </tr>
+                                    <tr>
+                        <td>6</td>
+                        <td class="text-left">Canon EOS 7D DSLR</td>
+                        <td>Camera</td>
+                        <td>Canon</td>
+                        <td>40</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn">🗑️</button></td>
+                    </tr>
+                                    <tr>
+                        <td>7</td>
+                        <td class="text-left">Green Screen</td>
+                        <td>Tools</td>
+                        <td>-</td>
+                        <td>30</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn">🗑️</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- GEMINI HELPER -->
+    <footer>
+        <button class="gemini-btn" onclick="toggleAI()">
+            <span class="gemini-icon">✨</span> Ask Gemini
+        </button>
+
+        <div id="ai-window" class="ai-modal" style="display: none;">
+            <div class="ai-header">
+                <span>✨ Gemini Assistant</span>
+                <button onclick="toggleAI()" class="close-btn">&times;</button>
+            </div>
+            <div id="ai-response-area" class="ai-content">
+                Hi! How can I help you navigate ICT-RENTALS?
+            </div>
+            <div class="ai-footer">
+                <input type="text" id="ai-input" placeholder="Type your question...">
+                <button onclick="sendToAI()">Send</button>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        function toggleAI() {
+            const win = document.getElementById('ai-window');
+            win.style.display = win.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        async function sendToAI() {
+            const input = document.getElementById('ai-input');
+            const area = document.getElementById('ai-response-area');
+            const prompt = input.value;
+            if (!prompt) return;
+
+            area.innerHTML = "<em>Thinking...</em>";
+            input.value = ""; // Clear input
+
+            try {
+                const response = await fetch('/api/ai-assist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: `[Context: ${window.location.pathname}] ${prompt}` }),
+                });
+                
+                const data = await response.json();
+                area.innerHTML = data.success ? data.text : "Error: " + data.error;
+            } catch (err) {
+                area.innerHTML = "Failed to connect to AI.";
+            }
+        }
+
+        /* Modal for navigation bar*/
+        function toggleManagement(event) {
+            // Prevents the click from bubbling up to the window listener
+            event.stopPropagation();
+            
+            const menu = document.getElementById('mgmt-menu');
+            const arrow = document.getElementById('mgmt-arrow');
+            const isOpen = menu.style.display === 'block';
+
+            menu.style.display = isOpen ? 'none' : 'block';
+            arrow.textContent = isOpen ? '▼' : '▲';
+        }
+
+        // Closes the dropdown if you click anywhere else on the page
+        window.onclick = function(event) {
+            const menu = document.getElementById('mgmt-menu');
+            const arrow = document.getElementById('mgmt-arrow');
+            
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+                arrow.textContent = '▼';
+            }
+        };
+    </script>
 
 </body>
 </html>

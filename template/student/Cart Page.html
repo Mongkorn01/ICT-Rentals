@@ -186,22 +186,123 @@
             font-weight: 500;
             cursor: pointer;
         }
+        /* GEMINI HELPER */
+        .gemini-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #4285f4, #9b72cb);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            z-index: 1000;
+            transition: transform 0.2s;
+        }
 
+        .gemini-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .gemini-icon {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        .ai-modal {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            width: 350px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+            z-index: 1001;
+        }
+
+        .ai-header {
+            background: #1a3a8a; /* Matches your logo blue */
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ai-content {
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .ai-footer {
+            padding: 10px;
+            border-top: 1px solid #eee;
+            display: flex;
+        }
+
+        #ai-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .ai-footer button {
+            background: #7d97e2;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin-left: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        /* GEMINI HELPER */
     </style>
 </head>
 <body>
 
     <nav>
-        <img src="https://via.placeholder.com/50x50?text=Logo" alt="Logo" class="logo">
+        <img src="https://via.placeholder.com/40x40?text=Logo" alt="Logo" class="logo">
         <ul class="nav-links">
-           <li onclick="window.location.href='Dashboard.html'">Dashboard</li>
-           <li onclick="window.location.href='Search.html'">Search</li>
-            <li onclick="window.location.href='Rent.html'">Rent</li>
-            <li onclick="window.location.href='Team Page.html'">Team Page</li>
+            <li><a href="/student/dashboard">Dashboard</a></li>
+            <li><a href="/student/search">Search</a></li>
+            <li><a href="/student/rent">Rent</a></li>
+            <li><a href="/student/team">Team Page</a></li>
         </ul>
         <div class="nav-right">
-            <span style="font-size: 24px; color: #bbb;">🔔</span>
-            <div class="profile-icon"></div>
+            <span style="font-size: 24px; color: #999; cursor: pointer;">🔔</span>
+            
+            <div class="profile-nav-wrapper" style="position: relative; display: flex; align-items: center; margin-left: 15px;">
+                
+                <div class="profile-circle" style="width: 35px; height: 35px; background-color: #e0e0e0; border-radius: 50%; border: 1px solid #ccc;"></div>
+                
+                <span class="dropdown-arrow" onclick="toggleDropdown()" style="cursor: pointer; margin-left: 8px; color: #666; font-size: 12px; transition: 0.2s;">▼</span>
+
+                <div id="profile-dropdown" style="display: none; position: absolute; top: 45px; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; min-width: 140px; padding: 5px 0;">
+                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none; font-size: 14px; transition: background 0.2s;">Profile</a>
+                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; font-size: 14px; transition: background 0.2s; border-top: 1px solid #eee;">Log Out</a>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -263,6 +364,80 @@
             <button class="btn-rent-final" onclick="window.location.href='Justification Page.html'">Rent (2)</button>
         </footer>
     </main>
+    <!-- GEMINI HELPER -->
+    <footer>
+        <button class="gemini-btn" onclick="toggleAI()">
+            <span class="gemini-icon">✨</span> Ask Gemini
+        </button>
 
+        <div id="ai-window" class="ai-modal" style="display: none;">
+            <div class="ai-header">
+                <span>✨ Gemini Assistant</span>
+                <button onclick="toggleAI()" class="close-btn">&times;</button>
+            </div>
+            <div id="ai-response-area" class="ai-content">
+                Hi! How can I help you navigate ICT-RENTALS?
+            </div>
+            <div class="ai-footer">
+                <input type="text" id="ai-input" placeholder="Type your question...">
+                <button onclick="sendToAI()">Send</button>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        function toggleAI() {
+            const win = document.getElementById('ai-window');
+            win.style.display = win.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        async function sendToAI() {
+            const input = document.getElementById('ai-input');
+            const area = document.getElementById('ai-response-area');
+            const prompt = input.value;
+            if (!prompt) return;
+
+            area.innerHTML = "<em>Thinking...</em>";
+            input.value = ""; // Clear input
+
+            try {
+                const response = await fetch('/api/ai-assist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: `[Context: ${window.location.pathname}] ${prompt}` }),
+                });
+                
+                const data = await response.json();
+                area.innerHTML = data.success ? data.text : "Error: " + data.error;
+            } catch (err) {
+                area.innerHTML = "Failed to connect to AI.";
+            }
+        }
+        function toggleDropdown() {
+            const dropdown = document.getElementById('profile-dropdown');
+            const arrow = document.querySelector('.dropdown-arrow');
+            
+            if (dropdown.style.display === 'none') {
+                dropdown.style.display = 'block';
+                arrow.textContent = '▲';
+            } else {
+                dropdown.style.display = 'none';
+                arrow.textContent = '▼';
+            }
+        }
+
+        // Close dropdown if user clicks anywhere else on the screen
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropdown-arrow')) {
+                const dropdown = document.getElementById('profile-dropdown');
+                const arrow = document.querySelector('.dropdown-arrow');
+                if (dropdown.style.display === 'block') {
+                    dropdown.style.display = 'none';
+                    arrow.textContent = '▼';
+                }
+            }
+        }
+    </script>
 </body>
 </html>

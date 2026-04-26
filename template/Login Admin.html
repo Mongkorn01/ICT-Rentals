@@ -102,16 +102,18 @@
 
         /* SSO Buttons */
         .btn-sso {
-            display: flex;
+            display: flex;            
             align-items: center;
             justify-content: center;
-            width: 100%;
+            width: 100%;              
             padding: 12px;
             margin-bottom: 12px;
             border: none;
             border-radius: 12px;
             font-size: 14px;
             cursor: pointer;
+            text-decoration: none;
+            box-sizing: border-box; 
         }
 
         .btn-mahidol {
@@ -148,47 +150,193 @@
             text-decoration: none;
             font-weight: 600;
         }
+        /* GEMINI HELPER */
+        .gemini-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #4285f4, #9b72cb);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            z-index: 1000;
+            transition: transform 0.2s;
+        }
+
+        .gemini-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .gemini-icon {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        .ai-modal {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            width: 350px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+            z-index: 1001;
+        }
+
+        .ai-header {
+            background: #1a3a8a; /* Matches your logo blue */
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ai-content {
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .ai-footer {
+            padding: 10px;
+            border-top: 1px solid #eee;
+            display: flex;
+        }
+
+        #ai-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .ai-footer button {
+            background: #7d97e2;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin-left: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        /* GEMINI HELPER */
     </style>
 </head>
 <body>
+    <main>
+        <div class="login-card">
+            <div class="logo-container">
+                <div class="logo-icon"></div>
+                <div class="logo-text">ICT<span>- RENTALS</span></div>
+            </div>
 
-    <div class="login-card">
-        <div class="logo-container">
-            <div class="logo-icon"></div>
-            <div class="logo-text">ICT<span>- RENTALS</span></div>
+            <div class="form-group">
+                <input type="text" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Password">
+            </div>
+            <a href="/admin/dashboard" class="btn-primary-login" style="text-decoration: none; display: inline-block; text-align: center;">
+                Log in
+            </a>
+            <hr>
+
+            <h2>Log in using your account on:</h2>
+
+            <a href="/login-student" class="btn-sso btn-mahidol" style="text-decoration: none;">
+                <span class="icon-user">👤</span> Mahidol Account Login
+            </a>
+
+            <a href="/login-admin" class="btn-sso btn-admin" style="text-decoration: none;">
+                Admin Account Login
+            </a>
+
+            <hr>
+
+            <div class="footer-text">
+                <h3>Is this your first time here?</h3>
+                <p><a href="#" class="blue-link">Use your MU internet account for login</a></p>
+                <p>
+                    <strong>Ex.</strong> u6388xxx (for student),<br>
+                    pxxxx.xxx (for teacher)
+                </p>
+            </div>
         </div>
+    </main>
 
-        <div class="form-group">
-            <input type="text" placeholder="Username">
-        </div>
-        <div class="form-group">
-            <input type="password" placeholder="Password">
-        </div>
-        <button class="btn-primary-login"onclick="window.location.href='admin/Dashboard Admin.html'">Log in</button>
 
-        <hr>
-
-        <h2>Log in using your account on:</h2>
-
-        <button class="btn btn-mahidol" onclick="window.location.href='Login Student.html'">
-            <span class="icon-user">👤</span> Mahidol Account Login
+    <!-- GEMINI HELPER -->
+    <footer>
+        <button class="gemini-btn" onclick="toggleAI()">
+            <span class="gemini-icon">✨</span> Ask Gemini
         </button>
 
-        <button class="btn-sso btn-admin">Sign in</button>
-            Admin Account Login
-        </button>
-
-        <hr>
-
-        <div class="footer-text">
-            <h3>Is this your first time here?</h3>
-            <p><a href="#" class="blue-link">Use your MU internet account for login</a></p>
-            <p>
-                <strong>Ex.</strong> u6388xxx (for student),<br>
-                pxxxx.xxx (for teacher)
-            </p>
+        <div id="ai-window" class="ai-modal" style="display: none;">
+            <div class="ai-header">
+                <span>✨ Gemini Assistant</span>
+                <button onclick="toggleAI()" class="close-btn">&times;</button>
+            </div>
+            <div id="ai-response-area" class="ai-content">
+                Hi! How can I help you navigate ICT-RENTALS?
+            </div>
+            <div class="ai-footer">
+                <input type="text" id="ai-input" placeholder="Type your question...">
+                <button onclick="sendToAI()">Send</button>
+            </div>
         </div>
-    </div>
+    </footer>
 
+
+    <script>
+        function toggleAI() {
+            const win = document.getElementById('ai-window');
+            win.style.display = win.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        async function sendToAI() {
+            const input = document.getElementById('ai-input');
+            const area = document.getElementById('ai-response-area');
+            const prompt = input.value;
+            if (!prompt) return;
+
+            area.innerHTML = "<em>Thinking...</em>";
+            input.value = ""; // Clear input
+
+            try {
+                const response = await fetch('/api/ai-assist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: `[Context: ${window.location.pathname}] ${prompt}` }),
+                });
+                
+                const data = await response.json();
+                area.innerHTML = data.success ? data.text : "Error: " + data.error;
+            } catch (err) {
+                area.innerHTML = "Failed to connect to AI.";
+            }
+        }
+    </script>
+    <!-- GEMINI HELPER -->
 </body>
 </html>

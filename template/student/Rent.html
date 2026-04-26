@@ -101,109 +101,347 @@
             margin-bottom: 30px;
             font-style: italic;
         }
-
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 25px;
+            gap: 20px;
+            padding: 20px;
         }
 
         .product-card {
-            background: #fff;
-            border: 1px solid #f0f0f0;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: left;
-            box-shadow: var(--card-shadow);
-            transition: transform 0.2s;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
             cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
         }
-        .product-card:hover { transform: translateY(-5px); }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
 
         .product-img {
             width: 100%;
             height: 150px;
             object-fit: contain;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
-        .product-name { font-weight: bold; font-size: 16px; margin-bottom: 5px; }
-        .stock-label { color: var(--gray-text); font-size: 14px; }
 
+        .product-category {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+        }
+
+        .product-name {
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .stock-label {
+            font-size: 13px;
+            color: #28a745;
+        }
+        /* GEMINI HELPER */
+        .gemini-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #4285f4, #9b72cb);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            z-index: 1000;
+            transition: transform 0.2s;
+        }
+
+        .gemini-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .gemini-icon {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        .ai-modal {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            width: 350px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+            z-index: 1001;
+        }
+
+        .ai-header {
+            background: #1a3a8a; /* Matches your logo blue */
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ai-content {
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .ai-footer {
+            padding: 10px;
+            border-top: 1px solid #eee;
+            display: flex;
+        }
+
+        #ai-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .ai-footer button {
+            background: #7d97e2;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin-left: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        /* GEMINI HELPER */
     </style>
 </head>
 <body>
 
     <nav>
-        <img src="https://via.placeholder.com/50x50?text=Logo" alt="ICT Logo" class="logo">
+        <img src="https://via.placeholder.com/40x40?text=Logo" alt="Logo" class="logo">
         <ul class="nav-links">
-            <li onclick="window.location.href='Dashboard.html'">Dashboard</li>
-            <li onclick="window.location.href='Search.html'">Search</li>
-            <li class="active" onclick="window.location.href='Rent.html'">Rent</li>
-            <li onclick="window.location.href='Team Page.html'">Team Page</li>
+            <li><a href="/student/dashboard">Dashboard</a></li>
+            <li><a href="/student/search">Search</a></li>
+            <li><a href="/student/rent">Rent</a></li>
+            <li><a href="/student/team">Team Page</a></li>
         </ul>
         <div class="nav-right">
-            <span style="font-size: 24px; color: #bbb; cursor: pointer;">🔔</span>
-            <div class="profile-section">
-                <div class="profile-icon"></div>
-                <span style="color: #bbb; font-size: 12px;">▼</span>
+            <span style="font-size: 24px; color: #999; cursor: pointer;">🔔</span>
+            
+            <div class="profile-nav-wrapper" style="position: relative; display: flex; align-items: center; margin-left: 15px;">
+                
+                <div class="profile-circle" style="width: 35px; height: 35px; background-color: #e0e0e0; border-radius: 50%; border: 1px solid #ccc;"></div>
+                
+                <span class="dropdown-arrow" onclick="toggleDropdown()" style="cursor: pointer; margin-left: 8px; color: #666; font-size: 12px; transition: 0.2s;">▼</span>
+
+                <div id="profile-dropdown" style="display: none; position: absolute; top: 45px; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; min-width: 140px; padding: 5px 0;">
+                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none; font-size: 14px; transition: background 0.2s;">Profile</a>
+                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; font-size: 14px; transition: background 0.2s; border-top: 1px solid #eee;">Log Out</a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="cart-status" onclick="location.href='Cart Page.html'" style="cursor: pointer; z-index: 999;">
-    <div class="cart-circle" style="pointer-events: none;">🛒</div>
-    <div style="font-size: 14px; font-weight: 500;">In cart: 4</div>
-    </div>
+    <main>
+        <div class="cart-status" onclick="location.href='/student/cart'" style="cursor: pointer; z-index: 999;">
+        <div class="cart-circle" style="pointer-events: none;">🛒</div>
+        <div style="font-size: 14px; font-weight: 500;">In cart: 4</div>
+        </div>
 
-    <div class="hero-section">
-        <div class="arrow arrow-left">⟨</div>
-        <img src="https://via.placeholder.com/400x120?text=ICT+-+RENTALS" alt="Rental Banner" class="hero-logo">
-        <div class="arrow arrow-right">⟩</div>
-    </div>
+        <div class="hero-section">
+            <div class="arrow arrow-left">⟨</div>
+            <img src="https://via.placeholder.com/400x120?text=ICT+-+RENTALS" alt="Rental Banner" class="hero-logo">
+            <div class="arrow arrow-right">⟩</div>
+        </div>
 
-    <div class="carousel-indicators">
-        <div class="indicator active"></div>
-        <div class="indicator"></div>
-        <div class="indicator"></div>
-        <div class="indicator"></div>
-        <div class="indicator"></div>
-    </div>
+        <div class="carousel-indicators">
+            <div class="indicator active"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+        </div>
 
-    <div class="category-container">
-        <h2 class="category-title">“Computing”</h2>
-        
-        <div class="product-grid">
-            <div class="product-card" onclick="location.href='Product Page.html'">
-                <img src="https://via.placeholder.com/150x150?text=iPhone+13" alt="iPhone 13" class="product-img">
-                <div class="product-name">iPhone 13</div>
-                <div class="stock-label">Left in stock: 1</div>
+        <!-- Load Product and Category -->
+        <div class="category-container">
+            <h2 class="category-title">“Computing”</h2>
+            
+            <div class="product-grid">
+                <div class="product-card" onclick="location.href='/student/product'">
+                    <img src="https://via.placeholder.com/150x150?text=iPhone+13" alt="iPhone 13" class="product-img">
+                    <div class="product-name">iPhone 13</div>
+                    <div class="stock-label">Left in stock: 1</div>
+                </div>
+
+                <div class="product-card" onclick="location.href='/student/product'">
+                    <img src="https://via.placeholder.com/150x150?text=iPhone+14" alt="iPhone 14" class="product-img">
+                    <div class="product-name">iPhone 14</div>
+                    <div class="stock-label">Left in stock: 1</div>
+                </div>
+
+                <div class="product-card" onclick="location.href='/student/product'">
+                    <img src="https://via.placeholder.com/150x150?text=iPhone+15" alt="iPhone 15" class="product-img">
+                    <div class="product-name">iPhone 15</div>
+                    <div class="stock-label">Left in stock: 1</div>
+                </div>
+
+                <div class="product-card" onclick="location.href='/student/product'">
+                    <img src="https://via.placeholder.com/150x150?text=iPhone+16" alt="iPhone 16" class="product-img">
+                    <div class="product-name">iPhone 16</div>
+                    <div class="stock-label">Left in stock: 1</div>
+                </div>
+
+                <div class="product-card" onclick="location.href='/student/product'">
+                    <img src="https://via.placeholder.com/150x150?text=iPhone+17" alt="iPhone 17" class="product-img">
+                    <div class="product-name">iPhone 17</div>
+                    <div class="stock-label">Left in stock: 1</div>
+                </div>
             </div>
-
-            <div class="product-card" onclick="location.href='Product Page.html'">
-                <img src="https://via.placeholder.com/150x150?text=iPhone+14" alt="iPhone 14" class="product-img">
-                <div class="product-name">iPhone 14</div>
-                <div class="stock-label">Left in stock: 1</div>
+        </div>    
+        <!--
+            <div class="product-grid" id="product-container">
+            <p>Loading products...</p>
             </div>
+        -->
+    </main>
+    
 
-            <div class="product-card" onclick="location.href='Product Page.html'">
-                <img src="https://via.placeholder.com/150x150?text=iPhone+15" alt="iPhone 15" class="product-img">
-                <div class="product-name">iPhone 15</div>
-                <div class="stock-label">Left in stock: 1</div>
+ 
+    <footer>
+        <!-- GEMINI HELPER -->
+        <button class="gemini-btn" onclick="toggleAI()">
+            <span class="gemini-icon">✨</span> Ask Gemini
+        </button>
+
+        <div id="ai-window" class="ai-modal" style="display: none;">
+            <div class="ai-header">
+                <span>✨ Gemini Assistant</span>
+                <button onclick="toggleAI()" class="close-btn">&times;</button>
             </div>
-
-            <div class="product-card" onclick="location.href='Product Page.html'">
-                <img src="https://via.placeholder.com/150x150?text=iPhone+16" alt="iPhone 16" class="product-img">
-                <div class="product-name">iPhone 16</div>
-                <div class="stock-label">Left in stock: 1</div>
+            <div id="ai-response-area" class="ai-content">
+                Hi! How can I help you navigate ICT-RENTALS?
             </div>
-
-            <div class="product-card" onclick="location.href='Product Page.html'">
-                <img src="https://via.placeholder.com/150x150?text=iPhone+17" alt="iPhone 17" class="product-img">
-                <div class="product-name">iPhone 17</div>
-                <div class="stock-label">Left in stock: 1</div>
+            <div class="ai-footer">
+                <input type="text" id="ai-input" placeholder="Type your question...">
+                <button onclick="sendToAI()">Send</button>
             </div>
         </div>
-    </div>
+    </footer>
 
+    <script>
+        function toggleAI() {
+            const win = document.getElementById('ai-window');
+            win.style.display = win.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        async function sendToAI() {
+            const input = document.getElementById('ai-input');
+            const area = document.getElementById('ai-response-area');
+            const prompt = input.value;
+            if (!prompt) return;
+
+            area.innerHTML = "<em>Thinking...</em>";
+            input.value = ""; // Clear input
+
+            try {
+                const response = await fetch('/api/ai-assist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: `[Context: ${window.location.pathname}] ${prompt}` }),
+                });
+                
+                const data = await response.json();
+                area.innerHTML = data.success ? data.text : "Error: " + data.error;
+            } catch (err) {
+                area.innerHTML = "Failed to connect to AI.";
+            }
+        }
+        function toggleDropdown() {
+            const dropdown = document.getElementById('profile-dropdown');
+            const arrow = document.querySelector('.dropdown-arrow');
+            
+            if (dropdown.style.display === 'none') {
+                dropdown.style.display = 'block';
+                arrow.textContent = '▲';
+            } else {
+                dropdown.style.display = 'none';
+                arrow.textContent = '▼';
+            }
+        }
+
+        // Close dropdown if user clicks anywhere else on the screen
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropdown-arrow')) {
+                const dropdown = document.getElementById('profile-dropdown');
+                const arrow = document.querySelector('.dropdown-arrow');
+                if (dropdown.style.display === 'block') {
+                    dropdown.style.display = 'none';
+                    arrow.textContent = '▼';
+                }
+            }
+        }
+        // Load product and category
+        /*
+        async function loadProductsByCategory() {
+            const container = document.getElementById('product-container');
+            const title = document.getElementById('display-category');
+            
+            // 1. Get the category from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryName = urlParams.get('category');
+
+            if (categoryName) {
+                title.textContent = `${categoryName}s`;
+            }
+
+            try {
+                // 2. Fetch products (Backend should handle filtering via query param)
+                const response = await fetch(`/api/products?category=${encodeURIComponent(categoryName)}`);
+                const products = await response.json();
+
+                if (products.length === 0) {
+                    container.innerHTML = "<p>No products found in this category.</p>";
+                    return;
+                }
+
+                // 3. Inject the HTML
+                container.innerHTML = products.map(product => `
+                    <div class="product-card" onclick="location.href='/student/product?id=${product.id}'">
+                        <img src="${product.image_url || 'https://via.placeholder.com/150'}" alt="${product.name}" class="product-img">
+                        <div class="product-category">${product.category}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="stock-label">Left in stock: ${product.stock}</div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                container.innerHTML = "<p>Error loading products.</p>";
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadProductsByCategory);
+        */
+    </script>
 </body>
 </html>

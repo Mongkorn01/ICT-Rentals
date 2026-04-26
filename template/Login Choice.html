@@ -82,6 +82,7 @@
             font-size: 15px;
             cursor: pointer;
             transition: opacity 0.2s;
+            text-decoration: none;
         }
 
         .btn:hover {
@@ -210,58 +211,70 @@
             border-radius: 4px;
             cursor: pointer;
         }
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
         /* GEMINI HELPER */
     </style>
 </head>
 <body>
+    <main>
+        <div class="login-card">
+            <div class="logo-container">
+                <div class="logo-icon"></div>
+                <div class="logo-text">ICT<span>- RENTALS</span></div>
+            </div>
 
-    <div class="login-card">
-        <div class="logo-container">
-            <div class="logo-icon"></div>
-            <div class="logo-text">ICT<span>- RENTALS</span></div>
-        </div>
+            <hr>
 
-        <hr>
+            <h2>Log in using your account on:</h2>
 
-        <h2>Log in using your account on:</h2>
+            <a href="login-student" class="btn btn-mahidol">
+                <span class="icon">👤</span> Mahidol Account Login
+            </a>
 
-        <button class="btn btn-mahidol" onclick="window.location.href='Login Student.html'">
-            <span class="icon">👤</span> Mahidol Account Login
-        </button>
+            <a href="login-admin" class="btn btn-admin">
+                Admin Account Login
+            </a>
 
-        <button class="btn btn-admin" onclick="window.location.href='Login Admin.html'">
-            Admin Account Login
-        </button>
+            <hr>
 
-        <hr>
-
-        <div class="footer-text">
-            <h3>Is this your first time here?</h3>
-            <p><a href="#" class="blue-link">Use your MU internet account for login</a></p>
-            <p class="example-text">
-                <strong>Ex.</strong> u6388xxx (for student),<br>
-                pxxxx.xxx (for teacher)
-            </p>
-        </div>
-    </div>
+            <div class="footer-text">
+                <h3>Is this your first time here?</h3>
+                <p><a href="#" class="blue-link">Use your MU internet account for login</a></p>
+                <p class="example-text">
+                    <strong>Ex.</strong> u6388xxx (for student),<br>
+                    pxxxx.xxx (for teacher)
+                </p>
+            </div>
+        </div>  
+    </main>
+    
     <!-- GEMINI HELPER -->
-    <button class="gemini-btn" onclick="toggleAI()">
-        <span class="gemini-icon">✨</span> Ask Gemini
-    </button>
+    <footer>
+        <button class="gemini-btn" onclick="toggleAI()">
+            <span class="gemini-icon">✨</span> Ask Gemini
+        </button>
 
-    <div id="ai-window" class="ai-modal" style="display: none;">
-        <div class="ai-header">
-            <span>✨ Gemini Assistant</span>
-            <button onclick="toggleAI()" class="close-btn">&times;</button>
+        <div id="ai-window" class="ai-modal" style="display: none;">
+            <div class="ai-header">
+                <span>✨ Gemini Assistant</span>
+                <button onclick="toggleAI()" class="close-btn">&times;</button>
+            </div>
+            <div id="ai-response-area" class="ai-content">
+                Hi! How can I help you navigate ICT-RENTALS?
+            </div>
+            <div class="ai-footer">
+                <input type="text" id="ai-input" placeholder="Type your question...">
+                <button onclick="sendToAI()">Send</button>
+            </div>
         </div>
-        <div id="ai-response-area" class="ai-content">
-            Hi! How can I help you navigate ICT-RENTALS?
-        </div>
-        <div class="ai-footer">
-            <input type="text" id="ai-input" placeholder="Type your question...">
-            <button onclick="sendToAI()">Send</button>
-        </div>
-    </div>
+    </footer>
+    
 
     <script>
         function toggleAI() {
