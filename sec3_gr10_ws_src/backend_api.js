@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require("dotenv");
 const path = require('path');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const cors = require('cors');
 
 dotenv.config();
 const app = express();
@@ -10,6 +11,19 @@ const router = express.Router();
 app.use(express.json()); // Essential for parsing JSON from your frontend
 app.use(express.urlencoded({ extended: true }));
 app.use('/', router);
+app.use(cors()); 
+
+let dbConn = mysql.createConnection({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE
+});
+
+dbConn.connect((err) => {
+    if (err) throw err;
+    console.log(`Connected to DB: ${process.env.MYSQL_DATABASE}`);
+});
 
 /* --- Gemini Configuration --- */
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -52,4 +66,14 @@ router.post('/api/ai-assist', async (req, res) => {
         console.error("Gemini Error:", error.message); // This prints the REAL error in your terminal
         res.status(500).json({ success: false, error: error.message });
     }
+});
+
+/* --- Auth / Login Route --- */
+
+/* --- Admin Routes --- */
+
+/* --- Student Routes --- */
+
+app.listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}`);
 });
