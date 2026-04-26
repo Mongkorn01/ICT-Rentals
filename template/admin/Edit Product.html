@@ -25,6 +25,9 @@
         .nav-links li { margin: 0 20px; font-size: 18px; cursor: pointer; color: #444; }
         .nav-links li.active { font-weight: 500; background-color: #f8f8f8; padding: 10px 15px; margin: -10px 5px; }
         .dropdown::after { content: ' ▼'; font-size: 10px; color: #888; }
+        .nav-links li.active {
+            font-weight: 600;
+        }                
         .nav-right { display: flex; align-items: center; gap: 20px; }
 
         /* --- Main Content Layout --- */
@@ -229,13 +232,13 @@
     <nav>
         <img src="https://via.placeholder.com/50x50?text=Logo" alt="Logo" class="logo">
         <ul class="nav-links">
-            <li>Dashboard</li>
-            <li class="active dropdown">Management</li>
-            <li>Penalty Page</li>
-            <li>Team Page</li>
+           <li onclick="window.location.href='Dashboard Admin.html'">Dashboard</li>
+            <li class="dropdown">Management</li>
+            <li onclick="window.location.href='Penalty Page.html'">Penalty Page</li>
+             <li onclick="window.location.href='Team Page Admin.html'">Team Page</li> 
         </ul>
         <div class="nav-right">
-            <span style="cursor: pointer;">Log Out</span>
+            <div class="nav-right"onclick ="window.location.href='../Login Choice.html'">
             <span style="font-size: 22px; color: #ccc; cursor: pointer;">🔔</span>
         </div>
     </nav>
@@ -306,8 +309,8 @@
                     </label>
                 </div>
                 <div class="action-group">
-                    <button class="btn btn-delete">Delete</button>
-                    <button class="btn btn-save">Save Changes</button>
+                    <button class="btn btn-delete" onclick="window.location.href='Product Control.html'" >Delete</button>
+                    <button class="btn btn-save" onclick="window.location.href='Product Control.html'" >Save Changes</button>
                 </div>
             </div>
         </div>
