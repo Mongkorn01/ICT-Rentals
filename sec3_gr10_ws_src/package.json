@@ -1,0 +1,21 @@
+{
+  "name": "sec3_gr10_ws_src",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "backend_api.js",
+  "scripts": {
+    "test": "nodemon backend_api.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "epress": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.22.2",
+    "nodemon": "^3.1.14"
+  }
+}
