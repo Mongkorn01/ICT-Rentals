@@ -41,5 +41,5 @@ npm start
 * **Username:** `6501234001`
 * **Password:** `student1`
 #### Admin
-* **Username:** `Supersomchai123`
+* **Username (Email):** `somchai.w@ict.ac.th`
 * **Password:** `admin1`
