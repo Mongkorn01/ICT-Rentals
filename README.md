@@ -38,8 +38,8 @@ npm start
 ```
 ### 4. Login with credentials
 #### Student
-* **Username:** `aaaa`
-* **Password:** `aaaa`
+* **Username:** `6501234001`
+* **Password:** `student1`
 #### Admin
-* **Username:** `aaaa`
-* **Password:** `aaaa`
+* **Username:** `Supersomchai123`
+* **Password:** `admin1`
