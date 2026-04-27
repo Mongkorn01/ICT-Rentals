@@ -10,10 +10,10 @@
 mysql -u root -p < sec_gr10_database.sql
 ```
 >### 2. (Optional Create User) Run create_user.sql -> Enter root password
+> Ensure the right user is in the .env file with the right accesss
 ```bash
 mysql -u root -p < create_user.sql
 ```
-> Ensure the right user is in the .env file with the right accesss
 
 ### 3. Open 2 Terminal
 #### Terminal 1: Frontend
