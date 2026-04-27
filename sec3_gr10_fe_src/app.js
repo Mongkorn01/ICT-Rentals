@@ -8,6 +8,7 @@ const router = express.Router();
 
 app.use(express.json()); // Essential for parsing JSON from your frontend
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'template')));
 app.use('/', router);
 
 /* --- Helper Function for HTML --- */

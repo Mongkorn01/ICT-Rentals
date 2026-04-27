@@ -1,0 +1,2 @@
+GRANT SELECT, INSERT, UPDATE, DELETE ON sec3_gr10_database.* TO 'itcs223'@'localhost';
+FLUSH PRIVILEGES;
