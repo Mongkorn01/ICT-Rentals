@@ -128,7 +128,6 @@ CREATE TABLE Admin_Activity_Logs (
 
 
 -- ---- Administrators (10 rows) ----
--- c
 INSERT INTO Administrators (username, password, role, first_name, last_name, email, phone) VALUES
 ('Supersomchai123','$2b$10$g3BohHKgCT0a77LKCd8xMOPaNrUwfRQYFZHTFlxk6NTQvjZmcVNFe', 'superadmin', 'Somchai', 'Wannasuk', 'somchai.w@ict.ac.th', '0812345601'),
 ('Nattsudsuay',' $2b$10$5pN0lG4SVkdgami9c2NMKOtR6xzBCsYs3mjD3RVaCCMOCZc4tj8Jy', 'superadmin', 'Nattaporn', 'Charoensuk', 'nattaporn.c@ict.ac.th', '0812345602'),

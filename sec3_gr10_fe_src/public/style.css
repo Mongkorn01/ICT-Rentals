@@ -1,0 +1,159 @@
+/* ============================== */
+/* === public/style.css ======= */
+/* ============================== */
+
+/* 1. Global & Reset
+   Ensures the card is centered with the correct background color
+================================================================== */
+* {
+    box-sizing: border-box; /* Crucial for padding/width calculation */
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    height: 100%;
+    /* Matches the specific light-grey background from image_1.png */
+    background-color: #F3F4F6;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 2. Login Card
+   Specific dimensions and shadow from the reference
+================================================================== */
+.login-card {
+    background-color: #FFFFFF;
+    width: 480px; /* Precise width match */
+    padding: 50px; /* Generous internal padding */
+    border-radius: 12px;
+    /* Subtle, soft shadow */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    text-align: center;
+}
+
+/* 3. Logo Section
+   Positions and styles the main 'ICT-RENTALS' logo
+================================================================== */
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px; /* Space above the horizontal line */
+}
+
+.logo-icon {
+    width: 80px; /* Sized to match reference image_1.png */
+    height: 80px;
+    margin-right: 15px;
+    background-image: url('https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: inline-block;
+}
+
+.logo-text {
+    font-size: 38px;
+    font-weight: 500; /* Medium weight */
+    color: #1A3D8F; /* Primary blue from image */
+}
+
+.logo-text span {
+    color: #6B7280; /* Secondary grey for '-RENTALS' */
+    font-weight: 300; /* Light weight */
+    margin-left: 2px;
+}
+
+/* 4. Separators & Headers
+   Clean look for the 'Log in using your account' section
+================================================================== */
+hr {
+    border: 0;
+    border-top: 1px solid #E5E7EB; /* Very subtle grey line */
+    margin: 30px 0; /* Space around the line */
+}
+
+h2.login-prompt {
+    font-size: 22px;
+    font-weight: 600;
+    color: #111827; /* Near-black text */
+    margin-bottom: 20px;
+}
+
+/* 5. SSO Buttons
+   Specific styling for Mahidol and Admin login links
+================================================================== */
+.btn-sso {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px; /* Matches larger click area */
+    margin-bottom: 12px;
+    border-radius: 12px; /* Smooth corners */
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    box-sizing: border-box; /* Required to keep width within the card */
+}
+
+.btn-sso:hover {
+    filter: brightness(0.95); /* Subtle dim on hover */
+}
+
+/* Mahidol Login (Blue Button) */
+.btn-mahidol {
+    background-color: #7D9BE9; /* Exact blue from image */
+    color: #FFFFFF;
+}
+
+/* Icon next to 'Mahidol Account Login' */
+.btn-mahidol .icon-user {
+    margin-right: 8px;
+    font-size: 20px;
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Admin Login (Cream/Orange Button) */
+.btn-admin {
+    background-color: #FEF3C7; /* Exact cream from image */
+    color: #8D764F; /* Brownish text color */
+}
+
+/* 6. Footer Section
+   'First time here?' section with blue links and examples
+================================================================== */
+.footer-text h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 12px;
+}
+
+.footer-text p {
+    font-size: 14px;
+    color: #6B7280; /* Standard grey paragraph text */
+    line-height: 1.6;
+    margin: 6px 0;
+}
+
+.footer-text p strong {
+    color: #374151; /* Slightly darker grey for 'Ex.' */
+}
+
+/* Blue, Bold links used throughout */
+.blue-link {
+    color: #2563EB; /* Bright blue from image */
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.blue-link:hover {
+    text-decoration: underline; /* Standard underline behavior */
+}

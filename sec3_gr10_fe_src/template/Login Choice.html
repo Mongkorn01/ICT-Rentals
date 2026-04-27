@@ -4,129 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICT-RENTALS Login</title>
+
+    <!-- External CSS Example-->
+    <link rel="stylesheet" href="/style.css">
     <style>
-        /* Base styles to match 1920x1080 aspect */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* The white card container */
-        .login-card {
-            background-color: #ffffff;
-            width: 450px;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-
-        /* Header Logo Section */
-        .logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            background-color: #1a3a8a; /* Dark blue from logo */
-            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-            display: inline-block;
-            margin-right: 10px;
-        }
-
-        .logo-text {
-            font-size: 32px;
-            font-weight: bold;
-            color: #1a3a8a;
-        }
-
-        .logo-text span {
-            color: #5c78b5;
-            font-weight: 300;
-            margin-left: 5px;
-        }
-
-        hr {
-            border: 0;
-            border-top: 1px solid #ddd;
-            margin: 25px 0;
-        }
-
-        h2 {
-            font-size: 20px;
-            color: #333;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        /* Buttons */
-        .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: none;
-            border-radius: 25px;
-            font-size: 15px;
-            cursor: pointer;
-            transition: opacity 0.2s;
-            text-decoration: none;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-        }
-
-        .btn-mahidol {
-            background-color: #7d97e2;
-            color: white;
-        }
-
-        .btn-admin {
-            background-color: #ffecd1;
-            color: #8a7a60;
-        }
-
-        .icon {
-            margin-right: 10px;
-            font-size: 18px;
-        }
-
-        /* Footer Section */
-        .footer-text h3 {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .footer-text p {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.5;
-            margin: 5px 0;
-        }
-
-        .blue-link {
-            color: #3a7ebf;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .example-text {
-            font-weight: normal;
-        }
+        
 
         /* GEMINI HELPER */
         .gemini-btn {
@@ -231,13 +113,13 @@
 
             <hr>
 
-            <h2>Log in using your account on:</h2>
+            <h2 class="login-prompt">Log in using your account on:</h2>
 
-            <a href="login-student" class="btn btn-mahidol">
-                <span class="icon">👤</span> Mahidol Account Login
+            <a href="/login-student" class="btn-sso btn-mahidol">
+                <span class="icon-user">👤</span> Mahidol Account Login
             </a>
 
-            <a href="login-admin" class="btn btn-admin">
+            <a href="/login-admin" class="btn-sso btn-admin">
                 Admin Account Login
             </a>
 

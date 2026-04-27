@@ -8,8 +8,14 @@ const router = express.Router();
 
 app.use(express.json()); // Essential for parsing JSON from your frontend
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'template')));
+app.use(express.static(path.join(__dirname, 'public'))); // External CSS example
 app.use('/', router);
+
+// Error Handling (Should ALWAYS be last)
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
 /* --- Helper Function for HTML --- */
 const serveHTML = (fileName, subfolder = '') => (req, res) => {
