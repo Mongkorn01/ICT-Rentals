@@ -8,6 +8,7 @@
 ```bash
 mysql -u root -p < create_user.sql
 ```
+> Ensure the user is in the .env file
 ### 2. Run mysql file to create the database
 ```bash
 mysql -u root -p < sec_gr10_database.sql
