@@ -1,4 +1,4 @@
-### ICT-Rentals
+# ICT-Rentals
 ---
 ## Notes
 - This project is part of ITCS223_Introduction to Web Development
