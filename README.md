@@ -35,7 +35,7 @@ npm install
 ```bash
 npm start
 ```
-### 4. Login with provided passwords
+### 4. Login with credentials
 #### Student
 * **Username:** `aaaa`
 * **Password:** `aaaa`
