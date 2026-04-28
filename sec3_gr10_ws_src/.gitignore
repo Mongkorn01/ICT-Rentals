@@ -66,8 +66,8 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
-# .env   ## Ajarn or TAs can either use our .env config (with created user) or make their own
-# .env.* ## Will not include in production
+.env   ## Ajarn or TAs can either use our .env config (with created user) or make their own
+.env.* ## Will not include in production
 !.env.example
 
 # parcel-bundler cache (https://parceljs.org/)

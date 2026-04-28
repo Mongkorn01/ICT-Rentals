@@ -58,7 +58,7 @@ const model = genAI.getGenerativeModel({
 
 /* --- AI Helper Route --- */
 // Use this to get AI assistance anywhere in your app
-router.post('/api/ai-assist', async (req, res) => {
+router.post('/ai-assist', async (req, res) => {
     try {
         const { prompt } = req.body;
         const result = await model.generateContent(prompt);
@@ -73,7 +73,7 @@ router.post('/api/ai-assist', async (req, res) => {
 
 /* --- AUTH; /login-admin  /login-student --- */
 
-router.post('/api/login-student', (req, res) => {
+router.post('/login-student', (req, res) => {
     const { student_id, password } = req.body;
     if (!student_id || !password)
         return res.status(400).json({ error: true, message: 'Please provide student ID and password.' });
@@ -93,7 +93,7 @@ router.post('/api/login-student', (req, res) => {
     });
 });
 
-router.post('/api/login-admin', (req, res) => {
+router.post('/login-admin', (req, res) => {
     const { email, password } = req.body;
     if (!email || !password)
         return res.status(400).json({ error: true, message: 'Please provide email and password.' });
@@ -120,7 +120,7 @@ router.post('/api/login-admin', (req, res) => {
 
 /* --- ADMIN; /admin/dashboard --- */
 
-router.get('/api/admin/dashboard', (req, res) => {
+router.get('/admin/dashboard', (req, res) => {
     const { status } = req.query;
     const whereClause = status ? 'WHERE ri.status = ?' : '';
     const params = status ? [status] : [];
@@ -146,14 +146,14 @@ router.get('/api/admin/dashboard', (req, res) => {
 
 /* --- ADMIN; /admin/brand-control  /admin/add-brand  /admin/edit-brand --- */
 
-router.get('/api/admin/brand-control', (req, res) => {
+router.get('/admin/brand-control', (req, res) => {
     dbConn.query('SELECT DISTINCT brand FROM Equipments_Models ORDER BY brand', (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         return res.json({ error: false, data: results, message: 'Brands retrieved.' });
     });
 });
 
-router.post('/api/admin/add-brand', (req, res) => {
+router.post('/admin/add-brand', (req, res) => {
     const { brand } = req.body;
     if (!brand) return res.status(400).json({ error: true, message: 'brand name is required.' });
     dbConn.query('SELECT DISTINCT brand FROM Equipments_Models WHERE brand = ?', [brand], (err, results) => {
@@ -163,7 +163,7 @@ router.post('/api/admin/add-brand', (req, res) => {
     });
 });
 
-router.put('/api/admin/edit-brand/:brand', (req, res) => {
+router.put('/admin/edit-brand/:brand', (req, res) => {
     const { new_brand } = req.body;
     if (!new_brand) return res.status(400).json({ error: true, message: 'new_brand is required.' });
     dbConn.query('UPDATE Equipments_Models SET brand = ? WHERE brand = ?', [new_brand, req.params.brand], (err, results) => {
@@ -173,7 +173,7 @@ router.put('/api/admin/edit-brand/:brand', (req, res) => {
     });
 });
 
-router.delete('/api/admin/brand-control/:brand', (req, res) => {
+router.delete('/admin/brand-control/:brand', (req, res) => {
     dbConn.query('DELETE FROM Equipments_Models WHERE brand = ?', [req.params.brand], (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Brand not found.' });
@@ -183,14 +183,14 @@ router.delete('/api/admin/brand-control/:brand', (req, res) => {
 
 /* --- ADMIN; /admin/category-control  /admin/add-category  /admin/edit-category --- */
 
-router.get('/api/admin/category-control', (req, res) => {
+router.get('/admin/category-control', (req, res) => {
     dbConn.query('SELECT DISTINCT category FROM Equipments_Models ORDER BY category', (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         return res.json({ error: false, data: results, message: 'Categories retrieved.' });
     });
 });
 
-router.post('/api/admin/add-category', (req, res) => {
+router.post('/add-category', (req, res) => {
     const { category } = req.body;
     if (!category) return res.status(400).json({ error: true, message: 'category name is required.' });
     dbConn.query('SELECT DISTINCT category FROM Equipments_Models WHERE category = ?', [category], (err, results) => {
@@ -200,7 +200,7 @@ router.post('/api/admin/add-category', (req, res) => {
     });
 });
 
-router.put('/api/admin/edit-category/:category', (req, res) => {
+router.put('/admin/edit-category/:category', (req, res) => {
     const { new_category } = req.body;
     if (!new_category) return res.status(400).json({ error: true, message: 'new_category is required.' });
     dbConn.query('UPDATE Equipments_Models SET category = ? WHERE category = ?', [new_category, req.params.category], (err, results) => {
@@ -210,7 +210,7 @@ router.put('/api/admin/edit-category/:category', (req, res) => {
     });
 });
 
-router.delete('/api/admin/category-control/:category', (req, res) => {
+router.delete('/admin/category-control/:category', (req, res) => {
     dbConn.query('DELETE FROM Equipments_Models WHERE category = ?', [req.params.category], (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Category not found.' });
@@ -220,7 +220,7 @@ router.delete('/api/admin/category-control/:category', (req, res) => {
 
 /* --- ADMIN; /admin/product-control  /admin/add-product  /admin/edit-product --- */
 
-router.get('/api/admin/product-control', (req, res) => {
+router.get('/admin/product-control', (req, res) => {
     const sql = `
         SELECT m.*,
             COUNT(CASE WHEN i.status = 'Available' THEN 1 END) AS quantity_available,
@@ -235,7 +235,7 @@ router.get('/api/admin/product-control', (req, res) => {
     });
 });
 
-router.post('/api/admin/add-product', (req, res) => {
+router.post('/admin/add-product', (req, res) => {
     const { name, brand, category, img_url, details, specs, admin_id } = req.body;
     if (!name || !brand || !category || !admin_id)
         return res.status(400).json({ error: true, message: 'name, brand, category, and admin_id are required.' });
@@ -254,7 +254,7 @@ router.post('/api/admin/add-product', (req, res) => {
     );
 });
 
-router.put('/api/admin/edit-product/:id', (req, res) => {
+router.put('/admin/edit-product/:id', (req, res) => {
     const { name, brand, category, img_url, details, specs, admin_id } = req.body;
     if (!admin_id)
         return res.status(400).json({ error: true, message: 'admin_id is required.' });
@@ -274,7 +274,7 @@ router.put('/api/admin/edit-product/:id', (req, res) => {
     );
 });
 
-router.delete('/api/admin/product-control/:id', (req, res) => {
+router.delete('/admin/product-control/:id', (req, res) => {
     const { admin_id } = req.body;
     dbConn.query('DELETE FROM Equipments_Models WHERE model_id = ?', [req.params.id], (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
@@ -291,7 +291,7 @@ router.delete('/api/admin/product-control/:id', (req, res) => {
 
 /* --- ADMIN; /admin/penalty --- */
 
-router.get('/api/admin/penalty', (req, res) => {
+router.get('/admin/penalty', (req, res) => {
     const sql = `
         SELECT ri.rental_item_id, ri.penalty_fee, rt.due_date,
             CONCAT(s.first_name, ' ', s.last_name) AS student_name,
@@ -313,7 +313,7 @@ router.get('/api/admin/penalty', (req, res) => {
 
 /* --- STUDENT; /student/dashboard --- */
 
-router.get('/api/student/dashboard/:id', (req, res) => {
+router.get('/student/dashboard/:id', (req, res) => {
     const sql = `
         SELECT ri.rental_item_id, ri.status, ri.return_date, ri.penalty_fee,
             rt.transaction_id, rt.borrow_date, rt.due_date, rt.event_name,
@@ -333,7 +333,7 @@ router.get('/api/student/dashboard/:id', (req, res) => {
 
 /* --- STUDENT; /student/rent --- */
 
-router.get('/api/student/rent', (req, res) => {
+router.get('/student/rent', (req, res) => {
     const sql = `
         SELECT m.*,
             COUNT(CASE WHEN i.status = 'Available' THEN 1 END) AS quantity_available,
@@ -350,7 +350,7 @@ router.get('/api/student/rent', (req, res) => {
 
 /* --- STUDENT; /student/search  +  /student/search-results --- */
 
-router.get('/api/student/search', (req, res) => {
+router.get('/student/search', (req, res) => {
     const { brand, category, status, name } = req.query;
     let conditions = [];
     let params = [];
@@ -378,7 +378,7 @@ router.get('/api/student/search', (req, res) => {
 
 /* --- STUDENT; /student/product --- */
 
-router.get('/api/student/product/:id', (req, res) => {
+router.get('/student/product/:id', (req, res) => {
     const sql = `
         SELECT m.*,
             COUNT(CASE WHEN i.status = 'Available' THEN 1 END) AS quantity_available,
@@ -397,7 +397,7 @@ router.get('/api/student/product/:id', (req, res) => {
 
 /* --- STUDENT; /student/profile --- */
 
-router.get('/api/student/profile/:id', (req, res) => {
+router.get('/student/profile/:id', (req, res) => {
     dbConn.query(
         'SELECT student_id, first_name, last_name, email, phone FROM Students WHERE student_id = ?',
         [req.params.id],
@@ -411,7 +411,7 @@ router.get('/api/student/profile/:id', (req, res) => {
 
 /* --- STUDENT; /student/justification --- */
 
-router.post('/api/student/justification', (req, res) => {
+router.post('/student/justification', (req, res) => {
     const { student_id, admin_id, event_name, reason, where_event, outside_location, borrow_date, due_date, item_ids } = req.body;
     if (!student_id || !admin_id || !event_name || !reason || !where_event || !borrow_date || !due_date || !item_ids?.length)
         return res.status(400).json({ error: true, message: 'All required fields must be provided including item_ids.' });
