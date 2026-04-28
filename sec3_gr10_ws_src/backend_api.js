@@ -73,6 +73,24 @@ router.post('/ai-assist', async (req, res) => {
 
 /* --- AUTH; /login-admin  /login-student --- */
 
+// Testing Valid Student Login
+// method: post
+// URL: http://localhost:3031/login-student
+// body: raw JSON
+// {
+//   "student_id": "6501234001",
+//   "password": "student1"
+// }
+
+// Testing Invalid Student Password (Returns 401)
+// method: post
+// URL: http://localhost:3031/login-student
+// body: raw JSON
+// {
+//   "student_id": "6501234001",
+//   "password": "wrongpassword"
+// }
+
 router.post('/login-student', (req, res) => {
     const { student_id, password } = req.body;
     if (!student_id || !password)
@@ -92,6 +110,24 @@ router.post('/login-student', (req, res) => {
         return res.json({ error: false, message: 'Login successful.', data: studentData });
     });
 });
+
+// Testing Valid Admin Login via Username
+// method: post
+// URL: http://localhost:3031/login-admin
+// body: raw JSON
+// {
+//   "identifier": "Supersomchai123",
+//   "password": "admin1"
+// }
+
+// Testing Valid Admin Login via Email
+// method: post
+// URL: http://localhost:3031/login-admin
+// body: raw JSON
+// {
+//   "identifier": "somchai.w@ict.ac.th",
+//   "password": "admin1"
+// }
 
 router.post('/login-admin', (req, res) => {
     const { identifier, password } = req.body;  // 'identifier' = email or username
@@ -125,6 +161,16 @@ router.post('/login-admin', (req, res) => {
 
 /* --- ADMIN; /admin/dashboard --- */
 
+// Testing Retrieve All Rental Records
+// method: get
+// URL: http://localhost:3031/admin/dashboard
+// query: None
+
+// Testing Filter by Overdue Status
+// method: get
+// URL: http://localhost:3031/admin/dashboard?status=Overdue
+// query: status=Overdue
+
 router.get('/admin/dashboard', (req, res) => {
     const { status } = req.query;
     const whereClause = status ? 'WHERE ri.status = ?' : '';
@@ -151,6 +197,16 @@ router.get('/admin/dashboard', (req, res) => {
 
 /* --- ADMIN; /admin/product-control  /admin/add-product  /admin/edit-product --- */
 
+// Testing Retrieve All Product Models with Stock Counts
+// method: get
+// URL: http://localhost:3031/admin/product-control
+// query: None
+
+// Testing Empty/Default Query Response
+// method: get
+// URL: http://localhost:3031/admin/product-control
+// headers: Cache-Control: no-cache
+
 router.get('/admin/product-control', (req, res) => {
     const sql = `
         SELECT m.*,
@@ -165,6 +221,26 @@ router.get('/admin/product-control', (req, res) => {
         return res.json({ error: false, data: results, message: 'All products retrieved.' });
     });
 });
+
+// Testing Successfully Add a New Equipment Model
+// method: post
+// URL: http://localhost:3031/admin/add-product
+// body: raw JSON
+// {
+//   "name": "Wireless Mouse",
+//   "brand": "Logitech",
+//   "category": "Connectivity",
+//   "admin_id": 1
+// }
+
+// Testing Missing Required Fields (Returns 400)
+// method: post
+// URL: http://localhost:3031/admin/add-product
+// body: raw JSON
+// {
+//   "name": "Missing Fields",
+//   "brand": "Test"
+// }
 
 router.post('/admin/add-product', (req, res) => {
     const { name, brand, category, img_url, details, specs, admin_id } = req.body;
@@ -185,6 +261,26 @@ router.post('/admin/add-product', (req, res) => {
     );
 });
 
+// Testing Successfully Update Existing Model (model_id=1)
+// method: put
+// URL: http://localhost:3031/admin/edit-product/1
+// body: raw JSON
+// {
+//   "name": "MacBook Pro 14-inch (Updated)",
+//   "brand": "Apple",
+//   "category": "Computing",
+//   "admin_id": 1
+// }
+
+// Testing Update Non-Existent Model ID (Returns 404)
+// method: put
+// URL: http://localhost:3031/admin/edit-product/999
+// body: raw JSON
+// {
+//   "name": "Ghost Product",
+//   "admin_id": 1
+// }
+
 router.put('/admin/edit-product/:id', (req, res) => {
     const { name, brand, category, img_url, details, specs, admin_id } = req.body;
     if (!admin_id)
@@ -204,6 +300,22 @@ router.put('/admin/edit-product/:id', (req, res) => {
         }
     );
 });
+
+// Testing Successfully Delete Model & Associated Items (model_id=10)
+// method: delete
+// URL: http://localhost:3031/admin/product-control/10
+// body: raw JSON
+// {
+//   "admin_id": 1
+// }
+
+// Testing Delete Non-Existent Model ID (Returns 404)
+// method: delete
+// URL: http://localhost:3031/admin/product-control/888
+// body: raw JSON
+// {
+//   "admin_id": 1
+// }
 
 router.delete('/admin/product-control/:id', (req, res) => {
     const { admin_id } = req.body;
@@ -255,6 +367,16 @@ router.delete('/admin/product-control/:id', (req, res) => {
 
 /* --- ADMIN; /admin/penalty --- */
 
+// Testing Retrieve Overdue Penalty Records
+// method: get
+// URL: http://localhost:3031/admin/penalty
+// query: None
+
+// Testing Response Header Validation (JSON Content-Type)
+// method: get
+// URL: http://localhost:3031/admin/penalty
+// headers: Accept: application/json
+
 router.get('/admin/penalty', (req, res) => {
     const sql = `
         SELECT ri.rental_item_id, ri.penalty_fee, rt.due_date,
@@ -277,6 +399,16 @@ router.get('/admin/penalty', (req, res) => {
 
 /* --- STUDENT; /student/dashboard --- */
 
+// Testing Retrieve Rental History for Valid Student
+// method: get
+// URL: http://localhost:3031/student/dashboard/6501234001
+// query: None
+
+// Testing Retrieve History for Non-Existent Student (Returns 200 empty array or 404)
+// method: get
+// URL: http://localhost:3031/student/dashboard/00000000
+// query: None
+
 router.get('/student/dashboard/:id', (req, res) => {
     const sql = `
         SELECT ri.rental_item_id, ri.status, ri.return_date, ri.penalty_fee,
@@ -297,6 +429,16 @@ router.get('/student/dashboard/:id', (req, res) => {
 
 /* --- STUDENT; /student/rent --- */
 
+// Testing Retrieve All Available Equipment for Renting
+// method: get
+// URL: http://localhost:3031/student/rent
+// query: None
+
+// Testing JSON Response Structure Validation
+// method: get
+// URL: http://localhost:3031/student/rent
+// headers: Accept: application/json
+
 router.get('/student/rent', (req, res) => {
     const sql = `
         SELECT m.*,
@@ -313,6 +455,16 @@ router.get('/student/rent', (req, res) => {
 });
 
 /* --- STUDENT; /student/search  +  /student/search-results --- */
+
+// Testing Search by Brand and Category
+// method: get
+// URL: http://localhost:3031/student/search?brand=Apple&category=Computing
+// query: brand=Apple, category=Computing
+
+// Testing No Criteria Search (Returns All Products)
+// method: get
+// URL: http://localhost:3031/student/search
+// query: None
 
 router.get('/student/search', (req, res) => {
     const { brand, category, status, name } = req.query;
@@ -342,6 +494,16 @@ router.get('/student/search', (req, res) => {
 
 /* --- STUDENT; /student/product --- */
 
+// Testing Get Details for Valid Product (Canon Camera, model_id=4)
+// method: get
+// URL: http://localhost:3031/student/product/4
+// query: None
+
+// Testing Get Details for Non-Existent Product (Returns 404)
+// method: get
+// URL: http://localhost:3031/student/product/999
+// query: None
+
 router.get('/student/product/:id', (req, res) => {
     const sql = `
         SELECT m.*,
@@ -361,6 +523,16 @@ router.get('/student/product/:id', (req, res) => {
 
 /* --- STUDENT; /student/profile --- */
 
+// Testing Retrieve Valid Student Profile
+// method: get
+// URL: http://localhost:3031/student/profile/6501234005
+// query: None
+
+// Testing Retrieve Non-Existent Student Profile (Returns 404)
+// method: get
+// URL: http://localhost:3031/student/profile/99999999
+// query: None
+
 router.get('/student/profile/:id', (req, res) => {
     dbConn.query(
         'SELECT student_id, first_name, last_name, email, phone FROM Students WHERE student_id = ?',
@@ -374,18 +546,42 @@ router.get('/student/profile/:id', (req, res) => {
 });
 
 /* --- STUDENT; /student/justification --- */
+
+// Testing Successfully Submit Rental Request
+// method: post
+// URL: http://localhost:3031/student/justification
+// body: raw JSON
+// {
+//   "student_id": "6501234003",
+//   "admin_id": 2,
+//   "event_name": "Photography Workshop",
+//   "reason": "Need camera for event coverage",
+//   "where_event": "ICT",
+//   "outside_location": null,
+//   "borrow_date": "2026-05-10T09:00:00",
+//   "due_date": "2026-05-11T17:00:00",
+//   "item_ids": [5, 7]
+// }
+
+// Testing Missing Required Fields (Returns 400)
+// method: post
+// URL: http://localhost:3031/student/justification
+// body: raw JSON
+// {
+//   "student_id": "6501234003",
+//   "event_name": "Missing Fields"
+// }
+
 router.post('/student/justification', (req, res) => {
-    const { 
-        student_id, admin_id, event_name, reason, 
-        where_event, outside_location, borrow_date, due_date, item_ids 
+    const {
+        student_id, admin_id, event_name, reason,
+        where_event, outside_location, borrow_date, due_date, item_ids
     } = req.body;
 
-    // 1. Improved Validation (Checking for null/undefined specifically)
     if (student_id == null || admin_id == null || !event_name || !reason || !where_event || !borrow_date || !due_date || !item_ids?.length) {
         return res.status(400).json({ error: true, message: 'All required fields must be provided.' });
     }
 
-    // 2. Insert into Rental_Transactions
     const transSql = 'INSERT INTO Rental_Transactions (borrow_date, due_date, event_name, reason, where_event, outside_location, admin_id, student_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     const transValues = [borrow_date, due_date, event_name, reason, where_event, outside_location || null, admin_id, student_id];
 
@@ -393,21 +589,16 @@ router.post('/student/justification', (req, res) => {
         if (err) return res.status(500).json({ error: true, message: "Transaction Error: " + err.message });
 
         const transaction_id = transResult.insertId;
-        
-        // 3. Prepare Bulk Insert for Rental_Items
         const rentalItemValues = item_ids.map(item_id => [transaction_id, item_id, 'Pending']);
 
         dbConn.query('INSERT INTO Rental_Items (transaction_id, item_id, status) VALUES ?', [rentalItemValues], (err2) => {
             if (err2) return res.status(500).json({ error: true, message: "Items Error: " + err2.message });
 
-            // 4. Log the activity
             const logSql = 'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id, target_transaction_id) VALUES (?, ?, ?, ?)';
             const logDetails = `Transaction ${transaction_id} submitted by student ${student_id}`;
             
             dbConn.query(logSql, ['Approve Loan', logDetails, admin_id, transaction_id], (err3) => {
-                // We return success even if log fails, but we check for it
-                if (err3) console.error("Log Error:", err3.message);
-                
+                if (err3) console.error("Log Error: ", err3.message);
                 return res.json({ 
                     error: false, 
                     data: { transaction_id }, 
