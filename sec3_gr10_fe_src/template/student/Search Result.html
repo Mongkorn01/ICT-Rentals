@@ -502,33 +502,58 @@
         // --- Cart Management Logic ---
 
         function addToCart(modelId, btnElement) {
-            // 1. Get the specific card container to find the correct quantity
             const card = btnElement.closest('.product-card');
-            const quantity = parseInt(card.querySelector('.qty-val').innerText);
+            const quantityToAdd = parseInt(card.querySelector('.qty-val').innerText);
             const productName = card.querySelector('.product-title').innerText;
+            
+            // 1. Get max stock
+            const picker = card.querySelector('.qty-picker');
+            const maxStock = parseInt(picker.getAttribute('data-max-stock')) || 0;
 
-            // 2. Retrieve existing cart or start new array
+            if (quantityToAdd <= 0) return;
+
+            // 2. Retrieve existing cart
             let cart = JSON.parse(localStorage.getItem('student_cart')) || [];
 
-            // 3. Check if item already exists in cart, update quantity if so
+            // 3. Check current total for this item in the cart
             const existingItem = cart.find(item => item.model_id === modelId);
+            const currentInCart = existingItem ? existingItem.quantity : 0;
+
+            // 4. VALIDATION: Prevent exceeding stock
+            if (currentInCart + quantityToAdd > maxStock) {
+                alert(`❌ Cannot add more. Only ${maxStock} units available in total, and you already have ${currentInCart} in your cart.`);
+                return; 
+            }
+
+            // 5. Update or Add to cart
             if (existingItem) {
-                existingItem.quantity += quantity;
+                existingItem.quantity += quantityToAdd;
             } else {
                 cart.push({
                     model_id: modelId,
                     name: productName,
-                    quantity: quantity,
+                    quantity: quantityToAdd,
                     img: card.querySelector('.product-img').src
                 });
             }
 
-            // 4. Save back to localStorage
+            // 6. Save back to localStorage
             localStorage.setItem('student_cart', JSON.stringify(cart));
             
-            // Optional: Visual feedback
-            alert(`${productName} added to cart!`);
+            // 7. FEEDBACK: Update the UI without reloading
             updateCartCounter(); 
+            
+            // Optional: Change button text temporarily for feedback
+            const originalText = btnElement.innerText;
+            btnElement.innerText = "✅ Added!";
+            btnElement.style.background = "#4CAF50"; // Green feedback
+            btnElement.style.color = "white";
+
+            setTimeout(() => {
+                btnElement.innerText = originalText;
+                btnElement.style.background = ""; // Back to CSS default
+                btnElement.style.color = "";
+            }, 2000);
         }
 
         function rentNow(modelId, btnElement) {
@@ -544,7 +569,7 @@
             localStorage.setItem('direct_rent', JSON.stringify(checkoutItem));
             
             // Redirect straight to justification page
-            window.location.href = '/student/justification';
+            window.location.href = '/student/cart';
         }
 
         function updateCartCounter() {

@@ -240,23 +240,24 @@
             <div class="info-container">
                 <div class="info-row">
                     <div class="label">ID:</div>
-                    <div class="value"></div>
+                    <div class="value" id="prof-id">Loading...</div>
                 </div>
                 <div class="info-row">
                     <div class="label">Name:</div>
-                    <div class="value"></div>
+                    <div class="value" id="prof-name">Loading...</div>
                 </div>
                 <div class="info-row">
                     <div class="label">Phone:</div>
-                    <div class="value"></div>
+                    <div class="value" id="prof-phone">Loading...</div>
                 </div>
                 <div class="info-row">
                     <div class="label">Email:</div>
-                    <div class="value"></div>
+                    <div class="value" id="prof-email">Loading...</div>
                 </div>
             </div>
         </div>
     </main>
+
     <!-- GEMINI HELPER -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
@@ -331,6 +332,36 @@
                 }
             }
         }
+
+        /* API */
+        document.addEventListener('DOMContentLoaded', async () => {
+            const studentData = JSON.parse(localStorage.getItem('studentData'));
+            
+            if (!studentData || !studentData.student_id) {
+                window.location.href = '/login-student';
+                return;
+            }
+
+            const studentId = studentData.student_id;
+
+            try {
+                // ADDED /api/ TO THE START OF THE URL
+                const response = await fetch(`/api/student/profile/${studentId}`);
+                
+                // This is where it was crashing because 'response' was HTML, not JSON
+                const result = await response.json();
+
+                if (!result.error) {
+                    const student = result.data;
+                    document.getElementById('prof-id').textContent = student.student_id;
+                    document.getElementById('prof-name').textContent = `${student.first_name} ${student.last_name}`;
+                    document.getElementById('prof-phone').textContent = student.phone || 'N/A';
+                    document.getElementById('prof-email').textContent = student.email;
+                }
+            } catch (error) {
+                console.error("Failed to sync profile with database:", error);
+            }
+        });
     </script>
 </body>
 </html>

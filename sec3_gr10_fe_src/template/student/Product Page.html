@@ -486,8 +486,8 @@
                 }
 
                 // 5. Setup Button Actions
-                addBtn.onclick = () => addToCart(product);
-
+                addBtn.onclick = (e) => addToCart(product.model_id, e.target);
+               
                 rentBtn.onclick = () => {
                     const currentQty = parseInt(qtyDisplay.innerText);
                     if (currentQty > 0) {
@@ -496,7 +496,7 @@
                             name: product.name,
                             quantity: currentQty
                         }));
-                        window.location.href = '/student/justification';
+                        window.location.href = '/student/cart';
                     }
                 };
 
@@ -532,35 +532,59 @@
         }
 
         // Function to handle adding the current product to the cart
-        function addToCart(product) {
-            const qtyValue = parseInt(document.getElementById('qty-val').innerText);
+        function addToCart(modelId, btnElement) {
+            // 1. Get quantity from the specific ID used on this page
+            const qtyElem = document.getElementById('qty-val');
+            const quantityToAdd = parseInt(qtyElem.innerText);
+            const productName = document.getElementById('display-name').innerText;
+            const productImg = document.getElementById('display-img').src;
+            
+            // maxAvailable is already a global variable updated during fetch
+            if (quantityToAdd <= 0) return;
+
+            // 2. Retrieve existing cart
             let cart = JSON.parse(localStorage.getItem('student_cart')) || [];
 
-            const existingItem = cart.find(item => item.model_id === product.model_id);
+            // 3. Check current total for this item in the cart
+            const existingItem = cart.find(item => item.model_id === modelId);
             const currentInCart = existingItem ? existingItem.quantity : 0;
 
-            // Final validation: Total requested cannot exceed stock
-            if (currentInCart + qtyValue > maxAvailable) {
-                alert(`Cannot add more. You already have ${currentInCart} in cart, and max stock is ${maxAvailable}.`);
-                return;
+            // 4. VALIDATION: Use the global maxAvailable variable
+            if (currentInCart + quantityToAdd > maxAvailable) {
+                alert(`❌ Cannot add more. Only ${maxAvailable} units available in total, and you already have ${currentInCart} in your cart.`);
+                return; 
             }
 
+            // 5. Update or Add to cart
             if (existingItem) {
-                existingItem.quantity += qtyValue;
+                existingItem.quantity += quantityToAdd;
             } else {
                 cart.push({
-                    model_id: product.model_id,
-                    name: product.name,
-                    img: product.img_url,
-                    quantity: qtyValue,
-                    max: maxAvailable // Optional: store max to check on cart page later
+                    model_id: modelId,
+                    name: productName,
+                    quantity: quantityToAdd,
+                    img: productImg
                 });
             }
 
+            // 6. Save back to localStorage
             localStorage.setItem('student_cart', JSON.stringify(cart));
-            alert("Added to cart!");
-            updateCartCount();
+            
+            // 7. FEEDBACK
+            updateCartCount(); // Fixed the function name to match your code
+            
+            const originalText = btnElement.innerText;
+            btnElement.innerText = "✅ Added!";
+            btnElement.style.background = "#4CAF50"; 
+            btnElement.style.color = "white";
+
+            setTimeout(() => {
+                btnElement.innerText = originalText;
+                btnElement.style.background = ""; 
+                btnElement.style.color = "";
+            }, 2000);
         }
+
         // Function to update the top-right counter
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('student_cart')) || [];
