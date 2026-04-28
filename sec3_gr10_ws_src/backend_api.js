@@ -94,28 +94,33 @@ router.post('/login-student', (req, res) => {
 });
 
 router.post('/login-admin', (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password)
-        return res.status(400).json({ error: true, message: 'Please provide email and password.' });
+    const { identifier, password } = req.body;  // 'identifier' = email or username
+    if (!identifier || !password)
+        return res.status(400).json({ error: true, message: 'Please provide email/username and password.' });
 
-    dbConn.query('SELECT * FROM Administrators WHERE email = ?', [email], async (err, results) => {
-        if (err) return res.status(500).json({ error: true, message: err.message });
-        if (results.length === 0)
-            return res.status(401).json({ error: true, message: 'Invalid email or password.' });
+    // Check both email and username in one query
+    dbConn.query(
+        'SELECT * FROM Administrators WHERE email = ? OR username = ?',
+        [identifier, identifier],
+        async (err, results) => {
+            if (err) return res.status(500).json({ error: true, message: err.message });
+            if (results.length === 0)
+                return res.status(401).json({ error: true, message: 'Invalid credentials.' });
 
-        const admin = results[0];
-        const match = await bcrypt.compare(password, admin.password);
-        if (!match)
-            return res.status(401).json({ error: true, message: 'Invalid email or password.' });
+            const admin = results[0];
+            const match = await bcrypt.compare(password, admin.password);
+            if (!match)
+                return res.status(401).json({ error: true, message: 'Invalid credentials.' });
 
-        dbConn.query(
-            'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
-            ['Login', `Admin logged in: ${admin.email}`, admin.admin_id]
-        );
+            dbConn.query(
+                'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
+                ['Login', `Admin logged in: ${admin.email}`, admin.admin_id]
+            );
 
-        const { password: _, ...adminData } = admin;
-        return res.json({ error: false, message: 'Login successful.', data: adminData });
-    });
+            const { password: _, ...adminData } = admin;
+            return res.json({ error: false, message: 'Login successful.', data: adminData });
+        }
+    );
 });
 
 /* --- ADMIN; /admin/dashboard --- */
@@ -141,80 +146,6 @@ router.get('/admin/dashboard', (req, res) => {
     dbConn.query(sql, params, (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         return res.json({ error: false, data: results, message: 'Dashboard data retrieved.' });
-    });
-});
-
-/* --- ADMIN; /admin/brand-control  /admin/add-brand  /admin/edit-brand --- */
-
-router.get('/admin/brand-control', (req, res) => {
-    dbConn.query('SELECT DISTINCT brand FROM Equipments_Models ORDER BY brand', (err, results) => {
-        if (err) return res.status(500).json({ error: true, message: err.message });
-        return res.json({ error: false, data: results, message: 'Brands retrieved.' });
-    });
-});
-
-router.post('/admin/add-brand', (req, res) => {
-    const { brand } = req.body;
-    if (!brand) return res.status(400).json({ error: true, message: 'brand name is required.' });
-    dbConn.query('SELECT DISTINCT brand FROM Equipments_Models WHERE brand = ?', [brand], (err, results) => {
-        if (err) return res.status(500).json({ error: true, message: err.message });
-        if (results.length > 0) return res.status(409).json({ error: true, message: 'Brand already exists.' });
-        return res.json({ error: false, message: `Brand "${brand}" is ready to use.` });
-    });
-});
-
-router.put('/admin/edit-brand/:brand', (req, res) => {
-    const { new_brand } = req.body;
-    if (!new_brand) return res.status(400).json({ error: true, message: 'new_brand is required.' });
-    dbConn.query('UPDATE Equipments_Models SET brand = ? WHERE brand = ?', [new_brand, req.params.brand], (err, results) => {
-        if (err) return res.status(500).json({ error: true, message: err.message });
-        if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Brand not found.' });
-        return res.json({ error: false, data: results.affectedRows, message: 'Brand updated successfully.' });
-    });
-});
-
-router.delete('/admin/brand-control/:brand', (req, res) => {
-    dbConn.query('DELETE FROM Equipments_Models WHERE brand = ?', [req.params.brand], (err, results) => {
-        if (err) return res.status(500).json({ error: true, message: err.message });
-        if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Brand not found.' });
-        return res.json({ error: false, data: results.affectedRows, message: 'Brand deleted successfully.' });
-    });
-});
-
-/* --- ADMIN; /admin/category-control  /admin/add-category  /admin/edit-category --- */
-
-router.get('/admin/category-control', (req, res) => {
-    dbConn.query('SELECT DISTINCT category FROM Equipments_Models ORDER BY category', (err, results) => {
-        if (err) return res.status(500).json({ error: true, message: err.message });
-        return res.json({ error: false, data: results, message: 'Categories retrieved.' });
-    });
-});
-
-router.post('/add-category', (req, res) => {
-    const { category } = req.body;
-    if (!category) return res.status(400).json({ error: true, message: 'category name is required.' });
-    dbConn.query('SELECT DISTINCT category FROM Equipments_Models WHERE category = ?', [category], (err, results) => {
-        if (err) return res.status(500).json({ error: true, message: err.message });
-        if (results.length > 0) return res.status(409).json({ error: true, message: 'Category already exists.' });
-        return res.json({ error: false, message: `Category "${category}" is ready to use.` });
-    });
-});
-
-router.put('/admin/edit-category/:category', (req, res) => {
-    const { new_category } = req.body;
-    if (!new_category) return res.status(400).json({ error: true, message: 'new_category is required.' });
-    dbConn.query('UPDATE Equipments_Models SET category = ? WHERE category = ?', [new_category, req.params.category], (err, results) => {
-        if (err) return res.status(500).json({ error: true, message: err.message });
-        if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Category not found.' });
-        return res.json({ error: false, data: results.affectedRows, message: 'Category updated successfully.' });
-    });
-});
-
-router.delete('/admin/category-control/:category', (req, res) => {
-    dbConn.query('DELETE FROM Equipments_Models WHERE category = ?', [req.params.category], (err, results) => {
-        if (err) return res.status(500).json({ error: true, message: err.message });
-        if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Category not found.' });
-        return res.json({ error: false, data: results.affectedRows, message: 'Category deleted successfully.' });
     });
 });
 
@@ -276,16 +207,49 @@ router.put('/admin/edit-product/:id', (req, res) => {
 
 router.delete('/admin/product-control/:id', (req, res) => {
     const { admin_id } = req.body;
-    dbConn.query('DELETE FROM Equipments_Models WHERE model_id = ?', [req.params.id], (err, results) => {
+    const model_id = req.params.id;
+
+    // Step 1: Get all item_ids belonging to this model
+    dbConn.query('SELECT item_id FROM Equipments_Items WHERE model_id = ?', [model_id], (err, items) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
-        if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Product not found.' });
-        if (admin_id) {
-            dbConn.query(
-                'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
-                ['Delete Model', `Deleted model_id=${req.params.id}`, admin_id]
+
+        const item_ids = items.map(i => i.item_id);
+
+        const doDelete = () => {
+            // Step 3: Delete the items
+            const deleteItems = () => dbConn.query(
+                'DELETE FROM Equipments_Items WHERE model_id = ?', [model_id], (err) => {
+                    if (err) return res.status(500).json({ error: true, message: err.message });
+
+                    // Step 4: Delete the model
+                    dbConn.query('DELETE FROM Equipments_Models WHERE model_id = ?', [model_id], (err, results) => {
+                        if (err) return res.status(500).json({ error: true, message: err.message });
+                        if (results.affectedRows === 0)
+                            return res.status(404).json({ error: true, message: 'Product not found.' });
+
+                        if (admin_id) {
+                            dbConn.query(
+                                'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
+                                ['Delete Model', `Deleted model_id=${model_id}`, admin_id]
+                            );
+                        }
+                        return res.json({ error: false, message: 'Product deleted successfully.' });
+                    });
+                }
             );
-        }
-        return res.json({ error: false, data: results.affectedRows, message: 'Product deleted successfully.' });
+
+            if (item_ids.length > 0) {
+                // Step 2: Delete Rental_Items that reference these items
+                dbConn.query('DELETE FROM Rental_Items WHERE item_id IN (?)', [item_ids], (err) => {
+                    if (err) return res.status(500).json({ error: true, message: err.message });
+                    deleteItems();
+                });
+            } else {
+                deleteItems();
+            }
+        };
+
+        doDelete();
     });
 });
 
