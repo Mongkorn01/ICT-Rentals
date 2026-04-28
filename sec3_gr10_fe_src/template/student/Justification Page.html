@@ -89,19 +89,31 @@
             flex-grow: 1;
         }
 
-        .check-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 20px;
+        /* Unchecked State: A clean, empty square box */
+        .custom-check {
+            flex-shrink: 0;         
+            margin-top: 4px;       
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            cursor: pointer;
         }
 
-        .custom-check {
-            width: 32px;
-            height: 32px;
-            background: #d9d9d9;
-            border: none;
-            cursor: pointer;
+        /* Checked State: Becomes a solid blue box with a glow outline */
+        .check-item.active .custom-check,
+        .agreement-section.active .custom-check {
+            background-color: #007bff;
+            border-color: #007bff;
+            /* This creates the blue outline/glow effect around the box */
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3); 
+        }
+
+        /* Make text blue when active */
+        .check-item.active span {
+            color: #007bff;
+            font-weight: bold;
         }
 
         .outside-input {
@@ -115,15 +127,18 @@
         /* --- Agreement Section --- */
         .agreement-section {
             display: flex;
-            margin-top: 40px;
-            padding-left: 45px;
-            gap: 20px;
+            align-items: flex-start;
+            gap: 12px;              
+            margin-top: 20px;
         }
 
         .agreement-text {
+            margin: 0;               
             font-size: 18px;
-            line-height: 1.4;
-            max-width: 750px;
+            line-height: 1.4;      
+            color: #333;
+            cursor: pointer;
+            user-select: none;      
         }
 
         /* --- Buttons --- */
@@ -265,7 +280,7 @@
             <li><a href="/student/rent">Rent</a></li>
             <li><a href="/student/team">Team Page</a></li>
         </ul>
-        <div class="nav-right">
+        <div class="nav-right" style="display: flex; align-items: center;">
             <img src="https://i.postimg.cc/sgJMCVtT/Doorbell.png" style="height: 25px; cursor: pointer; margin-left: 15px;">
             
             <div class="profile-nav-wrapper" style="position: relative; display: flex; align-items: center; margin-left: 15px;">
@@ -302,22 +317,23 @@
 
         <div class="form-row">
             <div class="label-box">Location</div>
-            <div class="location-options">
-                <div class="check-item">
+            <div class="location-options" style="display: flex; align-items: center; gap: 20px;">
+                <div class="check-item" data-loc="ICT" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                     <div class="custom-check"></div>
                     <span>ICT</span>
                 </div>
-                <div class="check-item" style="flex-grow: 1;">
+
+                <div class="check-item" data-loc="Outside" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                     <div class="custom-check"></div>
                     <span>Outside:</span>
-                    <input type="text" class="outside-input">
+                    <input type="text" class="outside-input" style="height: 25px; border: 1px solid #ddd; border-radius: 4px;">
                 </div>
             </div>
         </div>
 
         <div class="agreement-section">
-            <div class="custom-check" style="flex-shrink: 0; margin-top: 5px;"></div>
-            <p class="agreement-text">
+            <div class="custom-check agreement-trigger" style="flex-shrink: 0; margin-top: 5px;"></div>
+            <p class="agreement-text agreement-trigger">
                 By clicking "Confirm Borrow," I agree to return all equipment in its original condition within seven (7) days. 
                 I acknowledge that failing to meet this deadline will trigger a formal penalty process, 
                 including email warnings and phone follow-ups.
@@ -404,6 +420,128 @@
                 }
             }
         }
+
+        /*Listen to buttons */
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Element Selectors
+            const eventInput = document.querySelectorAll('.input-field')[0];
+            const reasonInput = document.querySelectorAll('.input-field')[1];
+            const outsideInput = document.querySelector('.outside-input');
+            const locationItems = document.querySelectorAll('.location-options .check-item');
+            const agreementSection = document.querySelector('.agreement-section');
+            const [submitBtn, clearBtn] = document.querySelectorAll('.btn');
+
+            let selectedLocation = 'ICT'; // Default state
+
+            // 2. Location Selection Logic (Radio-style)
+            locationItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    // If user clicks directly in the input box, don't trigger the toggle logic
+                    if (e.target.classList.contains('outside-input')) return;
+
+                    // Clear 'active' from all, then add to clicked
+                    locationItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+
+                    // Determine selection based on text content
+                    selectedLocation = item.textContent.includes('ICT') ? 'ICT' : 'Outside';
+
+                    if (selectedLocation === 'Outside') {
+                        outsideInput.focus();
+                    } else {
+                        outsideInput.value = ''; // Clear input if switching back to ICT
+                    }
+                });
+            });
+
+            // 3. Agreement Toggle (Consolidated)
+            agreementSection.addEventListener('click', (e) => {
+                // Prevent toggle if the user is actually clicking the Submit or Clear buttons
+                if (e.target.classList.contains('btn')) return;
+
+                agreementSection.classList.toggle('active');
+            });
+
+            // 4. Submit and Redirect
+            submitBtn.onclick = async () => {
+                // Validation
+                if (!agreementSection.classList.contains('active')) {
+                    alert("Please check the agreement box.");
+                    return;
+                }
+
+                if (!eventInput.value.trim() || !reasonInput.value.trim()) {
+                    alert("Please fill in the Event Name and Reason.");
+                    return;
+                }
+
+                if (selectedLocation === 'Outside' && !outsideInput.value.trim()) {
+                    alert("Please specify the outside location.");
+                    return;
+                }
+
+                const directRent = JSON.parse(localStorage.getItem('direct_rent'));
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                
+                // Combine items: priority to directRent, otherwise use cart
+                const item_ids = directRent ? [directRent.model_id] : cart.map(i => i.model_id);
+
+                if (item_ids.length === 0) {
+                    alert("No items selected for borrowing.");
+                    return;
+                }
+
+                // Prepare timestamps (Format: YYYY-MM-DD HH:MM:SS)
+                const now = new Date();
+                const due = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+                const formatSQL = (d) => d.toISOString().slice(0, 19).replace('T', ' ');
+
+                const payload = {
+                    student_id: 1, // This should eventually come from your session/auth
+                    admin_id: 1,   
+                    event_name: eventInput.value,
+                    reason: reasonInput.value,
+                    where_event: selectedLocation,
+                    outside_location: selectedLocation === 'Outside' ? outsideInput.value : null,
+                    borrow_date: formatSQL(now),
+                    due_date: formatSQL(due),
+                    item_ids: item_ids
+                };
+
+                try {
+                    const response = await fetch('/student/justification', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+
+                    if (!result.error) {
+                        localStorage.removeItem('direct_rent');
+                        // You might want to clear the cart here too if applicable
+                        window.location.href = '/student/rent-status'; 
+                    } else {
+                        alert("Error: " + result.message);
+                    }
+                } catch (error) {
+                    console.error("Submission failed:", error);
+                    alert("Network error. Please check your connection.");
+                }
+            };
+
+            // 5. Clear Button Logic
+            clearBtn.onclick = () => {
+                eventInput.value = '';
+                reasonInput.value = '';
+                outsideInput.value = '';
+                agreementSection.classList.remove('active');
+                locationItems.forEach(i => i.classList.remove('active'));
+                // Reset to default
+                locationItems[0].classList.add('active');
+                selectedLocation = 'ICT';
+            };
+        });
     </script>
 
 </body>

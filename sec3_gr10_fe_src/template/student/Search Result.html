@@ -5,6 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICT-RENTALS - Product Details</title>
     <style>
+        /* Ensure the root and body allow scrolling */
+        html, body {
+            height: auto !important;
+            min-height: 100% !important;
+            overflow-y: auto !important;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        .content-wrapper, .main-container {
+            height: auto !important;
+            min-height: 100vh;
+            display: block; /* Ensure it's not trapped by a flexbox parent */
+            overflow: visible !important;
+        }
+        #dynamic-results-list {
+            height: auto !important;
+            overflow: visible !important;
+        }
+
+        /* Ensure your content wrapper doesn't trap the height */
+        .main-container {
+            min-height: 100vh;
+            padding-bottom: 50px; /* Space at the bottom */
+        }
+
+        /* Optional: Add a smooth scroll effect */
+        html {
+            scroll-behavior: smooth;
+        }
         :root {
             --nav-border: #e0e0e0;
             --bg-gray: #f5f5f5;
@@ -116,8 +146,15 @@
         .product-title { font-size: 28px; font-weight: 500; margin: 0; }
         .stock-info { width: 300px; text-align: left; }
         .stock-bar { width: 100%; height: 20px; background: #eee; border-radius: 10px; position: relative; overflow: hidden; }
-        .stock-fill { width: 50%; height: 100%; background: #ffebeb; display: flex; align-items: center; justify-content: center; color: var(--accent-red); font-size: 12px; }
-
+        .stock-bar-fill {
+            white-space: nowrap; /* Prevents text from wrapping */
+            min-width: fit-content; /* Ensures the bar is at least as wide as the text */
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--accent-red);
+        }
         .detail-text { color: #555; line-height: 1.5; margin: 20px 0; font-size: 15px; }
         .specs-toggle { font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
 
@@ -262,138 +299,9 @@
 
     <main>
         <div class="main-container">
-            
-            <div class="top-controls">
-                <div class="back-btn">⟨</div>
-                <div class="cart-box">
-                <div class="cart-box" onclick="location.href='Cart Page.html'" style="cursor: pointer;">
-                <div class="cart-icon" style="pointer-events: none;">🛒</div>
-                <div style="font-size: 12px; margin-top: 5px; pointer-events: none;">In cart: 4</div>
-                </div>
-                </div>
+            <div id="dynamic-results-list">
+                <div style="text-align: center; padding: 40px;">Searching for equipment...</div>
             </div>
-
-            <div class="product-card">
-                <div class="card-body">
-                    <div class="image-container">
-                        <div class="labels">
-                            <span class="label">Computing</span>
-                            <span class="label">Apple</span>
-                        </div>
-                        <img src="https://via.placeholder.com/250x300?text=iPhone+13" alt="iPhone 13" class="product-img">
-                    </div>
-                    <div class="details">
-                        <div class="title-row">
-                            <h2 class="product-title">iPhone 13</h2>
-                            <div class="stock-info">
-                                <span style="font-size: 14px;">left in stock</span>
-                                <div class="stock-bar">
-                                    <div class="stock-fill">1 out of 2</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="detail-text">
-                            <strong>Detail</strong><br>
-                            The Apple iPhone 13 is a flagship-class smartphone from Apple's 2021 lineup known for strong performance, good battery life, and excellent camera features for everyday use. It balances power and usability with a sleek design and long software support.
-                        </div>
-                        <div class="specs-toggle">▼ Specifications</div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="due-date">Due date: 22/02/2026</div>
-                    <div class="action-group">
-                        <span>Quantity</span>
-                        <div class="qty-picker">
-                            <button class="qty-btn">−</button>
-                            <div class="qty-val">1</div>
-                            <button class="qty-btn">+</button>
-                        </div>
-                        <button class="btn btn-add" onclick="window.location.href='/student/cart'">Add to cart</button>
-                        <button class="btn btn-rent" onclick="window.location.href='/student/justification'">Rent now</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="card-body">
-                    <div class="image-container">
-                        <div class="labels">
-                            <span class="label">Computing</span>
-                            <span class="label">Apple</span>
-                        </div>
-                        <img src="https://via.placeholder.com/250x300?text=iPhone+14" alt="iPhone 14" class="product-img">
-                    </div>
-                    <div class="details">
-                        <div class="title-row">
-                            <h2 class="product-title">iPhone 14</h2>
-                            <div class="stock-info">
-                                <span style="font-size: 14px;">left in stock</span>
-                                <div class="stock-bar">
-                                    <div class="stock-fill">1 out of 2</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="detail-text">
-                            <strong>Detail</strong><br>
-                            iPhone 14 is a capable and popular Apple smartphone with a 6.1" Super Retina XDR display, dual 12 MP cameras, and the A15 Bionic chip. It offers solid performance, great photo quality, and reliable battery life, making it a strong choice for everyday users.
-                        </div>
-                        <div class="specs-toggle">▼ Specifications</div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="due-date">Due date: 22/02/2026</div>
-                    <div class="action-group">
-                        <span>Quantity</span>
-                        <div class="qty-picker">
-                            <button class="qty-btn">−</button>
-                            <div class="qty-val">1</div>
-                            <button class="qty-btn">+</button>
-                        </div>
-                        <button class="btn btn-add" onclick="window.location.href='/student/cart'">Add to cart</button>
-                        <button class="btn btn-rent" onclick="window.location.href='/student/justification'">Rent now</button>                    </div>
-                </div>
-            </div>
-            
-            <div class="product-card">
-                <div class="card-body">
-                    <div class="image-container">
-                        <div class="labels">
-                            <span class="label">Computing</span>
-                            <span class="label">Apple</span>
-                        </div>
-                        <img src="https://via.placeholder.com/250x300?text=iPhone+15" alt="iPhone 15" class="product-img">
-                    </div>
-                    <div class="details">
-                        <div class="title-row">
-                            <h2 class="product-title">iPhone 15</h2>
-                            <div class="stock-info">
-                                <span style="font-size: 14px;">left in stock</span>
-                                <div class="stock-bar">
-                                    <div class="stock-fill">1 out of 2</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="detail-text">
-                            <strong>Detail</strong><br>
-                            Apple iPhone 15 is the next-generation 6.1″ iPhone featuring a faster A16 Bionic chip, upgraded 48 MP main camera, Dynamic Island interface, and USB-C charging for broader compatibility. It delivers improved performance, photography, and future-proof features over the iPhone 14.
-                        </div>
-                        <div class="specs-toggle">▼ Specifications</div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="due-date">Due date: 22/02/2026</div>
-                    <div class="action-group">
-                        <span>Quantity</span>
-                        <div class="qty-picker">
-                            <button class="qty-btn">−</button>
-                            <div class="qty-val">1</div>
-                            <button class="qty-btn">+</button>
-                        </div>
-                        <button class="btn btn-add" onclick="window.location.href='/student/cart'">Add to cart</button>
-                        <button class="btn btn-rent" onclick="window.location.href='/student/justification'">Rent now</button>                   </div>
-                </div>
-            </div>
-
         </div>
     </main>
 
@@ -469,6 +377,182 @@
                     dropdown.style.display = 'none';
                     arrow.textContent = '▼';
                 }
+            }
+        }
+
+        // Search result
+        document.addEventListener('DOMContentLoaded', async () => {
+            const resultsContainer = document.getElementById('dynamic-results-list');
+            const urlParams = new URLSearchParams(window.location.search);
+
+            try {
+                const response = await fetch(`/api/student/search?${urlParams.toString()}`);
+                const result = await response.json();
+
+                if (result.error || result.data.length === 0) {
+                    resultsContainer.innerHTML = `<div style="text-align: center; padding: 40px;">No matching equipment found.</div>`;
+                    return;
+                }
+
+                resultsContainer.innerHTML = result.data.map(product => {
+                    const available = product.quantity_available || 0;
+                    const total = product.quantity_total || 0;
+                    const stockPercent = total > 0 ? (available / total) * 100 : 0;
+                    
+                    // Stock logic: Start at 0 if no stock
+                    const isOutOfStock = available <= 0;
+                    const initialQty = isOutOfStock ? 0 : 1;
+                    const disabledStyle = isOutOfStock ? 'opacity: 0.5; pointer-events: none; cursor: not-allowed;' : '';
+
+                    return `
+                    <div class="product-card" style="margin-bottom: 20px;">
+                        <div class="card-body">
+                            <div class="image-container">
+                                <div class="labels">
+                                    <span class="label">${product.category}</span>
+                                    <span class="label">${product.brand}</span>
+                                </div>
+                                <img src="${product.img_url}" alt="${product.name}" class="product-img">
+                            </div>
+                            
+                            <div class="details">
+                                <div class="title-row">
+                                    <h2 class="product-title">${product.name}</h2>
+                                    <div class="stock-info">
+                                        <span style="font-size: 14px;">left in stock</span>
+                                        <div class="stock-bar" style="position: relative; width: 100%; background: #eee; height: 24px; border-radius: 12px; overflow: hidden; display: flex; align-items: center;">
+                                            <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${stockPercent}%; background: #ffebeb; transition: width 0.3s ease;"></div>
+                                            
+                                            <div style="position: relative; width: 100%; text-align: center; color: #ff4d4f; font-size: 13px; font-weight: 600; z-index: 1; white-space: nowrap;">
+                                                ${available} out of ${total}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-text">
+                                    <strong>Detail</strong><br>
+                                    ${product.details}
+                                </div>
+                                
+                                <div class="specs-wrapper" style="margin-top: 10px;">
+                                    <div class="specs-toggle" onclick="toggleSpecs(this)" style="cursor: pointer; color: #555; font-weight: 500;">
+                                        ▼ Specifications
+                                    </div>
+                                    <div class="specs-content" style="display: none; padding: 10px; background: #f9f9f9; border-radius: 4px; margin-top: 5px; font-size: 13px; border-left: 3px solid #007bff;">
+                                        ${product.specs}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="due-date">Due date: 22/02/2026</div>
+                            <div class="action-group">
+                                <span style="margin-right: 10px;">Quantity</span>
+                                <div class="qty-picker" data-max-stock="${available}" style="display: flex; align-items: center; border: 1px solid #ddd; border-radius: 4px; background: #fff; ${disabledStyle}">
+                                    <button class="qty-btn" onclick="adjustQty(this, -1)" style="padding: 5px 12px; border: none; cursor: pointer;">−</button>
+                                    <div class="qty-val" style="padding: 0 15px; font-weight: 600; min-width: 20px; text-align: center;">${initialQty}</div>
+                                    <button class="qty-btn" onclick="adjustQty(this, 1)" style="padding: 5px 12px; border: none; cursor: pointer;">+</button>
+                                </div>
+                                <button class="btn btn-add" style="${disabledStyle}" onclick="addToCart('${product.model_id}', this)">
+                                    ${isOutOfStock ? 'Out of Stock' : 'Add to cart'}
+                                </button>
+                                <button class="btn btn-rent" style="${disabledStyle}" onclick="rentNow('${product.model_id}', this)">Rent now</button>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+
+                // Ensure the page allows scrolling after injection
+                document.documentElement.style.height = 'auto';
+                document.body.style.overflowY = 'auto';
+
+            } catch (error) {
+                console.error("Search failed:", error);
+                resultsContainer.innerHTML = `<div style="text-align: center; color: red;">Error connecting to server.</div>`;
+            }
+        });
+
+        function adjustQty(btn, change) {
+            const picker = btn.parentElement;
+            const qtyDisplay = picker.querySelector('.qty-val');
+            const maxStock = parseInt(picker.getAttribute('data-max-stock')) || 0;
+            
+            let currentQty = parseInt(qtyDisplay.innerText);
+            let newQty = currentQty + change;
+
+            if (newQty < 0) newQty = 0;
+            if (newQty > maxStock) newQty = maxStock;
+
+            qtyDisplay.innerText = newQty;
+        }
+
+        function toggleSpecs(element) {
+            const content = element.nextElementSibling;
+            if (content.style.display === "none") {
+                content.style.display = "block";
+                element.innerText = "▲ Specifications";
+            } else {
+                content.style.display = "none";
+                element.innerText = "▼ Specifications";
+            }
+        }
+        // --- Cart Management Logic ---
+
+        function addToCart(modelId, btnElement) {
+            // 1. Get the specific card container to find the correct quantity
+            const card = btnElement.closest('.product-card');
+            const quantity = parseInt(card.querySelector('.qty-val').innerText);
+            const productName = card.querySelector('.product-title').innerText;
+
+            // 2. Retrieve existing cart or start new array
+            let cart = JSON.parse(localStorage.getItem('student_cart')) || [];
+
+            // 3. Check if item already exists in cart, update quantity if so
+            const existingItem = cart.find(item => item.model_id === modelId);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    model_id: modelId,
+                    name: productName,
+                    quantity: quantity,
+                    img: card.querySelector('.product-img').src
+                });
+            }
+
+            // 4. Save back to localStorage
+            localStorage.setItem('student_cart', JSON.stringify(cart));
+            
+            // Optional: Visual feedback
+            alert(`${productName} added to cart!`);
+            updateCartCounter(); 
+        }
+
+        function rentNow(modelId, btnElement) {
+            // Clear previous "Instant Rent" selection and save current one
+            const card = btnElement.closest('.product-card');
+            const quantity = card.querySelector('.qty-val').innerText;
+            
+            const checkoutItem = {
+                model_id: modelId,
+                quantity: quantity
+            };
+            
+            localStorage.setItem('direct_rent', JSON.stringify(checkoutItem));
+            
+            // Redirect straight to justification page
+            window.location.href = '/student/justification';
+        }
+
+        function updateCartCounter() {
+            const cart = JSON.parse(localStorage.getItem('student_cart')) || [];
+            const counter = document.getElementById('cart-count');
+            if (counter) {
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                counter.innerText = `In cart: ${totalItems}`;
             }
         }
     </script>

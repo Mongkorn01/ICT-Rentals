@@ -313,61 +313,18 @@
     </nav>
 
     <main class="content-wrapper">
-        <div class="back-circle">⟨</div>
+        <div class="back-circle" onclick="history.back()" style="cursor: pointer;">⟨</div>
 
-        <div class="cart-card">
-            <div class="cart-header">Category: Computing</div>
-            <div class="cart-list">
-                
-                <div class="cart-item">
-                    <div class="checkbox-container">✓</div>
-                    <img src="https://i.postimg.cc/1RdLw8Wq/Iphone13.png" alt="iPhone 13" class="product-img">
-                    <div class="item-details">
-                        <h2 class="item-name">iPhone 13</h2>
-                        <div class="stock-info">left in stock</div>
-                        <div class="stock-bar">
-                            <div class="stock-bar-fill">1 out of 1</div>
-                        </div>
-                        <div class="due-date">Due date:<br>22/02/2026</div>
-                    </div>
-                    <div class="item-right-panel">
-                        <div class="qty-selector">
-                            <button class="qty-btn">−</button>
-                            <div class="qty-input">1</div>
-                            <button class="qty-btn">+</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="cart-item">
-                    <div class="checkbox-container">✓</div>
-                    <img src="https://i.postimg.cc/Vsh3nJ7r/Iphone14.png" alt="iPhone 14" class="product-img">
-                    <div class="item-details">
-                        <h2 class="item-name">iPhone 14</h2>
-                        <div class="stock-info">left in stock</div>
-                        <div class="stock-bar">
-                            <div class="stock-bar-fill">1 out of 1</div>
-                        </div>
-                        <div class="due-date">Due date:<br>22/02/2026</div>
-                    </div>
-                    <div class="item-right-panel">
-                        <div class="qty-selector">
-                            <button class="qty-btn">−</button>
-                            <div class="qty-input">1</div>
-                            <button class="qty-btn">+</button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+        <div id="cart-container">
+            <div style="text-align: center; padding: 50px; color: #666;">Your cart is empty.</div>
         </div>
 
         <footer class="cart-footer">
             <div class="rent-all-box">
-                <div class="checkbox-large"></div>
+                <div class="checkbox-large" id="select-all" onclick="toggleSelectAll()"></div>
                 <span>Rent all</span>
             </div>
-            <button class="btn-rent-final" onclick="window.location.href='Justification Page.html'">Rent (2)</button>
+            <button class="btn-rent-final" id="checkout-btn" onclick="goToCheckout()">Rent (0)</button>
         </footer>
     </main>
     <!-- GEMINI HELPER -->
@@ -443,6 +400,85 @@
                     arrow.textContent = '▼';
                 }
             }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCart();
+        });
+
+        function renderCart() {
+            const container = document.getElementById('cart-container');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const cart = JSON.parse(localStorage.getItem('student_cart')) || [];
+
+            if (cart.length === 0) {
+                container.innerHTML = `<div style="text-align: center; padding: 50px; color: #666;">Your cart is empty.</div>`;
+                checkoutBtn.innerText = `Rent (0)`;
+                checkoutBtn.disabled = true;
+                return;
+            }
+
+            // Group items by category (Optional, but looks professional)
+            const grouped = cart.reduce((acc, item) => {
+                const cat = item.category || 'Other';
+                if (!acc[cat]) acc[cat] = [];
+                acc[cat].push(item);
+                return acc;
+            }, {});
+
+            container.innerHTML = Object.keys(grouped).map(category => `
+                <div class="cart-card">
+                    <div class="cart-header">Category: ${category}</div>
+                    <div class="cart-list">
+                        ${grouped[category].map(item => `
+                            <div class="cart-item" data-id="${item.model_id}">
+                                <div class="checkbox-container active">✓</div>
+                                <img src="${item.img}" alt="${item.name}" class="product-img">
+                                <div class="item-details">
+                                    <h2 class="item-name">${item.name}</h2>
+                                    <div class="stock-info">Selected for rent</div>
+                                    <div class="due-date">Due date:<br>22/02/2026</div>
+                                </div>
+                                <div class="item-right-panel">
+                                    <div class="qty-selector">
+                                        <button class="qty-btn" onclick="updateCartQty('${item.model_id}', -1)">−</button>
+                                        <div class="qty-input">${item.quantity}</div>
+                                        <button class="qty-btn" onclick="updateCartQty('${item.model_id}', 1)">+</button>
+                                    </div>
+                                    <div style="color: #ff4d4d; font-size: 12px; margin-top: 10px; cursor: pointer;" 
+                                        onclick="removeFromCart('${item.model_id}')">Remove</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            checkoutBtn.innerText = `Rent (${cart.length})`;
+            checkoutBtn.disabled = false;
+        }
+
+        function updateCartQty(modelId, change) {
+            let cart = JSON.parse(localStorage.getItem('student_cart')) || [];
+            const item = cart.find(i => i.model_id === modelId);
+            if (item) {
+                item.quantity = Math.max(1, item.quantity + change);
+                localStorage.setItem('student_cart', JSON.stringify(cart));
+                renderCart();
+            }
+        }
+
+        function removeFromCart(modelId) {
+            let cart = JSON.parse(localStorage.getItem('student_cart')) || [];
+            cart = cart.filter(i => i.model_id !== modelId);
+            localStorage.setItem('student_cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function goToCheckout() {
+            // Before moving to justification, you might want to save 
+            // exactly what is being checked out (if user unchecked some items)
+            window.location.href = '/student/justification';
         }
     </script>
 </body>

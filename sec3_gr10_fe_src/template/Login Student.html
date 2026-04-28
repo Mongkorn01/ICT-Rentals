@@ -323,6 +323,7 @@
 
                 if (response.ok && !result.error) {
                     // SUCCESS
+                    localStorage.setItem('studentData', JSON.stringify(result.data));
                     window.location.href = '/student/dashboard';
                 } else {
                     // WRONG PASSWORD or USER NOT FOUND

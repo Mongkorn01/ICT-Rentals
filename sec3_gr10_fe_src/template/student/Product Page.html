@@ -122,10 +122,14 @@
         .stock-container { width: 280px; }
         .stock-label { font-size: 14px; margin-bottom: 5px; display: block; }
         .stock-bar-bg { width: 100%; height: 24px; background: #f0f0f0; border-radius: 12px; overflow: hidden; }
-        .stock-bar-fill { 
-            width: 50%; height: 100%; background: #ffebeb; 
-            display: flex; align-items: center; justify-content: center; 
-            color: var(--accent-red); font-size: 13px; font-weight: 600; 
+        .stock-bar-fill {
+            white-space: nowrap; /* Prevents text from wrapping */
+            min-width: fit-content; /* Ensures the bar is at least as wide as the text */
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--accent-red);
         }
 
         .description-box { margin: 25px 0; line-height: 1.6; }
@@ -279,12 +283,11 @@
     </nav>
 
     <main class="content-wrapper">
-        
         <div class="top-action-bar">
-            <div class="back-circle">⟨</div>
-            <div class="cart-status">
+            <div class="back-circle" onclick="history.back()" style="cursor: pointer;">⟨</div>
+            <div class="cart-status" onclick="location.href='/student/cart'" style="cursor: pointer;">
                 <div class="cart-icon-circle">🛒</div>
-                <div style="font-size: 14px; font-weight: 500;">In cart: 4</div>
+                <div id="cart-count" style="font-size: 14px; font-weight: 500;">In cart: 0</div>
             </div>
         </div>
 
@@ -292,31 +295,32 @@
             <div class="product-main">
                 <div class="product-visuals">
                     <div class="tag-row">
-                        <span class="tag">Computing</span>
-                        <span class="tag">Apple</span>
+                        <span class="tag" id="display-category">Category</span>
+                        <span class="tag" id="display-brand">Brand</span>
                     </div>
-                    <img src="https://i.postimg.cc/1RdLw8Wq/Iphone13.png" alt="iPhone 13" class="product-image">
+                    <img src="" alt="" id="display-img" class="product-image">
                 </div>
 
                 <div class="product-info">
                     <div class="header-row">
-                        <h1 class="product-title">iPhone 13</h1>
+                        <h1 class="product-title" id="display-name">Loading...</h1>
                         <div class="stock-container">
                             <span class="stock-label">left in stock</span>
                             <div class="stock-bar-bg">
-                                <div class="stock-bar-fill">1 out of 2</div>
+                                <div id="display-stock-bar" class="stock-bar-fill">0 out of 0</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="description-box">
                         <span class="description-title">Detail</span>
-                        <p class="description-content">
-                            The Apple iPhone 13 is a flagship-class smartphone from Apple's 2021 lineup known for strong performance, good battery life, and excellent camera features for everyday use. It balances power and usability with a sleek design and long software support.
+                        <p class="description-content" id="display-details">
+                            Fetching details...
                         </p>
                     </div>
 
-                    <div class="specs-toggle">▼ Specifications</div>
+                    <div class="specs-toggle" onclick="toggleSpecs()" style="cursor: pointer;">▼ Specifications</div>
+                    <div id="display-specs" style="display: none; padding: 10px; font-size: 14px; color: #555;"></div>
                 </div>
             </div>
 
@@ -325,16 +329,15 @@
                 <div class="interaction-group">
                     <span class="qty-label">Quantity</span>
                     <div class="qty-selector">
-                        <button class="qty-btn">−</button>
-                        <div class="qty-input">1</div>
-                        <button class="qty-btn">+</button>
+                        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                        <div class="qty-input" id="qty-val">1</div>
+                        <button class="qty-btn" onclick="changeQty(1)">+</button>
                     </div>
-                        <button class="btn btn-cart" onclick="window.location.href='/student/cart'">Add to cart</button>
-                        <button class="btn btn-rent" onclick="window.location.href='/student/justification'">Rent now</button>  
+                    <button class="btn btn-cart" id="add-btn">Add to cart</button>
+                    <button class="btn btn-rent" id="rent-btn">Rent now</button>  
                 </div>
             </div>
         </div>
-
     </main>
     <!-- GEMINI HELPER -->
     <footer>
@@ -410,6 +413,165 @@
                 }
             }
         }
+
+        let maxAvailable = 0; 
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            if (!productId) {
+                alert("No product ID provided");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/student/product/${productId}`);
+                const result = await response.json();
+
+                if (result.error) {
+                    document.getElementById('display-name').innerText = "Product Not Found";
+                    return;
+                }
+
+                const product = result.data;
+
+                // 1. Calculations
+                maxAvailable = product.quantity_available || 0;
+                const total = product.quantity_total || 0;
+                const stockPercent = total > 0 ? (maxAvailable / total) * 100 : 0;
+                const isOutOfStock = maxAvailable <= 0;
+
+                // 2. Update UI text and tags
+                document.getElementById('display-name').innerText = product.name;
+                document.getElementById('display-category').innerText = product.category;
+                document.getElementById('display-brand').innerText = product.brand;
+                document.getElementById('display-details').innerText = product.details;
+                document.getElementById('display-specs').innerText = product.specs;
+                
+                const img = document.getElementById('display-img');
+                img.src = product.img_url;
+                img.alt = product.name;
+
+                // 3. Handle Stock Bar (The Layered Fix)
+                const barContainer = document.getElementById('display-stock-bar').parentElement;
+                
+                // We overwrite the innerHTML of the container to ensure the layered structure
+                barContainer.innerHTML = `
+                    <div class="stock-bar" style="position: relative; width: 100%; background: #eee; height: 24px; border-radius: 12px; overflow: hidden; display: flex; align-items: center;">
+                        <div id="display-stock-fill" style="position: absolute; left: 0; top: 0; height: 100%; width: ${stockPercent}%; background: #ffebeb; transition: width 0.3s ease;"></div>
+                        
+                        <div id="display-stock-bar" style="position: relative; width: 100%; text-align: center; color: #ff4d4f; font-size: 13px; font-weight: 600; z-index: 1; white-space: nowrap;">
+                            ${maxAvailable} out of ${total}
+                        </div>
+                    </div>
+                `;
+
+                // 4. Handle Button States
+                const addBtn = document.getElementById('add-btn');
+                const rentBtn = document.getElementById('rent-btn');
+                const qtyDisplay = document.getElementById('qty-val');
+
+                if (isOutOfStock) {
+                    addBtn.disabled = true;
+                    rentBtn.disabled = true;
+                    addBtn.innerText = "Out of Stock";
+                    addBtn.style.opacity = "0.5";
+                    addBtn.style.pointerEvents = "none";
+                    rentBtn.style.opacity = "0.5";
+                    rentBtn.style.pointerEvents = "none";
+                    qtyDisplay.innerText = "0";
+                } else {
+                    qtyDisplay.innerText = "1";
+                }
+
+                // 5. Setup Button Actions
+                addBtn.onclick = () => addToCart(product);
+
+                rentBtn.onclick = () => {
+                    const currentQty = parseInt(qtyDisplay.innerText);
+                    if (currentQty > 0) {
+                        localStorage.setItem('direct_rent', JSON.stringify({
+                            model_id: product.model_id,
+                            name: product.name,
+                            quantity: currentQty
+                        }));
+                        window.location.href = '/student/justification';
+                    }
+                };
+
+                updateCartCount();
+
+            } catch (err) {
+                console.error("Error loading product:", err);
+            }
+        });
+
+        // Helper: Toggle specs view
+        function toggleSpecs() {
+            const specs = document.getElementById('display-specs');
+            specs.style.display = specs.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function changeQty(val) {
+            const qtyElem = document.getElementById('qty-val');
+            let current = parseInt(qtyElem.innerText);
+            
+            // If out of stock, keep it at 0
+            if (maxAvailable <= 0) return;
+
+            let nextValue = current + val;
+
+            if (nextValue < 1) nextValue = 1;
+            if (nextValue > maxAvailable) {
+                nextValue = maxAvailable;
+                // Optional: show a small toast or tooltip instead of alert for better UX
+            }
+
+            qtyElem.innerText = nextValue;
+        }
+
+        // Function to handle adding the current product to the cart
+        function addToCart(product) {
+            const qtyValue = parseInt(document.getElementById('qty-val').innerText);
+            let cart = JSON.parse(localStorage.getItem('student_cart')) || [];
+
+            const existingItem = cart.find(item => item.model_id === product.model_id);
+            const currentInCart = existingItem ? existingItem.quantity : 0;
+
+            // Final validation: Total requested cannot exceed stock
+            if (currentInCart + qtyValue > maxAvailable) {
+                alert(`Cannot add more. You already have ${currentInCart} in cart, and max stock is ${maxAvailable}.`);
+                return;
+            }
+
+            if (existingItem) {
+                existingItem.quantity += qtyValue;
+            } else {
+                cart.push({
+                    model_id: product.model_id,
+                    name: product.name,
+                    img: product.img_url,
+                    quantity: qtyValue,
+                    max: maxAvailable // Optional: store max to check on cart page later
+                });
+            }
+
+            localStorage.setItem('student_cart', JSON.stringify(cart));
+            alert("Added to cart!");
+            updateCartCount();
+        }
+        // Function to update the top-right counter
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('student_cart')) || [];
+            const totalQty = cart.reduce((total, item) => total + item.quantity, 0);
+            const counterDisplay = document.getElementById('cart-count');
+            
+            if (counterDisplay) {
+                counterDisplay.innerText = `In cart: ${totalQty}`;
+            }
+        }
+
     </script>
 </body>
 </html>

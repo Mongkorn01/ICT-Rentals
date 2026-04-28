@@ -155,16 +155,16 @@ INSERT INTO Students (student_id, password, first_name, last_name, email, phone)
 
 -- ---- Equipments_Models (10 rows) ----
 INSERT INTO Equipments_Models (name, brand, category, img_url, details, specs, admin_id) VALUES
-('MacBook Pro 14-inch',          'Apple',     'Laptop',       '/images/macbook_pro_14.jpg',   'Professional laptop for development and design.', '14-inch Liquid Retina XDR, M3 Pro, 18GB RAM, 512GB SSD', 1),
-('Dell Projector P2418D',        'Dell',      'Projector',    '/images/dell_p2418d.jpg',      'Full HD business projector suitable for classrooms.', '3200 lumens, HDMI, VGA, 1920x1080', 1),
-('Canon EOS 90D DSLR',           'Canon',     'Camera',       '/images/canon_eos_90d.jpg',    'Professional DSLR camera for photography events.', '32.5MP APS-C, 4K video, dual pixel autofocus', 2),
-('iPad Pro 12.9-inch',           'Apple',     'Tablet',       '/images/ipad_pro_12.jpg',      'Tablet for student presentations and media.', '12.9-inch Liquid Retina, M2, 256GB, Wi-Fi', 2),
-('Rode NT-USB Microphone',       'Rode',      'Audio',        '/images/rode_nt_usb.jpg',      'USB condenser microphone for recording and streaming.', 'Cardioid condenser, 16-bit/48kHz, USB-A', 3),
-('Anker 10-Port USB Hub',        'Anker',     'Power Strip',  '/images/anker_usb_hub.jpg',    'Multi-port USB hub for shared workspace use.', '10x USB-A, 60W charging, data sync', 3),
-('Sony WH-1000XM5 Headphones',   'Sony',      'Audio',        '/images/sony_wh1000xm5.jpg',  'Noise-cancelling wireless headphones.', '30hr battery, Bluetooth 5.2, ANC', 4),
-('Wacom Intuos Pro Tablet',      'Wacom',     'Input Device', '/images/wacom_intuos.jpg',     'Graphic drawing tablet for design courses.', 'Medium size, 8192 pressure levels, Bluetooth', 4),
-('Raspberry Pi 4 Model B 8GB',   'Raspberry', 'SBC',          '/images/rpi4_8gb.jpg',         'Single-board computer for IoT and lab projects.', 'Quad-core 1.8GHz, 8GB RAM, 2x HDMI, USB 3.0', 5),
-('TP-Link TL-SG1016D Switch',    'TP-Link',   'Network',      '/images/tplink_sg1016d.jpg',   '16-port unmanaged Gigabit network switch.', '16x RJ-45, 1Gbps, plug-and-play, rackmount', 5);
+('MacBook Pro 14-inch',          'Apple',     'Laptop',       'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',   'Professional laptop for development and design.', '14-inch Liquid Retina XDR, M3 Pro, 18GB RAM, 512GB SSD', 1),
+('Dell Projector P2418D',        'Dell',      'Projector',    'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',      'Full HD business projector suitable for classrooms.', '3200 lumens, HDMI, VGA, 1920x1080', 1),
+('Canon EOS 90D DSLR',           'Canon',     'Camera',       'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',    'Professional DSLR camera for photography events.', '32.5MP APS-C, 4K video, dual pixel autofocus', 2),
+('iPad Pro 12.9-inch',           'Apple',     'Tablet',       'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',      'Tablet for student presentations and media.', '12.9-inch Liquid Retina, M2, 256GB, Wi-Fi', 2),
+('Rode NT-USB Microphone',       'Rode',      'Audio',        'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',      'USB condenser microphone for recording and streaming.', 'Cardioid condenser, 16-bit/48kHz, USB-A', 3),
+('Anker 10-Port USB Hub',        'Anker',     'Power Strip',  'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',    'Multi-port USB hub for shared workspace use.', '10x USB-A, 60W charging, data sync', 3),
+('Sony WH-1000XM5 Headphones',   'Sony',      'Audio',        'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',  'Noise-cancelling wireless headphones.', '30hr battery, Bluetooth 5.2, ANC', 4),
+('Wacom Intuos Pro Tablet',      'Wacom',     'Input Device', 'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',     'Graphic drawing tablet for design courses.', 'Medium size, 8192 pressure levels, Bluetooth', 4),
+('Raspberry Pi 4 Model B 8GB',   'Raspberry', 'SBC',          'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',         'Single-board computer for IoT and lab projects.', 'Quad-core 1.8GHz, 8GB RAM, 2x HDMI, USB 3.0', 5),
+('TP-Link TL-SG1016D Switch',    'TP-Link',   'Network',      'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',   '16-port unmanaged Gigabit network switch.', '16x RJ-45, 1Gbps, plug-and-play, rackmount', 5);
 
 -- ---- Equipments_Items (10 rows, 1–2 items per model) ----
 INSERT INTO Equipments_Items (serial_number, status, admin_id, model_id) VALUES

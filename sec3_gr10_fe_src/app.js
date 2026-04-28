@@ -53,7 +53,7 @@ router.get('/student/product', serveHTML('Product Page.html', 'student'));
 router.get('/student/profile', serveHTML('Profile.html', 'student'));
 router.get('/student/rent', serveHTML('Rent.html', 'student'));
 router.get('/student/search', serveHTML('Search.html', 'student'));
-router.get('/student/search-results', serveHTML('Search Result.html', 'student'));
+router.get('/student/search-result', serveHTML('Search Result.html', 'student'));
 router.get('/student/team', serveHTML('Team Page.html', 'student'));
 
 // Register Router

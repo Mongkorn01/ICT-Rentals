@@ -281,32 +281,32 @@
         <div class="filter-container">
             <div class="form-row">
                 <div class="label-block">Category</div>
-                <input type="text" class="input-field">
+                <input type="text" id="search-category" class="input-field">
             </div>
 
             <div class="form-row">
                 <div class="label-block">Brand</div>
-                <input type="text" class="input-field">
+                <input type="text" id="search-brand" class="input-field">
             </div>
 
             <div class="form-row">
                 <div class="label-block">Name</div>
-                <input type="text" class="input-field">
+                <input type="text" id="search-name" class="input-field">
             </div>
 
             <div class="form-row">
                 <div class="label-block">Status</div>
-                <select class="input-field">
+                <select id="search-status" class="input-field">
                     <option value=""></option>
-                    <option value="available">Available</option>
-                    <option value="rented">Rented</option>
-                    <option value="maintenance">Maintenance</option>
+                    <option value="Available">Available</option>
+                    <option value="Rented">Rented</option>
+                    <option value="Maintenance">Maintenance</option>
                 </select>
             </div>
 
             <div class="button-group">
-                <button class="btn btn-search" onclick="window.location.href='/student/search-result'">Search</button>
-                <button class="btn btn-clear">Clear</button>
+                <button class="btn btn-search" onclick="performSearch()">Search</button>
+                <button class="btn btn-clear" onclick="clearFilters()">Clear</button>
             </div>
         </div>
     </main>
@@ -385,6 +385,30 @@
                     arrow.textContent = '▼';
                 }
             }
+        }
+
+        // Show result
+        function performSearch() {
+            // 1. Collect values from inputs
+            const category = document.getElementById('search-category').value.trim();
+            const brand = document.getElementById('search-brand').value.trim();
+            const name = document.getElementById('search-name').value.trim();
+            const status = document.getElementById('search-status').value;
+
+            // 2. Build the query string using URLSearchParams (cleaner than manual strings)
+            const params = new URLSearchParams();
+            if (category) params.append('category', category);
+            if (brand) params.append('brand', brand);
+            if (name) params.append('name', name);
+            if (status) params.append('status', status);
+
+            // 3. Redirect to the result page with parameters
+            // This will result in: /student/search-result?category=...&brand=...
+            window.location.href = `/student/search-result?${params.toString()}`;
+        }
+
+        function clearFilters() {
+            document.querySelectorAll('.input-field').forEach(input => input.value = '');
         }
     </script>
 </body>

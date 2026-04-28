@@ -410,29 +410,48 @@ router.get('/student/profile/:id', (req, res) => {
 });
 
 /* --- STUDENT; /student/justification --- */
-
 router.post('/student/justification', (req, res) => {
-    const { student_id, admin_id, event_name, reason, where_event, outside_location, borrow_date, due_date, item_ids } = req.body;
-    if (!student_id || !admin_id || !event_name || !reason || !where_event || !borrow_date || !due_date || !item_ids?.length)
-        return res.status(400).json({ error: true, message: 'All required fields must be provided including item_ids.' });
+    const { 
+        student_id, admin_id, event_name, reason, 
+        where_event, outside_location, borrow_date, due_date, item_ids 
+    } = req.body;
 
-    dbConn.query(
-        'INSERT INTO Rental_Transactions (borrow_date, due_date, event_name, reason, where_event, outside_location, admin_id, student_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        [borrow_date, due_date, event_name, reason, where_event, outside_location || null, admin_id, student_id],
-        (err, transResult) => {
-            if (err) return res.status(500).json({ error: true, message: err.message });
-            const transaction_id = transResult.insertId;
-            const rentalItemValues = item_ids.map(item_id => [transaction_id, item_id, 'Pending']);
-            dbConn.query('INSERT INTO Rental_Items (transaction_id, item_id, status) VALUES ?', [rentalItemValues], (err2) => {
-                if (err2) return res.status(500).json({ error: true, message: err2.message });
-                dbConn.query(
-                    'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id, target_transaction_id) VALUES (?, ?, ?, ?)',
-                    ['Approve Loan', `Transaction ${transaction_id} submitted by student ${student_id}`, admin_id, transaction_id]
-                );
-                return res.json({ error: false, data: { transaction_id }, message: 'Rental request submitted successfully.' });
+    // 1. Improved Validation (Checking for null/undefined specifically)
+    if (student_id == null || admin_id == null || !event_name || !reason || !where_event || !borrow_date || !due_date || !item_ids?.length) {
+        return res.status(400).json({ error: true, message: 'All required fields must be provided.' });
+    }
+
+    // 2. Insert into Rental_Transactions
+    const transSql = 'INSERT INTO Rental_Transactions (borrow_date, due_date, event_name, reason, where_event, outside_location, admin_id, student_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const transValues = [borrow_date, due_date, event_name, reason, where_event, outside_location || null, admin_id, student_id];
+
+    dbConn.query(transSql, transValues, (err, transResult) => {
+        if (err) return res.status(500).json({ error: true, message: "Transaction Error: " + err.message });
+
+        const transaction_id = transResult.insertId;
+        
+        // 3. Prepare Bulk Insert for Rental_Items
+        const rentalItemValues = item_ids.map(item_id => [transaction_id, item_id, 'Pending']);
+
+        dbConn.query('INSERT INTO Rental_Items (transaction_id, item_id, status) VALUES ?', [rentalItemValues], (err2) => {
+            if (err2) return res.status(500).json({ error: true, message: "Items Error: " + err2.message });
+
+            // 4. Log the activity
+            const logSql = 'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id, target_transaction_id) VALUES (?, ?, ?, ?)';
+            const logDetails = `Transaction ${transaction_id} submitted by student ${student_id}`;
+            
+            dbConn.query(logSql, ['Approve Loan', logDetails, admin_id, transaction_id], (err3) => {
+                // We return success even if log fails, but we check for it
+                if (err3) console.error("Log Error:", err3.message);
+                
+                return res.json({ 
+                    error: false, 
+                    data: { transaction_id }, 
+                    message: 'Rental request submitted successfully.' 
+                });
             });
-        }
-    );
+        });
+    });
 });
 
 app.listen(process.env.PORT, () => {

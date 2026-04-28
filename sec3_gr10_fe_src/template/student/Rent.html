@@ -273,8 +273,8 @@
 
     <main>
         <div class="cart-status" onclick="location.href='/student/cart'" style="cursor: pointer; z-index: 999;">
-        <div class="cart-circle" style="pointer-events: none;">🛒</div>
-        <div style="font-size: 14px; font-weight: 500;">In cart: 4</div>
+            <div class="cart-circle" style="pointer-events: none;">🛒</div>
+            <div id="cart-count-display" style="font-size: 14px; font-weight: 500;">In cart: 0</div>
         </div>
 
         <div class="hero-section">
@@ -291,47 +291,9 @@
             <div class="indicator"></div>
         </div>
 
-        <!-- Load Product and Category -->
-        <div class="category-container">
-            <h2 class="category-title">“Computing”</h2>
-            
-            <div class="product-grid">
-                <div class="product-card" onclick="location.href='/student/product'">
-                    <img src="https://i.postimg.cc/1RdLw8Wq/Iphone13.png" alt="iPhone 13" class="product-img">
-                    <div class="product-name">iPhone 13</div>
-                    <div class="stock-label">Left in stock: 1</div>
-                </div>
-
-                <div class="product-card" onclick="location.href='/student/product'">
-                    <img src="https://i.postimg.cc/Vsh3nJ7r/Iphone14.png" alt="iPhone 14" class="product-img">
-                    <div class="product-name">iPhone 14</div>
-                    <div class="stock-label">Left in stock: 1</div>
-                </div>
-
-                <div class="product-card" onclick="location.href='/student/product'">
-                    <img src="https://i.postimg.cc/nVW6BXd9/Iphone15.png" alt="iPhone 15" class="product-img">
-                    <div class="product-name">iPhone 15</div>
-                    <div class="stock-label">Left in stock: 1</div>
-                </div>
-
-                <div class="product-card" onclick="location.href='/student/product'">
-                    <img src="https://i.postimg.cc/9XkvZDxq/Iphone16.png" alt="iPhone 16" class="product-img">
-                    <div class="product-name">iPhone 16</div>
-                    <div class="stock-label">Left in stock: 1</div>
-                </div>
-
-                <div class="product-card" onclick="location.href='/student/product'">
-                    <img src="https://i.postimg.cc/FF623YPf/Iphone17.png" alt="iPhone 17" class="product-img">
-                    <div class="product-name">iPhone 17</div>
-                    <div class="stock-label">Left in stock: 1</div>
-                </div>
-            </div>
-        </div>    
-        <!--
-            <div class="product-grid" id="product-container">
-            <p>Loading products...</p>
-            </div>
-        -->
+        <div id="main-product-area">
+            <p style="text-align: center; padding: 20px;">Loading equipment catalog...</p>
+        </div>
     </main>
     
 
@@ -409,46 +371,58 @@
                 }
             }
         }
-        // Load product and category
-        /*
-        async function loadProductsByCategory() {
-            const container = document.getElementById('product-container');
-            const title = document.getElementById('display-category');
-            
-            // 1. Get the category from the URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const categoryName = urlParams.get('category');
 
-            if (categoryName) {
-                title.textContent = `${categoryName}s`;
-            }
+        /*Load products & Catagory*/
+        document.addEventListener('DOMContentLoaded', async () => {
+            updateCartDisplay();
+            const mainArea = document.getElementById('main-product-area');
 
             try {
-                // 2. Fetch products (Backend should handle filtering via query param)
-                const response = await fetch(`/api/products?category=${encodeURIComponent(categoryName)}`);
-                const products = await response.json();
+                // 1. Fetch all products from your new route
+                const response = await fetch('/api/student/rent'); // Adjust path if your route is prefixed
+                const result = await response.json();
 
-                if (products.length === 0) {
-                    container.innerHTML = "<p>No products found in this category.</p>";
+                if (result.error || result.data.length === 0) {
+                    mainArea.innerHTML = `<p style="text-align:center;">No equipment available at this time.</p>`;
                     return;
                 }
 
-                // 3. Inject the HTML
-                container.innerHTML = products.map(product => `
-                    <div class="product-card" onclick="location.href='/student/product?id=${product.id}'">
-                        <img src="${product.image_url || 'https://via.placeholder.com/150'}" alt="${product.name}" class="product-img">
-                        <div class="product-category">${product.category}</div>
-                        <div class="product-name">${product.name}</div>
-                        <div class="stock-label">Left in stock: ${product.stock}</div>
+                // 2. Group products by Category
+                const productsByCategory = result.data.reduce((acc, product) => {
+                    const cat = product.category || "Uncategorized";
+                    if (!acc[cat]) acc[cat] = [];
+                    acc[cat].push(product);
+                    return acc;
+                }, {});
+
+                // 3. Generate HTML for each category
+                mainArea.innerHTML = Object.keys(productsByCategory).map(category => `
+                    <div class="category-container">
+                        <h2 class="category-title">“${category}”</h2>
+                        <div class="product-grid">
+                            ${productsByCategory[category].map(prod => `
+                                <div class="product-card" onclick="location.href='/student/product?id=${prod.model_id}'">
+                                    <img src="${prod.img_url}" alt="${prod.name}" class="product-img">
+                                    <div class="product-name">${prod.name}</div>
+                                    <div class="stock-label">Left in stock: ${prod.quantity_available}</div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                 `).join('');
 
-            } catch (err) {
-                container.innerHTML = "<p>Error loading products.</p>";
+            } catch (error) {
+                console.error("Failed to load products:", error);
+                mainArea.innerHTML = `<p style="text-align:center; color:red;">Error loading catalog.</p>`;
             }
+        });
+
+        function updateCartDisplay() {
+            const cart = JSON.parse(localStorage.getItem('student_cart')) || [];
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const display = document.getElementById('cart-count-display');
+            if (display) display.innerText = `In cart: ${count}`;
         }
-        document.addEventListener('DOMContentLoaded', loadProductsByCategory);
-        */
     </script>
 </body>
 </html>
