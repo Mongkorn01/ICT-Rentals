@@ -167,14 +167,14 @@ INSERT INTO Students (student_id, password, first_name, last_name, email, phone)
 INSERT INTO Equipments_Models (name, brand, category, img_url, details, specs, admin_id) VALUES
 ('MacBook Pro 14-inch',        'Apple',  'Computing',    'https://i.postimg.cc/rwPJ0LhD/Mac-Book-Pro-14inch.jpg',   'Laptop computer for development, design, and presentations.',  '14-inch Liquid Retina XDR, M3 Pro, 18GB RAM, 512GB SSD', 1),
 ('iPad Pro 12.9-inch',         'Apple',  'Computing',    'https://i.postimg.cc/qv5Lhdmv/i-Pad-Pro-12-9-inch-(gen4).jpg',      'iPad for student presentations and media.',                    '12.9-inch Liquid Retina, M2, 256GB, Wi-Fi',              1),
-('iPhone 15 Pro',              'Apple',  'Computing',    'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',    'iPhone for mobile documentation and communication.',           '6.1-inch Super Retina XDR, A17 Pro, 256GB',              2),
+('iPhone 15 Pro',              'Apple',  'Computing',    'https://i.postimg.cc/vTSBLM4R/IPhone-15-Pro.jpg',    'iPhone for mobile documentation and communication.',           '6.1-inch Super Retina XDR, A17 Pro, 256GB',              2),
 ('Canon EOS 90D DSLR',         'Canon',  'Production',   'https://i.postimg.cc/K8HNky9z/Canon-EOS-90D-DLSR.jpg',    'Digital camera for photography and video events.',             '32.5MP APS-C, 4K video, dual pixel autofocus',           2),
-('Dell Projector P2418D',      'Dell',   'Production',   'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',      'Full HD projector suitable for classrooms and events.',        '3200 lumens, HDMI, VGA, 1920x1080',                      3),
-('Joby GorillaPod 5K Tripod',  'Joby',   'Production',   'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',  'Flexible tripod for cameras and smartphones.',                 'Max load 5kg, flexible legs, universal ball head',        3),
+('Dell Projector P2418D',      'Dell',   'Production',   'https://i.postimg.cc/XYz8G02X/Dell-Projector-P2418D.jpg',      'Full HD projector suitable for classrooms and events.',        '3200 lumens, HDMI, VGA, 1920x1080',                      3),
+('Joby GorillaPod 5K Tripod',  'Joby',   'Production',   'https://i.postimg.cc/RhbFQ9Wx/Joby-Gorilla-Pod-5K-Tripod.jpg',  'Flexible tripod for cameras and smartphones.',                 'Max load 5kg, flexible legs, universal ball head',        3),
 ('Rode NT-USB Microphone',     'Rode',   'Audio',        'https://i.postimg.cc/Njz49wN0/Rode-NT-USB-Microphone.jpg',      'USB condenser microphone for recording and streaming.',        'Cardioid condenser, 16-bit/48kHz, USB-A',                4),
 ('Sony WH-1000XM5 Headphones', 'Sony',   'Audio',        'https://i.postimg.cc/K8HNky9G/Sony-WH-1000XM5-Headphones.jpg',   'Noise-cancelling wireless headphones.',                        '30hr battery, Bluetooth 5.2, ANC',                       4),
-('Ugreen HDMI Cable 2m',       'Ugreen', 'Connectivity', 'https://i.postimg.cc/1RdLw8Wq/Iphone13.png',   'HDMI 2.1 cable for connecting displays and projectors.',       '2m, 8K@60Hz, 4K@120Hz, braided nylon',                   5),
-('Anker PowerCore 20000mAh',   'Anker',  'Power',        'https://i.postimg.cc/Sxvr2pZN/Anker-10-Port-USB-Hub.jpg',  'High-capacity power bank for charging devices on the go.',    '20000mAh, 2x USB-A + 1x USB-C, 22.5W fast charge',       5);
+('Ugreen HDMI Cable 2m',       'Ugreen', 'Connectivity', 'https://i.postimg.cc/D0YZdFSk/Ugreen-HDMI-Cable-2mn.jpg',   'HDMI 2.1 cable for connecting displays and projectors.',       '2m, 8K@60Hz, 4K@120Hz, braided nylon',                   5),
+('Anker PowerCore 20000mAh',   'Anker',  'Power',        'https://i.postimg.cc/vTLmk9q7/Anker-Power-Core-20000m-Ah.jpg',  'High-capacity power bank for charging devices on the go.',    '20000mAh, 2x USB-A + 1x USB-C, 22.5W fast charge',       5);
 
 -- ---- Equipments_Items (10 rows, 1–2 items per model) ----
 INSERT INTO Equipments_Items (serial_number, status, admin_id, model_id) VALUES
