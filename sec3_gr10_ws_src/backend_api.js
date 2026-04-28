@@ -4,7 +4,7 @@ const path = require('path');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
 dotenv.config();
 const app = express();
@@ -15,16 +15,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/', router);
 
-let dbConn = mysql.createConnection({
+const dbConn = mysql.createPool({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USERNAME,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE
-});
-
-dbConn.connect((err) => {
-    if (err) throw err;
-    console.log(`Connected to DB: ${process.env.MYSQL_DATABASE}`);
 });
 
 /* --- Gemini Configuration --- */
@@ -57,7 +52,6 @@ const model = genAI.getGenerativeModel({
 });
 
 /* --- AI Helper Route --- */
-// Use this to get AI assistance anywhere in your app
 router.post('/ai-assist', async (req, res) => {
     try {
         const { prompt } = req.body;
@@ -65,7 +59,7 @@ router.post('/ai-assist', async (req, res) => {
         const response = await result.response;
         res.json({ success: true, text: response.text() });
     } catch (error) {
-        console.error("Gemini Error:", error.message); // This prints the REAL error in your terminal
+        console.error("Gemini Error:", error.message);
         res.status(500).json({ success: false, error: error.message });
     }
 });
@@ -73,13 +67,13 @@ router.post('/ai-assist', async (req, res) => {
 
 /* --- AUTH; /login-admin  /login-student --- */
 
-router.post('/login-student', (req, res) => {
+router.post('/login-student', async (req, res) => {
     const { student_id, password } = req.body;
     if (!student_id || !password)
         return res.status(400).json({ error: true, message: 'Please provide student ID and password.' });
 
-    dbConn.query('SELECT * FROM Students WHERE student_id = ?', [student_id], async (err, results) => {
-        if (err) return res.status(500).json({ error: true, message: err.message });
+    try {
+        const [results] = await dbConn.query('SELECT * FROM Students WHERE student_id = ?', [student_id]);
         if (results.length === 0)
             return res.status(401).json({ error: true, message: 'Invalid student ID or password.' });
 
@@ -90,37 +84,39 @@ router.post('/login-student', (req, res) => {
 
         const { password: _, ...studentData } = student;
         return res.json({ error: false, message: 'Login successful.', data: studentData });
-    });
+    } catch (err) {
+        return res.status(500).json({ error: true, message: err.message });
+    }
 });
 
-router.post('/login-admin', (req, res) => {
-    const { identifier, password } = req.body;  // 'identifier' = email or username
+router.post('/login-admin', async (req, res) => {
+    const { identifier, password } = req.body;
     if (!identifier || !password)
         return res.status(400).json({ error: true, message: 'Please provide email/username and password.' });
 
-    // Check both email and username in one query
-    dbConn.query(
-        'SELECT * FROM Administrators WHERE email = ? OR username = ?',
-        [identifier, identifier],
-        async (err, results) => {
-            if (err) return res.status(500).json({ error: true, message: err.message });
-            if (results.length === 0)
-                return res.status(401).json({ error: true, message: 'Invalid credentials.' });
+    try {
+        const [results] = await dbConn.query(
+            'SELECT * FROM Administrators WHERE email = ? OR username = ?',
+            [identifier, identifier]
+        );
+        if (results.length === 0)
+            return res.status(401).json({ error: true, message: 'Invalid credentials.' });
 
-            const admin = results[0];
-            const match = await bcrypt.compare(password, admin.password);
-            if (!match)
-                return res.status(401).json({ error: true, message: 'Invalid credentials.' });
+        const admin = results[0];
+        const match = await bcrypt.compare(password, admin.password);
+        if (!match)
+            return res.status(401).json({ error: true, message: 'Invalid credentials.' });
 
-            dbConn.query(
-                'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
-                ['Login', `Admin logged in: ${admin.email}`, admin.admin_id]
-            );
+        dbConn.query(
+            'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
+            ['Login', `Admin logged in: ${admin.email}`, admin.admin_id]
+        );
 
-            const { password: _, ...adminData } = admin;
-            return res.json({ error: false, message: 'Login successful.', data: adminData });
-        }
-    );
+        const { password: _, ...adminData } = admin;
+        return res.json({ error: false, message: 'Login successful.', data: adminData });
+    } catch (err) {
+        return res.status(500).json({ error: true, message: err.message });
+    }
 });
 
 /* --- ADMIN; /admin/dashboard --- */
@@ -205,52 +201,49 @@ router.put('/admin/edit-product/:id', (req, res) => {
     );
 });
 
-router.delete('/admin/product-control/:id', (req, res) => {
+router.delete('/admin/product-control/:id', async (req, res) => {
     const { admin_id } = req.body;
     const model_id = req.params.id;
 
-    // Step 1: Get all item_ids belonging to this model
-    dbConn.query('SELECT item_id FROM Equipments_Items WHERE model_id = ?', [model_id], (err, items) => {
-        if (err) return res.status(500).json({ error: true, message: err.message });
+    try {
+        const [items] = await dbConn.query(
+            'SELECT item_id, status FROM Equipments_Items WHERE model_id = ?',
+            [model_id]
+        );
+
+        const borrowed = items.filter(i => i.status === 'Borrowed');
+        if (borrowed.length > 0) {
+            return res.status(400).json({
+                error: true,
+                message: `Cannot delete: ${borrowed.length} item(s) are currently borrowed.`
+            });
+        }
 
         const item_ids = items.map(i => i.item_id);
 
-        const doDelete = () => {
-            // Step 3: Delete the items
-            const deleteItems = () => dbConn.query(
-                'DELETE FROM Equipments_Items WHERE model_id = ?', [model_id], (err) => {
-                    if (err) return res.status(500).json({ error: true, message: err.message });
+        if (item_ids.length > 0) {
+            await dbConn.query('DELETE FROM Admin_Activity_Logs WHERE target_item_id IN (?)', [item_ids]);
+            await dbConn.query('DELETE FROM Rental_Items WHERE item_id IN (?)', [item_ids]);
+            await dbConn.query('DELETE FROM Equipments_Items WHERE model_id = ?', [model_id]);
+        }
 
-                    // Step 4: Delete the model
-                    dbConn.query('DELETE FROM Equipments_Models WHERE model_id = ?', [model_id], (err, results) => {
-                        if (err) return res.status(500).json({ error: true, message: err.message });
-                        if (results.affectedRows === 0)
-                            return res.status(404).json({ error: true, message: 'Product not found.' });
+        const [result] = await dbConn.query(
+            'DELETE FROM Equipments_Models WHERE model_id = ?', [model_id]
+        );
+        if (result.affectedRows === 0)
+            return res.status(404).json({ error: true, message: 'Product not found.' });
 
-                        if (admin_id) {
-                            dbConn.query(
-                                'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
-                                ['Delete Model', `Deleted model_id=${model_id}`, admin_id]
-                            );
-                        }
-                        return res.json({ error: false, message: 'Product deleted successfully.' });
-                    });
-                }
+        if (admin_id) {
+            dbConn.query(
+                'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
+                ['Delete Model', `Deleted model_id=${model_id}`, admin_id]
             );
+        }
 
-            if (item_ids.length > 0) {
-                // Step 2: Delete Rental_Items that reference these items
-                dbConn.query('DELETE FROM Rental_Items WHERE item_id IN (?)', [item_ids], (err) => {
-                    if (err) return res.status(500).json({ error: true, message: err.message });
-                    deleteItems();
-                });
-            } else {
-                deleteItems();
-            }
-        };
-
-        doDelete();
-    });
+        return res.json({ error: false, message: 'Product deleted successfully.' });
+    } catch (err) {
+        return res.status(500).json({ error: true, message: err.message });
+    }
 });
 
 /* --- ADMIN; /admin/penalty --- */
@@ -374,48 +367,37 @@ router.get('/student/profile/:id', (req, res) => {
 });
 
 /* --- STUDENT; /student/justification --- */
-router.post('/student/justification', (req, res) => {
+
+router.post('/student/justification', async (req, res) => {
     const { 
         student_id, admin_id, event_name, reason, 
         where_event, outside_location, borrow_date, due_date, item_ids 
     } = req.body;
 
-    // 1. Improved Validation (Checking for null/undefined specifically)
     if (student_id == null || admin_id == null || !event_name || !reason || !where_event || !borrow_date || !due_date || !item_ids?.length) {
         return res.status(400).json({ error: true, message: 'All required fields must be provided.' });
     }
 
-    // 2. Insert into Rental_Transactions
-    const transSql = 'INSERT INTO Rental_Transactions (borrow_date, due_date, event_name, reason, where_event, outside_location, admin_id, student_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    const transValues = [borrow_date, due_date, event_name, reason, where_event, outside_location || null, admin_id, student_id];
-
-    dbConn.query(transSql, transValues, (err, transResult) => {
-        if (err) return res.status(500).json({ error: true, message: "Transaction Error: " + err.message });
+    try {
+        const [transResult] = await dbConn.query(
+            'INSERT INTO Rental_Transactions (borrow_date, due_date, event_name, reason, where_event, outside_location, admin_id, student_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [borrow_date, due_date, event_name, reason, where_event, outside_location || null, admin_id, student_id]
+        );
 
         const transaction_id = transResult.insertId;
-        
-        // 3. Prepare Bulk Insert for Rental_Items
         const rentalItemValues = item_ids.map(item_id => [transaction_id, item_id, 'Pending']);
 
-        dbConn.query('INSERT INTO Rental_Items (transaction_id, item_id, status) VALUES ?', [rentalItemValues], (err2) => {
-            if (err2) return res.status(500).json({ error: true, message: "Items Error: " + err2.message });
+        await dbConn.query('INSERT INTO Rental_Items (transaction_id, item_id, status) VALUES ?', [rentalItemValues]);
 
-            // 4. Log the activity
-            const logSql = 'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id, target_transaction_id) VALUES (?, ?, ?, ?)';
-            const logDetails = `Transaction ${transaction_id} submitted by student ${student_id}`;
-            
-            dbConn.query(logSql, ['Approve Loan', logDetails, admin_id, transaction_id], (err3) => {
-                // We return success even if log fails, but we check for it
-                if (err3) console.error("Log Error:", err3.message);
-                
-                return res.json({ 
-                    error: false, 
-                    data: { transaction_id }, 
-                    message: 'Rental request submitted successfully.' 
-                });
-            });
-        });
-    });
+        dbConn.query(
+            'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id, target_transaction_id) VALUES (?, ?, ?, ?)',
+            ['Approve Loan', `Transaction ${transaction_id} submitted by student ${student_id}`, admin_id, transaction_id]
+        );
+
+        return res.json({ error: false, data: { transaction_id }, message: 'Rental request submitted successfully.' });
+    } catch (err) {
+        return res.status(500).json({ error: true, message: err.message });
+    }
 });
 
 app.listen(process.env.PORT, () => {
