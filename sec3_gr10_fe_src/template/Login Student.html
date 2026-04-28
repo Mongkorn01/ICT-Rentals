@@ -298,50 +298,59 @@
             }
         }
         /* Login authentication */
-        document.getElementById('studentLoginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. CLEAR PREVIOUS SESSION IMMEDIATELY
+            // This ensures no leftover carts or profile data from other users
+            localStorage.clear();
+            console.log("Local storage cleared for new session.");
 
-            const student_id = document.getElementById('student_id').value;
-            const password = document.getElementById('password').value;
+            const loginForm = document.getElementById('studentLoginForm');
             const warningBox = document.getElementById('auth-warning');
             const loginBtn = document.getElementById('loginBtn');
 
-            // Reset UI state
-            warningBox.style.display = 'none';
-            loginBtn.innerText = 'Checking...';
-            loginBtn.style.opacity = '0.7';
-            loginBtn.disabled = true;
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
 
-            try {
-                const response = await fetch('/api/login-student', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ student_id, password })
-                });
+                const student_id = document.getElementById('student_id').value;
+                const password = document.getElementById('password').value;
 
-                const result = await response.json();
+                // 2. RESET UI STATE
+                warningBox.style.display = 'none';
+                loginBtn.innerText = 'Checking...';
+                loginBtn.style.opacity = '0.7';
+                loginBtn.disabled = true;
 
-                if (response.ok && !result.error) {
-                    // SUCCESS
-                    localStorage.setItem('studentData', JSON.stringify(result.data));
-                    window.location.href = '/student/dashboard';
-                } else {
-                    // WRONG PASSWORD or USER NOT FOUND
-                    // result.message comes from your router.post logic
-                    warningBox.innerText = "❌ " + (result.message || "Invalid credentials.");
+                try {
+                    // 3. AUTHENTICATION REQUEST
+                    const response = await fetch('/api/login-student', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ student_id, password })
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && !result.error) {
+                        // SUCCESS: Save the new student data
+                        localStorage.setItem('studentData', JSON.stringify(result.data));
+                        window.location.href = '/student/dashboard';
+                    } else {
+                        // FAILURE: Display specific error message from the server
+                        warningBox.innerText = "❌ " + (result.message || "Invalid credentials.");
+                        warningBox.style.display = 'block';
+                    }
+                } catch (err) {
+                    // NETWORK OR SERVER ERROR
+                    warningBox.innerText = "🚨 System Error: Unable to connect to the login server.";
                     warningBox.style.display = 'block';
+                    console.error("Connection failed:", err);
+                } finally {
+                    // 4. RESTORE BUTTON STATE
+                    loginBtn.innerText = 'Sign in';
+                    loginBtn.style.opacity = '1';
+                    loginBtn.disabled = false;
                 }
-            } catch (err) {
-                // API SERVER IS DOWN
-                warningBox.innerText = "🚨 System Error: Unable to connect to the login server. Please check your internet or try again later.";
-                warningBox.style.display = 'block';
-                console.error("Connection failed:", err);
-            } finally {
-                // Restore button state
-                loginBtn.innerText = 'Sign in';
-                loginBtn.style.opacity = '1';
-                loginBtn.disabled = false;
-            }
+            });
         });
     </script>
 

@@ -469,9 +469,17 @@
         }
 
         function removeFromCart(modelId) {
+            // 1. Get current cart (force it to string to avoid reference issues)
             let cart = JSON.parse(localStorage.getItem('student_cart')) || [];
-            cart = cart.filter(i => i.model_id !== modelId);
+            
+            // 2. Filter out the item. 
+            // IMPORTANT: Ensure modelId is compared as the same type (String vs Number)
+            cart = cart.filter(i => String(i.model_id) !== String(modelId));
+            
+            // 3. Save it back
             localStorage.setItem('student_cart', JSON.stringify(cart));
+            
+            // 4. Immediately update the UI
             renderCart();
         }
 
