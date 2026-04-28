@@ -224,27 +224,27 @@
 <body>
     <main>
         <div class="login-card">
-           <div class="logo-container">
-                 <img src="https://i.postimg.cc/BvYTBQ6S/long-logo.png" alt="ICT Rentals" style="height: 50px;">
+            <div class="logo-container">
+                <img src="https://i.postimg.cc/BvYTBQ6S/long-logo.png" alt="ICT Rentals" style="height: 50px;">
             </div>
 
             <h1>Sign in</h1>
             <p class="subtitle">with your Mahidol University Accounts.</p>
 
-            <!-- send to authorize server -->
-            <form>
+            <div id="auth-warning" style="display: none; color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 14px;"></div>
+
+            <form id="studentLoginForm">
                 <div class="input-group">
-                    <input type="text" placeholder="Username" required>
+                    <input type="text" id="student_id" placeholder="Student ID" required>
                 </div>
                 
                 <div class="input-group">
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" id="password" placeholder="Password" required>
                 </div>
 
-                <button type="button" class="btn-signin" onclick="window.location.href='/student/dashboard'">Sign in</button>        </form>
-
+                <button type="submit" id="loginBtn" class="btn-signin">Sign in</button>
+            </form>
         </div>
-
     </main>
 
     <!-- GEMINI HELPER -->
@@ -297,7 +297,52 @@
                 area.innerHTML = "Failed to connect to AI.";
             }
         }
+        /* Login authentication */
+        document.getElementById('studentLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const student_id = document.getElementById('student_id').value;
+            const password = document.getElementById('password').value;
+            const warningBox = document.getElementById('auth-warning');
+            const loginBtn = document.getElementById('loginBtn');
+
+            // Reset UI state
+            warningBox.style.display = 'none';
+            loginBtn.innerText = 'Checking...';
+            loginBtn.style.opacity = '0.7';
+            loginBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/login-student', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ student_id, password })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && !result.error) {
+                    // SUCCESS
+                    window.location.href = '/student/dashboard';
+                } else {
+                    // WRONG PASSWORD or USER NOT FOUND
+                    // result.message comes from your router.post logic
+                    warningBox.innerText = "❌ " + (result.message || "Invalid credentials.");
+                    warningBox.style.display = 'block';
+                }
+            } catch (err) {
+                // API SERVER IS DOWN
+                warningBox.innerText = "🚨 System Error: Unable to connect to the login server. Please check your internet or try again later.";
+                warningBox.style.display = 'block';
+                console.error("Connection failed:", err);
+            } finally {
+                // Restore button state
+                loginBtn.innerText = 'Sign in';
+                loginBtn.style.opacity = '1';
+                loginBtn.disabled = false;
+            }
+        });
     </script>
-    <!-- GEMINI HELPER -->
+
 </body>
 </html>

@@ -73,37 +73,12 @@ router.post('/api/ai-assist', async (req, res) => {
 
 /* --- AUTH; /login-admin  /login-student --- */
 
-router.post('/api/login-admin', (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password)
-        return res.status(400).json({ error: true, message: 'Please provide email and password.' });
-
-    db.query('SELECT * FROM Administrators WHERE email = ?', [email], async (err, results) => {
-        if (err) return res.status(500).json({ error: true, message: err.message });
-        if (results.length === 0)
-            return res.status(401).json({ error: true, message: 'Invalid email or password.' });
-
-        const admin = results[0];
-        const match = await bcrypt.compare(password, admin.password);
-        if (!match)
-            return res.status(401).json({ error: true, message: 'Invalid email or password.' });
-
-        db.query(
-            'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
-            ['Login', `Admin logged in: ${admin.email}`, admin.admin_id]
-        );
-
-        const { password: _, ...adminData } = admin;
-        return res.json({ error: false, message: 'Login successful.', data: adminData });
-    });
-});
-
 router.post('/api/login-student', (req, res) => {
     const { student_id, password } = req.body;
     if (!student_id || !password)
         return res.status(400).json({ error: true, message: 'Please provide student ID and password.' });
 
-    db.query('SELECT * FROM Students WHERE student_id = ?', [student_id], async (err, results) => {
+    dbConn.query('SELECT * FROM Students WHERE student_id = ?', [student_id], async (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.length === 0)
             return res.status(401).json({ error: true, message: 'Invalid student ID or password.' });
@@ -115,6 +90,31 @@ router.post('/api/login-student', (req, res) => {
 
         const { password: _, ...studentData } = student;
         return res.json({ error: false, message: 'Login successful.', data: studentData });
+    });
+});
+
+router.post('/api/login-admin', (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password)
+        return res.status(400).json({ error: true, message: 'Please provide email and password.' });
+
+    dbConn.query('SELECT * FROM Administrators WHERE email = ?', [email], async (err, results) => {
+        if (err) return res.status(500).json({ error: true, message: err.message });
+        if (results.length === 0)
+            return res.status(401).json({ error: true, message: 'Invalid email or password.' });
+
+        const admin = results[0];
+        const match = await bcrypt.compare(password, admin.password);
+        if (!match)
+            return res.status(401).json({ error: true, message: 'Invalid email or password.' });
+
+        dbConn.query(
+            'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
+            ['Login', `Admin logged in: ${admin.email}`, admin.admin_id]
+        );
+
+        const { password: _, ...adminData } = admin;
+        return res.json({ error: false, message: 'Login successful.', data: adminData });
     });
 });
 
@@ -138,7 +138,7 @@ router.get('/api/admin/dashboard', (req, res) => {
         ${whereClause}
         ORDER BY rt.borrow_date DESC
     `;
-    db.query(sql, params, (err, results) => {
+    dbConn.query(sql, params, (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         return res.json({ error: false, data: results, message: 'Dashboard data retrieved.' });
     });
@@ -147,7 +147,7 @@ router.get('/api/admin/dashboard', (req, res) => {
 /* --- ADMIN; /admin/brand-control  /admin/add-brand  /admin/edit-brand --- */
 
 router.get('/api/admin/brand-control', (req, res) => {
-    db.query('SELECT DISTINCT brand FROM Equipments_Models ORDER BY brand', (err, results) => {
+    dbConn.query('SELECT DISTINCT brand FROM Equipments_Models ORDER BY brand', (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         return res.json({ error: false, data: results, message: 'Brands retrieved.' });
     });
@@ -156,7 +156,7 @@ router.get('/api/admin/brand-control', (req, res) => {
 router.post('/api/admin/add-brand', (req, res) => {
     const { brand } = req.body;
     if (!brand) return res.status(400).json({ error: true, message: 'brand name is required.' });
-    db.query('SELECT DISTINCT brand FROM Equipments_Models WHERE brand = ?', [brand], (err, results) => {
+    dbConn.query('SELECT DISTINCT brand FROM Equipments_Models WHERE brand = ?', [brand], (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.length > 0) return res.status(409).json({ error: true, message: 'Brand already exists.' });
         return res.json({ error: false, message: `Brand "${brand}" is ready to use.` });
@@ -166,7 +166,7 @@ router.post('/api/admin/add-brand', (req, res) => {
 router.put('/api/admin/edit-brand/:brand', (req, res) => {
     const { new_brand } = req.body;
     if (!new_brand) return res.status(400).json({ error: true, message: 'new_brand is required.' });
-    db.query('UPDATE Equipments_Models SET brand = ? WHERE brand = ?', [new_brand, req.params.brand], (err, results) => {
+    dbConn.query('UPDATE Equipments_Models SET brand = ? WHERE brand = ?', [new_brand, req.params.brand], (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Brand not found.' });
         return res.json({ error: false, data: results.affectedRows, message: 'Brand updated successfully.' });
@@ -174,7 +174,7 @@ router.put('/api/admin/edit-brand/:brand', (req, res) => {
 });
 
 router.delete('/api/admin/brand-control/:brand', (req, res) => {
-    db.query('DELETE FROM Equipments_Models WHERE brand = ?', [req.params.brand], (err, results) => {
+    dbConn.query('DELETE FROM Equipments_Models WHERE brand = ?', [req.params.brand], (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Brand not found.' });
         return res.json({ error: false, data: results.affectedRows, message: 'Brand deleted successfully.' });
@@ -184,7 +184,7 @@ router.delete('/api/admin/brand-control/:brand', (req, res) => {
 /* --- ADMIN; /admin/category-control  /admin/add-category  /admin/edit-category --- */
 
 router.get('/api/admin/category-control', (req, res) => {
-    db.query('SELECT DISTINCT category FROM Equipments_Models ORDER BY category', (err, results) => {
+    dbConn.query('SELECT DISTINCT category FROM Equipments_Models ORDER BY category', (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         return res.json({ error: false, data: results, message: 'Categories retrieved.' });
     });
@@ -193,7 +193,7 @@ router.get('/api/admin/category-control', (req, res) => {
 router.post('/api/admin/add-category', (req, res) => {
     const { category } = req.body;
     if (!category) return res.status(400).json({ error: true, message: 'category name is required.' });
-    db.query('SELECT DISTINCT category FROM Equipments_Models WHERE category = ?', [category], (err, results) => {
+    dbConn.query('SELECT DISTINCT category FROM Equipments_Models WHERE category = ?', [category], (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.length > 0) return res.status(409).json({ error: true, message: 'Category already exists.' });
         return res.json({ error: false, message: `Category "${category}" is ready to use.` });
@@ -203,7 +203,7 @@ router.post('/api/admin/add-category', (req, res) => {
 router.put('/api/admin/edit-category/:category', (req, res) => {
     const { new_category } = req.body;
     if (!new_category) return res.status(400).json({ error: true, message: 'new_category is required.' });
-    db.query('UPDATE Equipments_Models SET category = ? WHERE category = ?', [new_category, req.params.category], (err, results) => {
+    dbConn.query('UPDATE Equipments_Models SET category = ? WHERE category = ?', [new_category, req.params.category], (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Category not found.' });
         return res.json({ error: false, data: results.affectedRows, message: 'Category updated successfully.' });
@@ -211,7 +211,7 @@ router.put('/api/admin/edit-category/:category', (req, res) => {
 });
 
 router.delete('/api/admin/category-control/:category', (req, res) => {
-    db.query('DELETE FROM Equipments_Models WHERE category = ?', [req.params.category], (err, results) => {
+    dbConn.query('DELETE FROM Equipments_Models WHERE category = ?', [req.params.category], (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Category not found.' });
         return res.json({ error: false, data: results.affectedRows, message: 'Category deleted successfully.' });
@@ -229,7 +229,7 @@ router.get('/api/admin/product-control', (req, res) => {
         LEFT JOIN Equipments_Items i ON m.model_id = i.model_id
         GROUP BY m.model_id
     `;
-    db.query(sql, (err, results) => {
+    dbConn.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         return res.json({ error: false, data: results, message: 'All products retrieved.' });
     });
@@ -240,12 +240,12 @@ router.post('/api/admin/add-product', (req, res) => {
     if (!name || !brand || !category || !admin_id)
         return res.status(400).json({ error: true, message: 'name, brand, category, and admin_id are required.' });
 
-    db.query(
+    dbConn.query(
         'INSERT INTO Equipments_Models (name, brand, category, img_url, details, specs, admin_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
         [name, brand, category, img_url || null, details || null, specs || null, admin_id],
         (err, results) => {
             if (err) return res.status(500).json({ error: true, message: err.message });
-            db.query(
+            dbConn.query(
                 'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
                 ['Add Model', `Added model: ${name} (model_id=${results.insertId})`, admin_id]
             );
@@ -259,13 +259,13 @@ router.put('/api/admin/edit-product/:id', (req, res) => {
     if (!admin_id)
         return res.status(400).json({ error: true, message: 'admin_id is required.' });
 
-    db.query(
+    dbConn.query(
         'UPDATE Equipments_Models SET name=?, brand=?, category=?, img_url=?, details=?, specs=? WHERE model_id=?',
         [name, brand, category, img_url, details, specs, req.params.id],
         (err, results) => {
             if (err) return res.status(500).json({ error: true, message: err.message });
             if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Product not found.' });
-            db.query(
+            dbConn.query(
                 'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
                 ['Edit Model', `Updated model_id=${req.params.id}`, admin_id]
             );
@@ -276,11 +276,11 @@ router.put('/api/admin/edit-product/:id', (req, res) => {
 
 router.delete('/api/admin/product-control/:id', (req, res) => {
     const { admin_id } = req.body;
-    db.query('DELETE FROM Equipments_Models WHERE model_id = ?', [req.params.id], (err, results) => {
+    dbConn.query('DELETE FROM Equipments_Models WHERE model_id = ?', [req.params.id], (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Product not found.' });
         if (admin_id) {
-            db.query(
+            dbConn.query(
                 'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
                 ['Delete Model', `Deleted model_id=${req.params.id}`, admin_id]
             );
@@ -305,7 +305,7 @@ router.get('/api/admin/penalty', (req, res) => {
         WHERE ri.status = 'Overdue'
         ORDER BY rt.due_date ASC
     `;
-    db.query(sql, (err, results) => {
+    dbConn.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         return res.json({ error: false, data: results, message: 'Overdue items retrieved.' });
     });
@@ -325,7 +325,7 @@ router.get('/api/student/dashboard/:id', (req, res) => {
         WHERE rt.student_id = ?
         ORDER BY rt.borrow_date DESC
     `;
-    db.query(sql, [req.params.id], (err, results) => {
+    dbConn.query(sql, [req.params.id], (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         return res.json({ error: false, data: results, message: 'Student dashboard retrieved.' });
     });
@@ -342,7 +342,7 @@ router.get('/api/student/rent', (req, res) => {
         LEFT JOIN Equipments_Items i ON m.model_id = i.model_id
         GROUP BY m.model_id
     `;
-    db.query(sql, (err, results) => {
+    dbConn.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         return res.json({ error: false, data: results, message: 'All products retrieved.' });
     });
@@ -370,7 +370,7 @@ router.get('/api/student/search', (req, res) => {
         ${whereClause}
         GROUP BY m.model_id
     `;
-    db.query(sql, params, (err, results) => {
+    dbConn.query(sql, params, (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         return res.json({ error: false, data: results, message: 'Search results retrieved.' });
     });
@@ -388,7 +388,7 @@ router.get('/api/student/product/:id', (req, res) => {
         WHERE m.model_id = ?
         GROUP BY m.model_id
     `;
-    db.query(sql, [req.params.id], (err, results) => {
+    dbConn.query(sql, [req.params.id], (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.length === 0) return res.status(404).json({ error: true, message: 'Product not found.' });
         return res.json({ error: false, data: results[0], message: 'Product retrieved.' });
@@ -398,7 +398,7 @@ router.get('/api/student/product/:id', (req, res) => {
 /* --- STUDENT; /student/profile --- */
 
 router.get('/api/student/profile/:id', (req, res) => {
-    db.query(
+    dbConn.query(
         'SELECT student_id, first_name, last_name, email, phone FROM Students WHERE student_id = ?',
         [req.params.id],
         (err, results) => {
@@ -416,16 +416,16 @@ router.post('/api/student/justification', (req, res) => {
     if (!student_id || !admin_id || !event_name || !reason || !where_event || !borrow_date || !due_date || !item_ids?.length)
         return res.status(400).json({ error: true, message: 'All required fields must be provided including item_ids.' });
 
-    db.query(
+    dbConn.query(
         'INSERT INTO Rental_Transactions (borrow_date, due_date, event_name, reason, where_event, outside_location, admin_id, student_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [borrow_date, due_date, event_name, reason, where_event, outside_location || null, admin_id, student_id],
         (err, transResult) => {
             if (err) return res.status(500).json({ error: true, message: err.message });
             const transaction_id = transResult.insertId;
             const rentalItemValues = item_ids.map(item_id => [transaction_id, item_id, 'Pending']);
-            db.query('INSERT INTO Rental_Items (transaction_id, item_id, status) VALUES ?', [rentalItemValues], (err2) => {
+            dbConn.query('INSERT INTO Rental_Items (transaction_id, item_id, status) VALUES ?', [rentalItemValues], (err2) => {
                 if (err2) return res.status(500).json({ error: true, message: err2.message });
-                db.query(
+                dbConn.query(
                     'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id, target_transaction_id) VALUES (?, ?, ?, ?)',
                     ['Approve Loan', `Transaction ${transaction_id} submitted by student ${student_id}`, admin_id, transaction_id]
                 );

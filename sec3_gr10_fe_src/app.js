@@ -1,21 +1,25 @@
 const express = require('express');
 const dotenv = require("dotenv");
 const path = require('path');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
+// 1. Configuration
 dotenv.config();
 const app = express();
 const router = express.Router();
+const PORT = process.env.PORT || 3030;
+const BACKEND_URL = `http://localhost:${process.env.BACKEND_PORT || 3031}`;
 
-app.use(express.json()); // Essential for parsing JSON from your frontend
+// Create a proxy to the backend
+app.use('/api', createProxyMiddleware({
+    target: BACKEND_URL,
+    changeOrigin: true,
+    logLevel: 'debug' // For development
+}));
+
+app.use(express.static(path.join(__dirname, 'public'))); // Static files
+app.use(express.json()); // Essential for parsing JSON from frontend
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public'))); // External CSS example
-app.use('/', router);
-
-// Error Handling (Should ALWAYS be last)
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-});
 
 /* --- Helper Function for HTML --- */
 const serveHTML = (fileName, subfolder = '') => (req, res) => {
@@ -51,6 +55,15 @@ router.get('/student/rent', serveHTML('Rent.html', 'student'));
 router.get('/student/search', serveHTML('Search.html', 'student'));
 router.get('/student/search-results', serveHTML('Search Result.html', 'student'));
 router.get('/student/team', serveHTML('Team Page.html', 'student'));
+
+// Register Router
+app.use('/', router);
+
+// Final Error Handling
+app.use((err, req, res, next) => {
+    console.error(`[Server Error] ${err.message}`);
+    res.status(500).send('Internal Server Error');
+});
 
 /* Server Start */
 app.listen(process.env.PORT, () => {
