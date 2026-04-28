@@ -5,6 +5,7 @@
 - .env was included to aid our graders, and it won't be included in real production
 ## How to Run
 
+### 0. Generate Gemini API key at https://aistudio.google.com/ and put it in /sec3_gr10_ws_src/.env
 ### 1. Run mysql file to create the database (Using MySQL Workbench/PowerShell)
 #### 1.1) PowerShell Method
 ##### 1.1.1) Open PowerShell (Window)
