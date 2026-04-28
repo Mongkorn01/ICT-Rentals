@@ -240,22 +240,7 @@
         <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
             <li><a href="/admin/dashboard">Dashboard</a></li>
             
-            <li class="dropdown" style="position: relative; cursor: pointer;">
-                <div onclick="toggleManagement(event)" style="display: flex; align-items: center;">
-                    Management <span id="mgmt-arrow" style="margin-left: 5px; font-size: 10px;">▼</span>
-                </div>
-                    <ul id="mgmt-menu" style="display: none; position: absolute; top: 100%; left: 0; background: white; list-style: none; padding: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 220px; z-index: 1000;">
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/product-control" style="text-decoration: none; color: #333; display: block;">Product List</a>
-                        </li>
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/category-control" style="text-decoration: none; color: #333; display: block;">Category List</a>
-                        </li>
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/brand-control" style="text-decoration: none; color: #333; display: block;">Brand List</a>
-                        </li>
-                    </ul>
-            </li>
+            <li><a href="/admin/product-control">Product Control</a></li>
 
             <li><a href="/admin/penalty">Penalty Page</a></li>
             <li><a href="/admin/team">Team Page</a></li> 
@@ -268,7 +253,16 @@
 
     <main>
         <div class="container">
-            <h1>Dashboard</h1>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>Dashboard</h1>
+                <select id="statusFilter" onchange="fetchDashboardData()" style="padding: 5px; border-radius: 4px;">
+                    <option value="">All Statuses</option>
+                    <option value="Borrowed">Borrowed</option>
+                    <option value="Returned">Returned</option>
+                    <option value="Overdue">Overdue</option>
+                    <option value="Pending">Pending</option>
+                </select>
+            </div>
 
             <table>
                 <thead>
@@ -281,62 +275,9 @@
                         <th style="width: 80px;">Details</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="dashboard-table-body">
                     <tr>
-                        <td>1</td>
-                        <td>107</td>
-                        <td>Gon Freak</td>
-                        <td><span class="badge status-borrowed">Borrowed</span></td>
-                        <td>20/02/2026</td>
-                        <td><span class="details-icon">⎋</span></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>58</td>
-                        <td>Sawada Tsunayoshi</td>
-                        <td><span class="badge status-returned">Returned</span></td>
-                        <td>19/02/2026</td>
-                        <td><span class="details-icon">⎋</span></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>107</td>
-                        <td>Generator Rex</td>
-                        <td><span class="badge status-overdue">Overdue</span></td>
-                        <td>05/02/2026</td>
-                        <td><span class="details-icon">⎋</span></td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>107</td>
-                        <td>Gwen Tennyson</td>
-                        <td><span class="badge status-borrowed">Borrowed</span></td>
-                        <td>15/02/2026</td>
-                        <td><span class="details-icon">⎋</span></td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>107</td>
-                        <td>Ben Tennyson</td>
-                        <td><span class="badge status-borrowed">Borrowed</span></td>
-                        <td>14/02/2026</td>
-                        <td><span class="details-icon">⎋</span></td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>99</td>
-                        <td>Jake The Dog</td>
-                        <td><span class="badge status-pending">Pending</span></td>
-                        <td>14/02/2026</td>
-                        <td><span class="details-icon">⎋</span></td>
-                    </tr>
-            <tr>
-                        <td>7</td>
-                        <td>67</td>
-                        <td>Finn The Human</td>
-                        <td><span class="badge status-pending">Pending</span></td>
-                        <td>15/02/2026</td>
-                        <td><span class="details-icon">⎋</span></td>
+                        <td colspan="6" style="text-align: center;">Loading data...</td>
                     </tr>
                 </tbody>
             </table>
@@ -418,29 +359,70 @@
             }
         };
 
-        /* Modal for navigation bar*/
-        function toggleManagement(event) {
-            // Prevents the click from bubbling up to the window listener
-            event.stopPropagation();
+        /*api*/
+        async function fetchDashboardData() {
+            const tableBody = document.getElementById('dashboard-table-body');
+            const status = document.getElementById('statusFilter').value;
             
-            const menu = document.getElementById('mgmt-menu');
-            const arrow = document.getElementById('mgmt-arrow');
-            const isOpen = menu.style.display === 'block';
+            // Build URL with query parameter if a status is selected
+            const url = status ? `/api/admin/dashboard?status=${status}` : '/api/admin/dashboard';
 
-            menu.style.display = isOpen ? 'none' : 'block';
-            arrow.textContent = isOpen ? '▼' : '▲';
+            try {
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.error) {
+                    tableBody.innerHTML = `<tr><td colspan="6" style="color: red;">Error: ${result.message}</td></tr>`;
+                    return;
+                }
+
+                renderTable(result.data);
+            } catch (error) {
+                console.error("Fetch error:", error);
+                tableBody.innerHTML = `<tr><td colspan="6" style="color: red;">Failed to connect to server.</td></tr>`;
+            }
         }
 
-        // Closes the dropdown if you click anywhere else on the page
-        window.onclick = function(event) {
-            const menu = document.getElementById('mgmt-menu');
-            const arrow = document.getElementById('mgmt-arrow');
-            
-            if (menu.style.display === 'block') {
-                menu.style.display = 'none';
-                arrow.textContent = '▼';
+        function renderTable(data) {
+            const tableBody = document.getElementById('dashboard-table-body');
+            tableBody.innerHTML = ''; // Clear the "Loading..." or old rows
+
+            if (data.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">No records found.</td></tr>`;
+                return;
             }
-        };
+
+            data.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                
+                // Format date to DD/MM/YYYY
+                const borrowDate = new Date(row.borrow_date).toLocaleDateString('en-GB');
+
+                // Match your existing CSS: status-borrowed, status-returned, etc.
+                const statusClass = `status-${row.status.toLowerCase()}`;
+
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${row.serial_number || row.item_id}</td>
+                    <td>${row.student_name}</td>
+                    <td><span class="badge ${statusClass}">${row.status}</span></td>
+                    <td>${borrowDate}</td>
+                    <td>
+                        <span class="details-icon" title="View Details" onclick="viewDetails(${row.rental_item_id})">⎋</span>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function viewDetails(id) {
+            // Logic for when someone clicks the icon
+            console.log("Details for Rental ID:", id);
+            // window.location.href = `/admin/penalty?id=${id}`;
+        }
+
+        // Initial load when page opens
+        document.addEventListener('DOMContentLoaded', fetchDashboardData);
     </script>
 </body>
 </html>

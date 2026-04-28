@@ -203,9 +203,12 @@
             transition: .4s;
             border-radius: 50%;
         }
-        input:checked + .slider { background-color: #888; }
-        input:checked + .slider:before { transform: translateX(26px); }
-
+        input:checked + .slider { 
+            background-color: #4CAF50; /* This makes it green */
+        }
+        input:checked + .slider:before { 
+            transform: translateX(26px); 
+        }
         .btn-save {
             background-color: #d9d9d9;
             border: none;
@@ -310,28 +313,12 @@
     </style>
 </head>
 <body>
-
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="ICT Rentals" class="logo">
         <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
             <li><a href="/admin/dashboard">Dashboard</a></li>
             
-            <li class="dropdown" style="position: relative; cursor: pointer;">
-                <div onclick="toggleManagement(event)" style="display: flex; align-items: center;">
-                    Management <span id="mgmt-arrow" style="margin-left: 5px; font-size: 10px;">▼</span>
-                </div>
-                    <ul id="mgmt-menu" style="display: none; position: absolute; top: 100%; left: 0; background: white; list-style: none; padding: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 220px; z-index: 1000;">
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/product-control" style="text-decoration: none; color: #333; display: block;">Product List</a>
-                        </li>
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/category-control" style="text-decoration: none; color: #333; display: block;">Category List</a>
-                        </li>
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/brand-control" style="text-decoration: none; color: #333; display: block;">Brand List</a>
-                        </li>
-                    </ul>
-            </li>
+            <li><a href="/admin/product-control">Product Control</a></li>
 
             <li><a href="/admin/penalty">Penalty Page</a></li>
             <li><a href="/admin/team">Team Page</a></li> 
@@ -344,59 +331,52 @@
 
     <main>
         <div class="container">
-            <button class="back-btn">❮</button>
+            <button class="back-btn" onclick="window.location.href='/admin/product-control'">❮</button>
             <h1>Add product</h1>
 
             <div class="form-card">
                 <div class="form-row">
                     <label>Category :</label>
-                    <select><option>Computing</option></select>
+                    <select id="prodCategory">
+                        <option value="Computing">Computing</option>
+                        <option value="Laptop">Laptop</option>
+                        <option value="Camera">Camera</option>
+                    </select>
                 </div>
 
                 <div class="form-row">
                     <label>Brand :</label>
-                    <input type="text" value="Apple">
+                    <input type="text" id="prodBrand" placeholder="e.g. Apple">
                 </div>
 
                 <div class="form-row">
                     <label>Product name :</label>
-                    <input type="text" value="Iphone13">
+                    <input type="text" id="prodName" placeholder="e.g. iPhone 13">
                 </div>
 
                 <div class="form-row">
-                    <label>Quantity :</label>
-                    <input type="number" value="22">
+                    <label>Initial Quantity :</label>
+                    <input type="number" id="prodQty" value="0">
+                </div>
+
+                <div class="form-row">
+                    <label>Product Image URL :</label>
+                    <input type="text" id="prodImgUrl" placeholder="https://example.com/image.png" oninput="updatePreview(this.value)">
                 </div>
 
                 <div class="form-row" style="align-items: flex-start;">
-                    <label>Product picture :</label>
+                    <label>Preview :</label>
                     <div class="pic-container">
                         <div class="pic-box">
-                            <img src="https://i.postimg.cc/1RdLw8Wq/Iphone13.png" alt="Preview">
+                            <img id="previewImg" src="https://via.placeholder.com/150?text=No+Image" alt="Preview">
                         </div>
-                        <div class="pic-box placeholder">+</div>
                     </div>
                 </div>
 
                 <div class="form-row" style="align-items: flex-start;">
                     <label>Product Specification :</label>
                     <div class="editor-container">
-                        <div class="editor-toolbar">
-                            <div class="toolbar-group"><strong>B</strong> <em>I</em> <u>U</u></div>
-                            <div class="toolbar-group">Font ▼ Formatting ▼</div>
-                            <div>🔗 🖼️ 📋</div>
-                        </div>
-                        <div class="editor-content">
-                            <strong>▶ Specification</strong><br>
-                            Screen:<br>
-                            • Super Retina XDR display<br>
-                            • 6.1-inch OLED display<br>
-                            • 2532 x 1170 pixels at 460 ppi<br>
-                            • HDR display<br>
-                            Chip:<br>
-                            • A15 Bionic chip
-                        </div>
-                        <div class="editor-footer">Characters : 556 | Words : 14</div>
+                        <textarea id="prodSpecs" style="width: 100%; height: 150px; border: none; padding: 10px; resize: vertical;" placeholder="Enter specs here..."></textarea>
                     </div>
                 </div>
 
@@ -404,11 +384,11 @@
                     <div class="toggle-row">
                         <span>Open visible :</span>
                         <label class="switch">
-                            <input type="checkbox">
+                            <input type="checkbox" id="prodVisible">
                             <span class="slider"></span>
                         </label>
                     </div>
-                    <button class="btn-save" onclick="window.location.href='Product Control.html'">Save</button>
+                    <button class="btn-save" id="saveProductBtn">Save</button>
                 </div>
             </div>
         </div>
@@ -464,31 +444,52 @@
                 area.innerHTML = "Failed to connect to AI.";
             }
         }
-
-        /* Modal for navigation bar*/
-        function toggleManagement(event) {
-            // Prevents the click from bubbling up to the window listener
-            event.stopPropagation();
-            
-            const menu = document.getElementById('mgmt-menu');
-            const arrow = document.getElementById('mgmt-arrow');
-            const isOpen = menu.style.display === 'block';
-
-            menu.style.display = isOpen ? 'none' : 'block';
-            arrow.textContent = isOpen ? '▼' : '▲';
+        
+        // Function to update the image preview as the user types the URL
+        function updatePreview(url) {
+            const preview = document.getElementById('previewImg');
+            preview.src = url || 'https://via.placeholder.com/150?text=No+Image';
         }
 
-        // Closes the dropdown if you click anywhere else on the page
-        window.onclick = function(event) {
-            const menu = document.getElementById('mgmt-menu');
-            const arrow = document.getElementById('mgmt-arrow');
-            
-            if (menu.style.display === 'block') {
-                menu.style.display = 'none';
-                arrow.textContent = '▼';
+        document.getElementById('saveProductBtn').addEventListener('click', async () => {
+            // 1. Collect Data
+            const productData = {
+                name: document.getElementById('prodName').value,
+                brand: document.getElementById('prodBrand').value,
+                category: document.getElementById('prodCategory').value,
+                img_url: document.getElementById('prodImgUrl').value,
+                specs: document.getElementById('prodSpecs').value,
+                details: "", // You can add a field for this if needed
+                admin_id: 1  // Replace with actual logged-in admin ID
+            };
+
+            // 2. Simple Validation
+            if (!productData.name || !productData.brand || !productData.category) {
+                alert("Please fill in Name, Brand, and Category.");
+                return;
             }
-        };
+
+            try {
+                // 3. Send to API
+                const response = await fetch('/api/admin/add-product', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(productData)
+                });
+
+                const result = await response.json();
+
+                if (result.error) {
+                    alert("Error: " + result.message);
+                } else {
+                    alert("Product added successfully!");
+                    window.location.href = '/admin/product-control';
+                }
+            } catch (error) {
+                console.error("Submission error:", error);
+                alert("Failed to connect to the server.");
+            }
+        });
     </script>
-    <!-- GEMINI HELPER -->
 </body>
 </html>

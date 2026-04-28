@@ -213,22 +213,7 @@
         <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
             <li><a href="/admin/dashboard">Dashboard</a></li>
             
-            <li class="dropdown" style="position: relative; cursor: pointer;">
-                <div onclick="toggleManagement(event)" style="display: flex; align-items: center;">
-                    Management <span id="mgmt-arrow" style="margin-left: 5px; font-size: 10px;">▼</span>
-                </div>
-                    <ul id="mgmt-menu" style="display: none; position: absolute; top: 100%; left: 0; background: white; list-style: none; padding: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 220px; z-index: 1000;">
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/product-control" style="text-decoration: none; color: #333; display: block;">Product List</a>
-                        </li>
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/category-control" style="text-decoration: none; color: #333; display: block;">Category List</a>
-                        </li>
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/brand-control" style="text-decoration: none; color: #333; display: block;">Brand List</a>
-                        </li>
-                    </ul>
-            </li>
+            <li><a href="/admin/product-control">Product Control</a></li>
 
             <li><a href="/admin/penalty">Penalty Page</a></li>
             <li><a href="/admin/team">Team Page</a></li> 
@@ -254,64 +239,8 @@
                         <th width="11%">Details</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>35</td>
-                        <td class="text-left">Thundwitchar Pongsa</td>
-                        <td><span class="status-overdue">Overdue</span></td>
-                        <td class="overdue-date">27/02/2026</td>
-                        <td><button class="detail-icon">⇪</button></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>52</td>
-                        <td class="text-left">Arteria Pendragon</td>
-                        <td><span class="status-overdue">Overdue</span></td>
-                        <td class="overdue-date">5/03/2026</td>
-                        <td><button class="detail-icon">⇪</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>67</td>
-                        <td class="text-left">Sanji Winsmoke</td>
-                        <td><span class="status-overdue">Overdue</span></td>
-                        <td class="overdue-date">06/04/2026</td>
-                        <td><button class="detail-icon">⇪</button></td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>32</td>
-                        <td class="text-left">Hungry Man</td>
-                        <td><span class="status-overdue">Overdue</span></td>
-                        <td class="overdue-date">15/03/2026</td>
-                        <td><button class="detail-icon">⇪</button></td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>56</td>
-                        <td class="text-left">Billgate Studiotype</td>
-                        <td><span class="status-overdue">Overdue</span></td>
-                        <td class="overdue-date">2/03/2026</td>
-                        <td><button class="detail-icon">⇪</button></td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>78</td>
-                        <td class="text-left">Elon Musk</td>
-                        <td><span class="status-overdue">Overdue</span></td>
-                        <td class="overdue-date">12/03/2026</td>
-                        <td><button class="detail-icon">⇪</button></td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>96</td>
-                        <td class="text-left">Mark Suckkerberg</td>
-                        <td><span class="status-overdue">Overdue</span></td>
-                        <td class="overdue-date">19/03/2026</td>
-                        <td><button class="detail-icon">⇪</button></td>
-                    </tr>
-                </tbody>
+                <tbody id="penalty-table-body">
+                    </tbody>
             </table>
         </div>
     </main>
@@ -367,29 +296,64 @@
             }
         }
 
-                /* Modal for navigation bar*/
-        function toggleManagement(event) {
-            // Prevents the click from bubbling up to the window listener
-            event.stopPropagation();
-            
-            const menu = document.getElementById('mgmt-menu');
-            const arrow = document.getElementById('mgmt-arrow');
-            const isOpen = menu.style.display === 'block';
+        /*api*/
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchOverdueItems();
+        });
 
-            menu.style.display = isOpen ? 'none' : 'block';
-            arrow.textContent = isOpen ? '▼' : '▲';
+        async function fetchOverdueItems() {
+            const tableBody = document.getElementById('penalty-table-body');
+            
+            try {
+                const response = await fetch('/api/admin/penalty');
+                const result = await response.json();
+
+                if (result.error) {
+                    throw new Error(result.message);
+                }
+
+                renderTable(result.data);
+            } catch (error) {
+                console.error("Fetch error:", error);
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Failed to load overdue list.</td></tr>`;
+            }
         }
 
-        // Closes the dropdown if you click anywhere else on the page
-        window.onclick = function(event) {
-            const menu = document.getElementById('mgmt-menu');
-            const arrow = document.getElementById('mgmt-arrow');
-            
-            if (menu.style.display === 'block') {
-                menu.style.display = 'none';
-                arrow.textContent = '▼';
+        function renderTable(data) {
+            const tableBody = document.getElementById('penalty-table-body');
+            tableBody.innerHTML = ''; // Clear static content
+
+            if (data.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No overdue items found.</td></tr>`;
+                return;
             }
-        };
+
+            data.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                
+                // Format the date (Assuming DD/MM/YYYY based on your static HTML)
+                const dueDate = new Date(item.due_date);
+                const formattedDate = dueDate.toLocaleDateString('en-GB'); // en-GB gives DD/MM/YYYY
+
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.serial_number}</td>
+                    <td class="text-left">${item.student_name}</td>
+                    <td><span class="status-overdue">Overdue</span></td>
+                    <td class="overdue-date">${formattedDate}</td>
+                    <td>
+                        <button class="detail-icon" onclick="viewPenaltyDetails(${item.rental_item_id})">⇪</button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function viewPenaltyDetails(rentalItemId) {
+            // Navigate to a details page or open a modal
+            // Example: window.location.href = `/admin/penalty-details?id=${rentalItemId}`;
+            console.log("Viewing details for Rental Item ID:", rentalItemId);
+        }
     </script>
 
 </body>

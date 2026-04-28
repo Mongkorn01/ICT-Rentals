@@ -220,22 +220,7 @@
         <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
             <li><a href="/admin/dashboard">Dashboard</a></li>
             
-            <li class="dropdown" style="position: relative; cursor: pointer;">
-                <div onclick="toggleManagement(event)" style="display: flex; align-items: center;">
-                    Management <span id="mgmt-arrow" style="margin-left: 5px; font-size: 10px;">▼</span>
-                </div>
-                    <ul id="mgmt-menu" style="display: none; position: absolute; top: 100%; left: 0; background: white; list-style: none; padding: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 220px; z-index: 1000;">
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/product-control" style="text-decoration: none; color: #333; display: block;">Product List</a>
-                        </li>
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/category-control" style="text-decoration: none; color: #333; display: block;">Category List</a>
-                        </li>
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/brand-control" style="text-decoration: none; color: #333; display: block;">Brand List</a>
-                        </li>
-                    </ul>
-            </li>
+            <li><a href="/admin/product-control">Product Control</a></li>
 
             <li><a href="/admin/penalty">Penalty Page</a></li>
             <li><a href="/admin/team">Team Page</a></li> 
@@ -334,30 +319,6 @@
                 area.innerHTML = "Failed to connect to AI.";
             }
         }
-
-        /* Modal for navigation bar*/
-        function toggleManagement(event) {
-            // Prevents the click from bubbling up to the window listener
-            event.stopPropagation();
-            
-            const menu = document.getElementById('mgmt-menu');
-            const arrow = document.getElementById('mgmt-arrow');
-            const isOpen = menu.style.display === 'block';
-
-            menu.style.display = isOpen ? 'none' : 'block';
-            arrow.textContent = isOpen ? '▼' : '▲';
-        }
-
-        // Closes the dropdown if you click anywhere else on the page
-        window.onclick = function(event) {
-            const menu = document.getElementById('mgmt-menu');
-            const arrow = document.getElementById('mgmt-arrow');
-            
-            if (menu.style.display === 'block') {
-                menu.style.display = 'none';
-                arrow.textContent = '▼';
-            }
-        };
     </script>
 
 </body>

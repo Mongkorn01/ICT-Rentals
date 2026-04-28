@@ -33,13 +33,7 @@ router.get('/login-student', serveHTML('Login Student.html'));
 
 /* --- ADMIN ROUTES (in /template/admin/) --- */
 router.get('/admin/dashboard', serveHTML('Dashboard.html', 'admin'));
-router.get('/admin/add-brand', serveHTML('Add Brand.html', 'admin'));
-router.get('/admin/add-category', serveHTML('Add Category.html', 'admin'));
 router.get('/admin/add-product', serveHTML('Add Product.html', 'admin'));
-router.get('/admin/brand-control', serveHTML('Brand Control.html', 'admin'));
-router.get('/admin/category-control', serveHTML('Category Control.html', 'admin'));
-router.get('/admin/edit-brand', serveHTML('Edit Brand.html', 'admin'));
-router.get('/admin/edit-category', serveHTML('Edit Category.html', 'admin'));
 router.get('/admin/edit-product', serveHTML('Edit Product.html', 'admin'));
 router.get('/admin/penalty', serveHTML('Penalty Page.html', 'admin'));
 router.get('/admin/product-control', serveHTML('Product Control.html', 'admin'));

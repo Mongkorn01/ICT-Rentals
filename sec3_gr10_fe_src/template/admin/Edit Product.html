@@ -332,22 +332,7 @@
         <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
             <li><a href="/admin/dashboard">Dashboard</a></li>
             
-            <li class="dropdown" style="position: relative; cursor: pointer;">
-                <div onclick="toggleManagement(event)" style="display: flex; align-items: center;">
-                    Management <span id="mgmt-arrow" style="margin-left: 5px; font-size: 10px;">▼</span>
-                </div>
-                    <ul id="mgmt-menu" style="display: none; position: absolute; top: 100%; left: 0; background: white; list-style: none; padding: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 220px; z-index: 1000;">
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/product-control" style="text-decoration: none; color: #333; display: block;">Product List</a>
-                        </li>
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/category-control" style="text-decoration: none; color: #333; display: block;">Category List</a>
-                        </li>
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/brand-control" style="text-decoration: none; color: #333; display: block;">Brand List</a>
-                        </li>
-                    </ul>
-            </li>
+            <li><a href="/admin/product-control">Product Control</a></li>
 
             <li><a href="/admin/penalty">Penalty Page</a></li>
             <li><a href="/admin/team">Team Page</a></li> 
@@ -360,59 +345,47 @@
 
     <main>
         <div class="container">
-            <button class="back-btn">❮</button>
-            <h1>Edit product</h1>
+            <button class="back-btn" onclick="window.location.href='/admin/product-control'">❮</button>
+            <h1>Edit Product</h1>
 
             <div class="form-card">
                 <div class="form-row">
                     <label>Category :</label>
-                    <select><option>Computing</option></select>
+                    <select id="editCategory">
+                        <option value="Computing">Computing</option>
+                        <option value="Laptop">Laptop</option>
+                        <option value="Camera">Camera</option>
+                    </select>
                 </div>
 
                 <div class="form-row">
                     <label>Brand :</label>
-                    <input type="text" value="Apple">
+                    <input type="text" id="editBrand">
                 </div>
 
                 <div class="form-row">
                     <label>Product name :</label>
-                    <input type="text" value="Iphone13">
+                    <input type="text" id="editName">
                 </div>
 
                 <div class="form-row">
-                    <label>Quantity :</label>
-                    <input type="number" value="22">
+                    <label>Product Image URL :</label>
+                    <input type="text" id="editImgUrl" oninput="updatePreview(this.value)">
                 </div>
 
                 <div class="form-row" style="align-items: flex-start;">
-                    <label>Product picture :</label>
+                    <label>Preview :</label>
                     <div class="pic-container">
                         <div class="pic-box">
-                            <img src="https://i.postimg.cc/1RdLw8Wq/Iphone13.png" alt="Preview">
+                            <img id="editPreviewImg" src="" alt="Preview" style="max-width: 100%;">
                         </div>
-                        <div class="pic-box placeholder">+</div>
                     </div>
                 </div>
 
                 <div class="form-row" style="align-items: flex-start;">
                     <label>Product Specification :</label>
                     <div class="editor-container">
-                        <div class="editor-toolbar">
-                            <div class="toolbar-group"><strong>B</strong> <em>I</em> <u>U</u></div>
-                            <div class="toolbar-group">Font ▼ Formatting ▼</div>
-                            <div>🔗 🖼️ 📋</div>
-                        </div>
-                        <div class="editor-content">
-                            <strong>▶ Specification</strong><br>
-                            Screen:<br>
-                            • Super Retina XDR display<br>
-                            • 6.1-inch OLED display<br>
-                            • 2532 x 1170 pixels at 460 ppi<br>
-                            • HDR display<br>
-                            Chip:<br>
-                            • A15 Bionic chip
-                        </div>
-                        <div class="editor-footer">Characters : 556 | Words : 14</div>
+                        <textarea id="editSpecs" style="width: 100%; height: 150px; border: none; padding: 10px; resize: vertical;"></textarea>
                     </div>
                 </div>
 
@@ -420,18 +393,17 @@
                     <div class="toggle-row">
                         <span>Open visible :</span>
                         <label class="switch">
-                            <input type="checkbox" checked>
+                            <input type="checkbox" id="editVisible" checked>
                             <span class="slider"></span>
                         </label>
                     </div>
                     <div class="action-group">
-                        <button class="btn btn-delete" onclick="window.location.href='Product Control.html'" >Delete</button>
-                        <button class="btn btn-save" onclick="window.location.href='Product Control.html'" >Save Changes</button>
+                        <button class="btn btn-delete" id="deleteProductBtn">Delete</button>
+                        <button class="btn btn-save" id="saveEditBtn">Save Changes</button>
                     </div>
                 </div>
             </div>
         </div>
-
     </main>
 
     <!-- GEMINI HELPER -->
@@ -485,29 +457,106 @@
             }
         }
 
-        /* Modal for navigation bar*/
-        function toggleManagement(event) {
-            // Prevents the click from bubbling up to the window listener
-            event.stopPropagation();
-            
-            const menu = document.getElementById('mgmt-menu');
-            const arrow = document.getElementById('mgmt-arrow');
-            const isOpen = menu.style.display === 'block';
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+        const CURRENT_ADMIN_ID = 1; // Replace with actual session ID
 
-            menu.style.display = isOpen ? 'none' : 'block';
-            arrow.textContent = isOpen ? '▼' : '▲';
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!productId) {
+                alert("No product ID found");
+                return;
+            }
+            await loadProductData();
+        });
+
+        function updatePreview(url) {
+            const preview = document.getElementById('editPreviewImg');
+            
+            // Reset the error handler so it can fire again for a new URL
+            preview.onerror = function() {
+                // IMPORTANT: Set onerror to null immediately to stop the infinite loop
+                this.onerror = null; 
+                
+                // Use a local fallback image or a reliable one
+                this.src = 'https://placehold.co/150?text=Error'; 
+                
+                console.error("The image at " + url + " could not be loaded.");
+            };
+
+            // If url is "null" (as a string) or actually null, use placeholder immediately
+            if (!url || url === "null") {
+                preview.src = 'https://placehold.co/150?text=No+URL';
+            } else {
+                preview.src = url;
+            }
+}
+
+        // 1. Fetch current data and fill the form
+        async function loadProductData() {
+            try {
+                const response = await fetch('/api/admin/product-control'); // Or a specific GET /id if you have one
+                const result = await response.json();
+                
+                // Find the specific product from the list
+                const product = result.data.find(p => p.model_id == productId);
+
+                if (product) {
+                    document.getElementById('editName').value = product.name;
+                    document.getElementById('editBrand').value = product.brand;
+                    document.getElementById('editCategory').value = product.category;
+                    document.getElementById('editImgUrl').value = product.img_url || '';
+                    document.getElementById('editSpecs').value = product.specs || '';
+                    updatePreview(product.img_url);
+                }
+            } catch (error) {
+                console.error("Error loading product:", error);
+            }
         }
 
-        // Closes the dropdown if you click anywhere else on the page
-        window.onclick = function(event) {
-            const menu = document.getElementById('mgmt-menu');
-            const arrow = document.getElementById('mgmt-arrow');
-            
-            if (menu.style.display === 'block') {
-                menu.style.display = 'none';
-                arrow.textContent = '▼';
+        // 2. Handle Save Changes
+        document.getElementById('saveEditBtn').addEventListener('click', async () => {
+            const updatedData = {
+                name: document.getElementById('editName').value,
+                brand: document.getElementById('editBrand').value,
+                category: document.getElementById('editCategory').value,
+                img_url: document.getElementById('editImgUrl').value,
+                specs: document.getElementById('editSpecs').value,
+                details: "", 
+                admin_id: CURRENT_ADMIN_ID
+            };
+
+            try {
+                const response = await fetch(`/api/admin/edit-product/${productId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedData)
+                });
+
+                const result = await response.json();
+                if (result.error) throw new Error(result.message);
+
+                alert("Update successful!");
+                window.location.href = '/admin/product-control';
+            } catch (error) {
+                alert("Failed to update: " + error.message);
             }
-        };
+        });
+
+        // 3. Handle Delete (Reuse existing delete logic)
+        document.getElementById('deleteProductBtn').addEventListener('click', async () => {
+            if (!confirm("Are you sure you want to delete this product?")) return;
+
+            try {
+                const response = await fetch(`/api/admin/product-control/${productId}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ admin_id: CURRENT_ADMIN_ID })
+                });
+                window.location.href = '/admin/product-control';
+            } catch (error) {
+                console.error("Delete error:", error);
+            }
+        });
     </script>
 
 </body>

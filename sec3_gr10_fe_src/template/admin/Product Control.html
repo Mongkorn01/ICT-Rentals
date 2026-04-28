@@ -116,7 +116,7 @@
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #999;
+            background-color: #ccc; /* Use a lighter grey for better contrast */
             transition: .4s;
             border-radius: 24px;
         }
@@ -129,6 +129,14 @@
             background-color: white;
             transition: .4s;
             border-radius: 50%;
+        }
+
+        .switch input:checked + .slider {
+            background-color: #4CAF50; 
+        }
+
+        .switch input:checked + .slider:before {
+            transform: translateX(26px);
         }
 
         /* Action Icons */
@@ -235,28 +243,12 @@
     </style>
 </head>
 <body>
-
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="ICT Rentals" class="logo">
         <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
             <li><a href="/admin/dashboard">Dashboard</a></li>
             
-            <li class="dropdown" style="position: relative; cursor: pointer;">
-                <div onclick="toggleManagement(event)" style="display: flex; align-items: center;">
-                    Management <span id="mgmt-arrow" style="margin-left: 5px; font-size: 10px;">▼</span>
-                </div>
-                    <ul id="mgmt-menu" style="display: none; position: absolute; top: 100%; left: 0; background: white; list-style: none; padding: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 220px; z-index: 1000;">
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/product-control" style="text-decoration: none; color: #333; display: block;">Product List</a>
-                        </li>
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/category-control" style="text-decoration: none; color: #333; display: block;">Category List</a>
-                        </li>
-                        <li style="padding: 8px 20px; white-space: nowrap;">
-                            <a href="/admin/brand-control" style="text-decoration: none; color: #333; display: block;">Brand List</a>
-                        </li>
-                    </ul>
-            </li>
+            <li><a href="/admin/product-control">Product Control</a></li>
 
             <li><a href="/admin/penalty">Penalty Page</a></li>
             <li><a href="/admin/team">Team Page</a></li> 
@@ -274,9 +266,9 @@
                     <h1>Product List</h1>
                     <div class="controls">
                         Show 
-                        <select>
-                            <option>8</option>
-                            <option>16</option>
+                        <select id="pageSize">
+                            <option value="8">8</option>
+                            <option value="16">16</option>
                         </select>
                         Product
                     </div>
@@ -297,113 +289,8 @@
                         <th width="10%">Delete</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td class="text-left">Iphone13</td>
-                        <td>Computing</td>
-                        <td>Apple</td>
-                        <td>10</td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </td>
-                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
-                        <td><button class="icon-btn">🗑️</button></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td class="text-left">A51</td>
-                        <td>Computing</td>
-                        <td>Android</td>
-                        <td>13</td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </td>
-                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
-                        <td><button class="icon-btn">🗑️</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td class="text-left">Android Galaxy Note 3</td>
-                        <td>Computing</td>
-                        <td>Android</td>
-                        <td>15</td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </td>
-                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
-                        <td><button class="icon-btn">🗑️</button></td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td class="text-left">MacBook Pro</td>
-                        <td>Laptop</td>
-                        <td>Apple</td>
-                        <td>33</td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </td>
-                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
-                        <td><button class="icon-btn">🗑️</button></td>
-                    </tr>
-                                    <tr>
-                        <td>5</td>
-                        <td class="text-left">Asus TUF Gaming A16 FA607NUG-RL116W</td>
-                        <td>Laptop</td>
-                        <td>Asus</td>
-                        <td>34</td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </td>
-                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
-                        <td><button class="icon-btn">🗑️</button></td>
-                    </tr>
-                                    <tr>
-                        <td>6</td>
-                        <td class="text-left">Canon EOS 7D DSLR</td>
-                        <td>Camera</td>
-                        <td>Canon</td>
-                        <td>40</td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </td>
-                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
-                        <td><button class="icon-btn">🗑️</button></td>
-                    </tr>
-                                    <tr>
-                        <td>7</td>
-                        <td class="text-left">Green Screen</td>
-                        <td>Tools</td>
-                        <td>-</td>
-                        <td>30</td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </td>
-                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
-                        <td><button class="icon-btn">🗑️</button></td>
-                    </tr>
-                </tbody>
+                <tbody id="product-table-body">
+                    </tbody>
             </table>
         </div>
     </main>
@@ -459,29 +346,126 @@
             }
         }
 
-        /* Modal for navigation bar*/
-        function toggleManagement(event) {
-            // Prevents the click from bubbling up to the window listener
-            event.stopPropagation();
-            
-            const menu = document.getElementById('mgmt-menu');
-            const arrow = document.getElementById('mgmt-arrow');
-            const isOpen = menu.style.display === 'block';
+        /*-- API --*/
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchProducts();
+        });
 
-            menu.style.display = isOpen ? 'none' : 'block';
-            arrow.textContent = isOpen ? '▼' : '▲';
+        // Mock admin ID - Replace this with your actual logged-in admin session data
+        const CURRENT_ADMIN_ID = 1; 
+
+        async function fetchProducts() {
+            const tableBody = document.getElementById('product-table-body');
+            
+            try {
+                const response = await fetch('/api/admin/product-control');
+                const result = await response.json();
+
+                if (result.error) throw new Error(result.message);
+
+                renderProducts(result.data);
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                tableBody.innerHTML = `<tr><td colspan="8" style="color:red; text-align:center;">Error loading products.</td></tr>`;
+            }
         }
 
-        // Closes the dropdown if you click anywhere else on the page
-        window.onclick = function(event) {
-            const menu = document.getElementById('mgmt-menu');
-            const arrow = document.getElementById('mgmt-arrow');
+        // Inside your renderProducts function loop:
+        function renderProducts(products) {
+            const tableBody = document.getElementById('product-table-body');
+            tableBody.innerHTML = '';
+
+            products.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                
+                // Convert 1/0 from DB to checked attribute
+                const isChecked = item.visible === 1 ? 'checked' : '';
+
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td class="text-left">${item.name}</td>
+                    <td>${item.category}</td>
+                    <td>${item.brand}</td>
+                    <td>${item.quantity_total}</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox" ${isChecked} 
+                                onchange="toggleVisibility(${item.model_id}, this.checked, '${item.name}', '${item.brand}', '${item.category}')">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <button class="icon-btn" onclick="editProduct(${item.model_id})">📝</button>
+                    </td>
+                    <td>
+                        <button class="icon-btn" onclick="deleteProduct(${item.model_id}, '${item.name}')">🗑️</button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Function to handle the API update
+        async function toggleVisibility(id, isVisible, name, brand, category) {
+            const status = isVisible ? 1 : 0;
             
-            if (menu.style.display === 'block') {
-                menu.style.display = 'none';
-                arrow.textContent = '▼';
+            try {
+                const response = await fetch(`/api/admin/edit-product/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: name,
+                        brand: brand,
+                        category: category,
+                        visible: status,
+                        admin_id: 1 // Replace with actual admin session ID
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.error) {
+                    alert("Failed to update visibility: " + result.message);
+                    // Optional: refresh page to reset toggle state if it failed
+                    fetchProducts(); 
+                } else {
+                    console.log(`Product ${id} visibility set to: ${status}`);
+                }
+            } catch (error) {
+                console.error("Toggle Error:", error);
+                alert("Network error while updating visibility.");
             }
-        };
+        }
+
+        function editProduct(id) {
+            // Pass the ID via query string so the edit page knows which product to load
+            window.location.href = `/admin/edit-product?id=${id}`;
+        }
+
+        async function deleteProduct(id, name) {
+            if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+
+            try {
+                const response = await fetch(`/api/admin/product-control/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ admin_id: CURRENT_ADMIN_ID })
+                });
+
+                const result = await response.json();
+
+                if (result.error) {
+                    // This will likely trigger if items are still linked to this model (Foreign Key error)
+                    alert("Error: " + result.message);
+                } else {
+                    alert("Product deleted successfully.");
+                    fetchProducts(); // Refresh list
+                }
+            } catch (error) {
+                console.error("Delete Error:", error);
+                alert("Failed to delete product.");
+            }
+        }
     </script>
 
 </body>
