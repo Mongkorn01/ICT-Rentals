@@ -5,14 +5,27 @@
 - .env was included to aid our graders, and it won't be included in real production
 ## How to Run
 
-### 1. Run mysql file to create the database -> Enter root password
+### 1. Run mysql file to create the database (Using MySQL workbench/PowerShell)
+#### 1.1) Open PowerShell (Window)
+#### 1.2) Navigate to MySQL folder
 ```bash
-mysql -u root -p < sec_gr10_database.sql
+cd "C:\Program Files\MySQL\MySQL Server 8.0\bin"
+# or
+cd "C:\Program Files\MySQL\MySQL Server 9.4\bin"
+```
+#### 1.2) Login as root
+```bash
+.\mysql -u root
+```
+#### 1.3) Run the database file using absolute path
+```bash
+source C:</path-to>/sec3_gr10_database.sql;
 ```
 >### 2. (Optional Create User) Run create_user.sql -> Enter root password
 > Ensure the right user is in the .env file with the right accesss
 ```bash
-mysql -u root -p < create_user.sql
+.\mysql -u root
+source C:</path-to>/create_user.sql;
 ```
 
 ### 3. Open 2 Terminal
