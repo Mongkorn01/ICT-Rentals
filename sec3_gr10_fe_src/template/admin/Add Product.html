@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== Meta Information ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ===== Page Title ===== -->
     <title>ICT-RENTALS - Add Product</title>
+
+    <!-- ===== Styles (Layout, Components, AI Helper) ===== -->
     <style>
+        /* ===== Global Styles ===== */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -12,7 +18,7 @@
             color: #333;
         }
 
-        /* --- Navbar (Consistent with previous screens) --- */
+        /* ===== Navbar Styles ===== */
         .nav-links li.active { font-weight: 600; }
         .nav-links a {
             text-decoration: none;
@@ -31,12 +37,10 @@
         .nav-links li { margin: 0 20px; font-size: 18px; cursor: pointer; color: #444; }
         .nav-links li.active { font-weight: 500; background-color: #f8f8f8; padding: 10px 15px; margin: -10px 5px; }
         .dropdown::after {font-size: 10px; color: #888; }
-        .nav-links li.active {
-            font-weight: 600;
-        }                
+        .nav-links li.active { font-weight: 600; }                
         .nav-right { display: flex; align-items: center; gap: 20px; }
 
-        /* --- Main Content Layout --- */
+        /* ===== Main Layout ===== */
         .container {
             padding: 30px 10%;
             max-width: 1200px;
@@ -63,7 +67,7 @@
 
         h1 { text-align: center; font-size: 28px; margin-bottom: 30px; }
 
-        /* --- Form Card --- */
+        /* ===== Form Card ===== */
         .form-card {
             background: white;
             border-radius: 15px;
@@ -92,7 +96,7 @@
             font-size: 16px;
         }
 
-        /* --- Picture Section --- */
+        /* ===== Image Preview ===== */
         .pic-container {
             display: flex;
             gap: 20px;
@@ -119,7 +123,7 @@
 
         .pic-box img { max-width: 90%; max-height: 90%; }
 
-        /* --- Rich Text Editor Mockup --- */
+        /* ===== Specification Editor ===== */
         .editor-container {
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -162,7 +166,7 @@
             border-top: 1px solid #ddd;
         }
 
-        /* --- Footer Actions --- */
+        /* ===== Footer Actions ===== */
         .form-footer {
             margin-top: 30px;
             display: flex;
@@ -178,7 +182,7 @@
             font-size: 18px;
         }
 
-        /* Switch Toggle */
+        /* ===== Toggle Switch ===== */
         .switch {
             position: relative;
             display: inline-block;
@@ -204,11 +208,13 @@
             border-radius: 50%;
         }
         input:checked + .slider { 
-            background-color: #4CAF50; /* This makes it green */
+            background-color: #4CAF50;
         }
         input:checked + .slider:before { 
             transform: translateX(26px); 
         }
+
+        /* ===== Save Button ===== */
         .btn-save {
             background-color: #d9d9d9;
             border: none;
@@ -219,7 +225,7 @@
             color: #333;
         }
 
-        /* GEMINI HELPER */
+        /* ===== Gemini AI Helper ===== */
         .gemini-btn {
             position: fixed;
             bottom: 20px;
@@ -246,6 +252,7 @@
             margin-right: 8px;
             font-size: 18px;
         }
+
         .ai-modal {
             position: fixed;
             bottom: 80px;
@@ -262,7 +269,7 @@
         }
 
         .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
+            background: #1a3a8a;
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -302,6 +309,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -309,17 +317,16 @@
             font-size: 20px;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
     </style>
 </head>
+
 <body>
+    <!-- ===== Navbar ===== -->
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="ICT Rentals" class="logo">
         <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
             <li><a href="/admin/dashboard">Dashboard</a></li>
-            
             <li><a href="/admin/product-control">Product Control</a></li>
-
             <li><a href="/admin/penalty">Penalty Page</a></li>
             <li><a href="/admin/team">Team Page</a></li> 
         </ul>
@@ -329,12 +336,16 @@
         </div>
     </nav>
 
+    <!-- ===== Main Content ===== -->
     <main>
         <div class="container">
             <button class="back-btn" onclick="window.location.href='/admin/product-control'">❮</button>
             <h1>Add product</h1>
 
+            <!-- ===== Product Form ===== -->
             <div class="form-card">
+
+                <!-- Category -->
                 <div class="form-row">
                     <label>Category :</label>
                     <select id="prodCategory">
@@ -344,26 +355,31 @@
                     </select>
                 </div>
 
+                <!-- Brand -->
                 <div class="form-row">
                     <label>Brand :</label>
                     <input type="text" id="prodBrand" placeholder="e.g. Apple">
                 </div>
 
+                <!-- Product Name -->
                 <div class="form-row">
                     <label>Product name :</label>
                     <input type="text" id="prodName" placeholder="e.g. iPhone 13">
                 </div>
 
+                <!-- Quantity -->
                 <div class="form-row">
                     <label>Initial Quantity :</label>
                     <input type="number" id="prodQty" value="0">
                 </div>
 
+                <!-- Image URL -->
                 <div class="form-row">
                     <label>Product Image URL :</label>
                     <input type="text" id="prodImgUrl" placeholder="https://example.com/image.png" oninput="updatePreview(this.value)">
                 </div>
 
+                <!-- Image Preview -->
                 <div class="form-row" style="align-items: flex-start;">
                     <label>Preview :</label>
                     <div class="pic-container">
@@ -373,6 +389,7 @@
                     </div>
                 </div>
 
+                <!-- Specification -->
                 <div class="form-row" style="align-items: flex-start;">
                     <label>Product Specification :</label>
                     <div class="editor-container">
@@ -380,6 +397,7 @@
                     </div>
                 </div>
 
+                <!-- Footer Actions -->
                 <div class="form-footer">
                     <div class="toggle-row">
                         <span>Open visible :</span>
@@ -390,11 +408,12 @@
                     </div>
                     <button class="btn-save" id="saveProductBtn">Save</button>
                 </div>
+
             </div>
         </div>
     </main>
 
-    <!-- GEMINI HELPER -->
+    <!-- ===== Gemini AI Helper ===== -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
@@ -415,13 +434,15 @@
         </div>
     </footer>
 
-
+    <!-- ===== Scripts (AI, Preview, Form Submission) ===== -->
     <script>
+        // Toggle AI window visibility
         function toggleAI() {
             const win = document.getElementById('ai-window');
             win.style.display = win.style.display === 'none' ? 'flex' : 'none';
         }
 
+        // Send message to AI assistant
         async function sendToAI() {
             const input = document.getElementById('ai-input');
             const area = document.getElementById('ai-response-area');
@@ -429,7 +450,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {
@@ -445,32 +466,33 @@
             }
         }
         
-        // Function to update the image preview as the user types the URL
+        // Update image preview from URL
         function updatePreview(url) {
             const preview = document.getElementById('previewImg');
             preview.src = url || 'https://via.placeholder.com/150?text=No+Image';
         }
 
+        // Handle product submission
         document.getElementById('saveProductBtn').addEventListener('click', async () => {
-            // 1. Collect Data
+            // Collect form data
             const productData = {
                 name: document.getElementById('prodName').value,
                 brand: document.getElementById('prodBrand').value,
                 category: document.getElementById('prodCategory').value,
                 img_url: document.getElementById('prodImgUrl').value,
                 specs: document.getElementById('prodSpecs').value,
-                details: "", // You can add a field for this if needed
-                admin_id: 1  // Replace with actual logged-in admin ID
+                details: "",
+                admin_id: 1
             };
 
-            // 2. Simple Validation
+            // Validate required fields
             if (!productData.name || !productData.brand || !productData.category) {
                 alert("Please fill in Name, Brand, and Category.");
                 return;
             }
 
             try {
-                // 3. Send to API
+                // Send data to backend API
                 const response = await fetch('/api/admin/add-product', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

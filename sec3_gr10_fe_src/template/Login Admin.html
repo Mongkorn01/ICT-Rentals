@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== Meta Information ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ===== Page Title ===== -->
     <title>ICT-RENTALS Login - Updated</title>
+
+    <!-- ===== Styles (Layout, Form, AI Helper) ===== -->
     <style>
-        /* Base page styling */
+        /* ===== Base Layout ===== */
         body, html {
             margin: 0;
             padding: 0;
@@ -17,7 +22,7 @@
             align-items: center;
         }
 
-        /* Centered login card */
+        /* ===== Login Card ===== */
         .login-card {
             background-color: #ffffff;
             width: 420px;
@@ -27,7 +32,7 @@
             text-align: center;
         }
 
-        /* Logo Section */
+        /* ===== Logo Section ===== */
         .logo-container {
             display: flex;
             align-items: center;
@@ -36,7 +41,7 @@
         }
 
         .logo-icon {
-            width: 80px; /* Sized to match reference image_1.png */
+            width: 80px;
             height: 80px;
             margin-right: 15px;
             background-image: url('https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png');
@@ -58,7 +63,7 @@
             font-weight: 300;
         }
 
-        /* Standard Login Form Section */
+        /* ===== Form Inputs ===== */
         .form-group {
             margin-bottom: 15px;
         }
@@ -79,6 +84,7 @@
             color: #aaa;
         }
 
+        /* ===== Login Button ===== */
         .btn-primary-login {
             background-color: #7d97e2;
             color: white;
@@ -90,6 +96,7 @@
             margin-top: 5px;
         }
 
+        /* ===== Divider ===== */
         hr {
             border: 0;
             border-top: 1px solid #eee;
@@ -103,7 +110,7 @@
             font-weight: 600;
         }
 
-        /* SSO Buttons */
+        /* ===== SSO Buttons ===== */
         .btn-sso {
             display: flex;            
             align-items: center;
@@ -134,7 +141,7 @@
             font-size: 16px;
         }
 
-        /* Help/Footer Section */
+        /* ===== Footer Help Section ===== */
         .footer-text h3 {
             font-size: 16px;
             color: #222;
@@ -153,7 +160,8 @@
             text-decoration: none;
             font-weight: 600;
         }
-        /* GEMINI HELPER */
+
+        /* ===== Gemini AI Helper ===== */
         .gemini-btn {
             position: fixed;
             bottom: 20px;
@@ -180,6 +188,7 @@
             margin-right: 8px;
             font-size: 18px;
         }
+
         .ai-modal {
             position: fixed;
             bottom: 80px;
@@ -196,7 +205,7 @@
         }
 
         .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
+            background: #1a3a8a;
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -236,6 +245,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -243,19 +253,24 @@
             font-size: 20px;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
     </style>
 </head>
+
 <body>
+    <!-- ===== Main Login Section ===== -->
     <main>
         <div class="login-card">
-           <div class="logo-container">
-                 <img src="https://i.postimg.cc/BvYTBQ6S/long-logo.png" alt="ICT Rentals" style="height: 50px;">
+
+            <!-- Logo -->
+            <div class="logo-container">
+                <img src="https://i.postimg.cc/BvYTBQ6S/long-logo.png" alt="ICT Rentals" style="height: 50px;">
             </div>
 
+            <!-- Authentication Warning -->
             <div id="auth-warning" style="display: none; color: #dc2626; background: #fee2e2; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; border: 1px solid #fecaca; text-align: center;">
             </div>
 
+            <!-- Login Form -->
             <form id="adminLoginForm">
                 <div class="form-group">
                     <input type="text" id="identifier" name="identifier" placeholder="Username or work Email" required>
@@ -271,6 +286,7 @@
 
             <hr>
 
+            <!-- Alternative Login -->
             <h2 class="login-prompt" style="font-size: 18px; margin-bottom: 15px;">Alternative Login:</h2>
 
             <a href="/login-student" class="btn-sso btn-mahidol" style="text-decoration: none;">
@@ -283,6 +299,7 @@
 
             <hr>
 
+            <!-- Help Section -->
             <div class="footer-text">
                 <h3>Is this your first time here?</h3>
                 <p><a href="#" class="blue-link">Use your MU internet account for login</a></p>
@@ -291,11 +308,11 @@
                     pxxxx.xxx (for teacher)
                 </p>
             </div>
+
         </div>
     </main>
 
-
-    <!-- GEMINI HELPER -->
+    <!-- ===== Gemini AI Helper ===== -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
@@ -316,13 +333,15 @@
         </div>
     </footer>
 
-
+    <!-- ===== Scripts (AI + Authentication) ===== -->
     <script>
+        // Toggle AI assistant
         function toggleAI() {
             const win = document.getElementById('ai-window');
             win.style.display = win.style.display === 'none' ? 'flex' : 'none';
         }
 
+        // Send prompt to AI API
         async function sendToAI() {
             const input = document.getElementById('ai-input');
             const area = document.getElementById('ai-response-area');
@@ -330,7 +349,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {
@@ -345,7 +364,8 @@
                 area.innerHTML = "Failed to connect to AI.";
             }
         }
-        /* Admin Authentication Logic */
+
+        // Handle admin login
         document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -354,7 +374,7 @@
             const warningBox = document.getElementById('auth-warning');
             const loginBtn = document.getElementById('loginBtn');
 
-            // Reset UI state
+            // Reset UI
             warningBox.style.display = 'none';
             loginBtn.innerText = 'Checking...';
             loginBtn.style.opacity = '0.7';
@@ -370,16 +390,12 @@
                 const result = await response.json();
 
                 if (response.ok && !result.error) {
-                    // SUCCESS
                     window.location.href = '/admin/dashboard';
                 } else {
-                    // WRONG PASSWORD or USER NOT FOUND
-                    // result.message comes from your router.post logic
                     warningBox.innerText = "❌ " + (result.message || "Invalid credentials.");
                     warningBox.style.display = 'block';
                 }
             } catch (err) {
-                // API SERVER IS DOWN
                 warningBox.innerText = "🚨 System Error: Unable to connect to the login server. Please check your internet or try again later.";
                 warningBox.style.display = 'block';
                 console.error("Connection failed:", err);

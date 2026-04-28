@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== META & TITLE ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICT-RENTALS Admin Dashboard</title>
+
+    <!-- ===== STYLES ===== -->
     <style>
+        /* --- Global Layout --- */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -50,7 +54,7 @@
         .nav-links li.active {
             background-color: #f5f5f5;
             padding: 10px 20px;
-            margin: -10px 0; /* Align with nav height */
+            margin: -10px 0;
             font-weight: 500;
         }
 
@@ -105,7 +109,7 @@
             vertical-align: middle;
         }
 
-        /* Status Badges */
+        /* --- Status Badges --- */
         .badge {
             display: inline-flex;
             align-items: center;
@@ -128,6 +132,7 @@
         .status-overdue { background-color: #f34336; }
         .status-pending { background-color: #7d97e2; }
 
+        /* --- Table Interaction --- */
         .details-icon {
             font-size: 20px;
             color: #999;
@@ -140,7 +145,7 @@
             background-color: #f9f9f9;
         }
 
-        /* GEMINI HELPER */
+        /* --- AI Assistant Button --- */
         .gemini-btn {
             position: fixed;
             bottom: 20px;
@@ -167,6 +172,8 @@
             margin-right: 8px;
             font-size: 18px;
         }
+
+        /* --- AI Assistant Modal --- */
         .ai-modal {
             position: fixed;
             bottom: 80px;
@@ -183,7 +190,7 @@
         }
 
         .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
+            background: #1a3a8a;
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -223,6 +230,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -230,18 +238,17 @@
             font-size: 20px;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
     </style>
 </head>
+
 <body>
 
+    <!-- ===== NAVIGATION BAR ===== -->
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="ICT Rentals" class="logo">
         <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
             <li><a href="/admin/dashboard">Dashboard</a></li>
-            
             <li><a href="/admin/product-control">Product Control</a></li>
-
             <li><a href="/admin/penalty">Penalty Page</a></li>
             <li><a href="/admin/team">Team Page</a></li> 
         </ul>
@@ -251,8 +258,10 @@
         </div>
     </nav>
 
+    <!-- ===== MAIN CONTENT ===== -->
     <main>
         <div class="container">
+            <!-- --- Header & Filter --- -->
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h1>Dashboard</h1>
                 <select id="statusFilter" onchange="fetchDashboardData()" style="padding: 5px; border-radius: 4px;">
@@ -264,6 +273,7 @@
                 </select>
             </div>
 
+            <!-- --- Data Table --- -->
             <table>
                 <thead>
                     <tr>
@@ -284,7 +294,7 @@
         </div>
     </main>
 
-    <!-- GEMINI HELPER -->
+    <!-- ===== AI ASSISTANT UI ===== -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
@@ -305,8 +315,9 @@
         </div>
     </footer>
 
-
+    <!-- ===== JAVASCRIPT LOGIC ===== -->
     <script>
+        /* --- AI Window Controls --- */
         function toggleAI() {
             const win = document.getElementById('ai-window');
             win.style.display = win.style.display === 'none' ? 'flex' : 'none';
@@ -319,7 +330,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {
@@ -335,9 +346,8 @@
             }
         }
 
-        /* Modal for navigation bar*/
+        /* --- Navbar Dropdown Logic --- */
         function toggleManagement(event) {
-            // Prevents the click from bubbling up to the window listener
             event.stopPropagation();
             
             const menu = document.getElementById('mgmt-menu');
@@ -348,7 +358,6 @@
             arrow.textContent = isOpen ? '▼' : '▲';
         }
 
-        // Closes the dropdown if you click anywhere else on the page
         window.onclick = function(event) {
             const menu = document.getElementById('mgmt-menu');
             const arrow = document.getElementById('mgmt-arrow');
@@ -359,12 +368,11 @@
             }
         };
 
-        /*api*/
+        /* --- API Fetch Logic --- */
         async function fetchDashboardData() {
             const tableBody = document.getElementById('dashboard-table-body');
             const status = document.getElementById('statusFilter').value;
             
-            // Build URL with query parameter if a status is selected
             const url = status ? `/api/admin/dashboard?status=${status}` : '/api/admin/dashboard';
 
             try {
@@ -383,9 +391,10 @@
             }
         }
 
+        /* --- Table Rendering --- */
         function renderTable(data) {
             const tableBody = document.getElementById('dashboard-table-body');
-            tableBody.innerHTML = ''; // Clear the "Loading..." or old rows
+            tableBody.innerHTML = '';
 
             if (data.length === 0) {
                 tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">No records found.</td></tr>`;
@@ -395,10 +404,7 @@
             data.forEach((row, index) => {
                 const tr = document.createElement('tr');
                 
-                // Format date to DD/MM/YYYY
                 const borrowDate = new Date(row.borrow_date).toLocaleDateString('en-GB');
-
-                // Match your existing CSS: status-borrowed, status-returned, etc.
                 const statusClass = `status-${row.status.toLowerCase()}`;
 
                 tr.innerHTML = `
@@ -415,13 +421,12 @@
             });
         }
 
+        /* --- Row Interaction --- */
         function viewDetails(id) {
-            // Logic for when someone clicks the icon
             console.log("Details for Rental ID:", id);
-            // window.location.href = `/admin/penalty?id=${id}`;
         }
 
-        // Initial load when page opens
+        /* --- Initial Page Load --- */
         document.addEventListener('DOMContentLoaded', fetchDashboardData);
     </script>
 </body>

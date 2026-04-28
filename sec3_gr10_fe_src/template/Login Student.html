@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== Meta & Page Setup ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICT-RENTALS Student Login</title>
+
+    <!-- ===== Styles (Layout, Components, UI) ===== -->
     <style>
-        /* Base layout with background placeholder */
+        /* ===== Base Layout ===== */
         body, html {
             margin: 0;
             padding: 0;
@@ -18,7 +21,7 @@
             align-items: center;
         }
 
-        /* The Sign-in Card */
+        /* ===== Login Card ===== */
         .login-card {
             background-color: white;
             width: 440px;
@@ -28,7 +31,7 @@
             box-sizing: border-box;
         }
 
-        /* Logo Styling */
+        /* ===== Logo ===== */
         .logo-container {
             display: flex;
             align-items: center;
@@ -55,7 +58,7 @@
             font-weight: 300;
         }
 
-        /* Text Headers */
+        /* ===== Typography ===== */
         h1 {
             font-size: 32px;
             margin: 0;
@@ -69,7 +72,7 @@
             margin: 5px 0 40px 0;
         }
 
-        /* Form Inputs (Underline Style) */
+        /* ===== Input Fields ===== */
         .input-group {
             position: relative;
             margin-bottom: 35px;
@@ -95,10 +98,10 @@
             border-bottom: 2px solid #1a3a8a;
         }
 
-        /* Submit Button */
+        /* ===== Buttons ===== */
         .btn-signin {
             width: 100%;
-            background-color: #2a3e7a; /* Darker navy blue */
+            background-color: #2a3e7a;
             color: white;
             padding: 14px;
             border: none;
@@ -114,7 +117,7 @@
             background-color: #1a2a5a;
         }
 
-        /* Links */
+        /* ===== Links ===== */
         .forgot-password {
             display: block;
             margin-top: 15px;
@@ -128,7 +131,7 @@
             text-decoration: underline;
         }
 
-        /* GEMINI HELPER */
+        /* ===== Gemini Assistant UI ===== */
         .gemini-btn {
             position: fixed;
             bottom: 20px;
@@ -147,14 +150,13 @@
             transition: transform 0.2s;
         }
 
-        .gemini-btn:hover {
-            transform: scale(1.05);
-        }
+        .gemini-btn:hover { transform: scale(1.05); }
 
         .gemini-icon {
             margin-right: 8px;
             font-size: 18px;
         }
+
         .ai-modal {
             position: fixed;
             bottom: 80px;
@@ -171,7 +173,7 @@
         }
 
         .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
+            background: #1a3a8a;
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -211,6 +213,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -218,21 +221,27 @@
             font-size: 20px;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
     </style>
 </head>
+
 <body>
+
+    <!-- ===== Main Content ===== -->
     <main>
         <div class="login-card">
+            <!-- Logo -->
             <div class="logo-container">
                 <img src="https://i.postimg.cc/BvYTBQ6S/long-logo.png" alt="ICT Rentals" style="height: 50px;">
             </div>
 
+            <!-- Header -->
             <h1>Sign in</h1>
             <p class="subtitle">with your Mahidol University Accounts.</p>
 
+            <!-- Warning Box -->
             <div id="auth-warning" style="display: none; color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 14px;"></div>
 
+            <!-- Login Form -->
             <form id="studentLoginForm">
                 <div class="input-group">
                     <input type="text" id="student_id" placeholder="Student ID" required>
@@ -247,7 +256,7 @@
         </div>
     </main>
 
-    <!-- GEMINI HELPER -->
+    <!-- ===== Gemini Assistant ===== -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
@@ -267,9 +276,10 @@
             </div>
         </div>
     </footer>
-    
 
+    <!-- ===== Script (AI + Authentication Logic) ===== -->
     <script>
+        /* ===== AI Assistant ===== */
         function toggleAI() {
             const win = document.getElementById('ai-window');
             win.style.display = win.style.display === 'none' ? 'flex' : 'none';
@@ -282,7 +292,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {
@@ -297,12 +307,11 @@
                 area.innerHTML = "Failed to connect to AI.";
             }
         }
-        /* Login authentication */
+
+        /* ===== Login Authentication ===== */
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. CLEAR PREVIOUS SESSION IMMEDIATELY
-            // This ensures no leftover carts or profile data from other users
+            // Clear previous session data
             localStorage.clear();
-            console.log("Local storage cleared for new session.");
 
             const loginForm = document.getElementById('studentLoginForm');
             const warningBox = document.getElementById('auth-warning');
@@ -314,14 +323,14 @@
                 const student_id = document.getElementById('student_id').value;
                 const password = document.getElementById('password').value;
 
-                // 2. RESET UI STATE
+                // Reset UI state
                 warningBox.style.display = 'none';
                 loginBtn.innerText = 'Checking...';
                 loginBtn.style.opacity = '0.7';
                 loginBtn.disabled = true;
 
                 try {
-                    // 3. AUTHENTICATION REQUEST
+                    // Authentication request
                     const response = await fetch('/api/login-student', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -331,21 +340,21 @@
                     const result = await response.json();
 
                     if (response.ok && !result.error) {
-                        // SUCCESS: Save the new student data
+                        // Success: store session data
                         localStorage.setItem('studentData', JSON.stringify(result.data));
                         window.location.href = '/student/dashboard';
                     } else {
-                        // FAILURE: Display specific error message from the server
+                        // Failure: show error message
                         warningBox.innerText = "❌ " + (result.message || "Invalid credentials.");
                         warningBox.style.display = 'block';
                     }
                 } catch (err) {
-                    // NETWORK OR SERVER ERROR
+                    // Network/server error
                     warningBox.innerText = "🚨 System Error: Unable to connect to the login server.";
                     warningBox.style.display = 'block';
                     console.error("Connection failed:", err);
                 } finally {
-                    // 4. RESTORE BUTTON STATE
+                    // Restore button state
                     loginBtn.innerText = 'Sign in';
                     loginBtn.style.opacity = '1';
                     loginBtn.disabled = false;

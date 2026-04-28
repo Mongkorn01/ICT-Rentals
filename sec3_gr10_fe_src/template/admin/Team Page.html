@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== Meta & Page Setup ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICT-RENTALS - Our Developer Team</title>
+
+    <!-- ===== Styles (Layout, Components, UI) ===== -->
     <style>
+        /* ===== Root Variables ===== */
         :root {
             --nav-border: #e0e0e0;
             --card-bg: #fcfcfc;
@@ -12,6 +16,7 @@
             --role-color: #555;
         }
 
+        /* ===== Base Styles ===== */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -19,7 +24,7 @@
             color: #333;
         }
 
-        /* --- Navbar --- */
+        /* ===== Navbar ===== */
         .nav-links li.active { font-weight: 600; }
         .nav-links a {
             text-decoration: none;
@@ -39,13 +44,11 @@
         .nav-links li { font-size: 18px; cursor: pointer; color: #333; }
         .nav-links li.active { font-weight: 600; }
         .dropdown::after {font-size: 10px; color: #888; }
-        .nav-links li.active {
-            font-weight: 600;
-        }               
+        .nav-links li.active { font-weight: 600; }               
         .nav-right { display: flex; align-items: center; gap: 20px; }
         .profile-circle { width: 35px; height: 35px; border-radius: 50%; background: #eee; border: 1px solid #ddd; }
 
-        /* --- Main Content --- */
+        /* ===== Main Content ===== */
         .container {
             padding: 60px 5%;
             max-width: 1200px;
@@ -59,7 +62,7 @@
             font-weight: 600;
         }
 
-        /* --- Team Grid (Optimized for 5) --- */
+        /* ===== Team Grid ===== */
         .team-grid {
             display: flex;
             flex-wrap: wrap;
@@ -101,7 +104,7 @@
             color: var(--role-color);
         }
 
-        /* --- Help Floating Button --- */
+        /* ===== Floating Help Button ===== */
         .help-btn {
             position: fixed;
             bottom: 30px;
@@ -120,7 +123,7 @@
             cursor: pointer;
         }
 
-        /* GEMINI HELPER */
+        /* ===== Gemini Assistant UI ===== */
         .gemini-btn {
             position: fixed;
             bottom: 20px;
@@ -139,14 +142,13 @@
             transition: transform 0.2s;
         }
 
-        .gemini-btn:hover {
-            transform: scale(1.05);
-        }
+        .gemini-btn:hover { transform: scale(1.05); }
 
         .gemini-icon {
             margin-right: 8px;
             font-size: 18px;
         }
+
         .ai-modal {
             position: fixed;
             bottom: 80px;
@@ -163,7 +165,7 @@
         }
 
         .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
+            background: #1a3a8a;
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -203,6 +205,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -210,31 +213,32 @@
             font-size: 20px;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
     </style>
 </head>
+
 <body>
 
+    <!-- ===== Navigation Bar ===== -->
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="ICT Rentals" class="logo">
         <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
             <li><a href="/admin/dashboard">Dashboard</a></li>
-            
             <li><a href="/admin/product-control">Product Control</a></li>
-
             <li><a href="/admin/penalty">Penalty Page</a></li>
             <li><a href="/admin/team">Team Page</a></li> 
         </ul>
         <div class="nav-right">
-            <a href="/" style="text-decoration: none; color: inherit; cursor: pointer;">Log Out</a>
+            <a href="/">Log Out</a>
             <img src="https://i.postimg.cc/sgJMCVtT/Doorbell.png" style="height: 30px; cursor: pointer; margin-left: 15px;">
         </div>
     </nav>
 
+    <!-- ===== Main Content ===== -->
     <main>
         <div class="container">
             <h1>Our developer team</h1>
 
+            <!-- ===== Team Members ===== -->
             <div class="team-grid">
                 <div class="member-card">
                     <img src="https://i.postimg.cc/sDP6gmNL/Taetae.png" alt="Natanon" class="member-photo">
@@ -269,7 +273,7 @@
         </div>
     </main>
 
-    <!-- GEMINI HELPER -->
+    <!-- ===== Gemini Assistant ===== -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
@@ -290,7 +294,7 @@
         </div>
     </footer>
 
-
+    <!-- ===== Script (AI Logic) ===== -->
     <script>
         function toggleAI() {
             const win = document.getElementById('ai-window');
@@ -304,7 +308,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {

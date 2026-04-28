@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== Meta Information ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ===== Page Title ===== -->
     <title>ICT-RENTALS - Cart</title>
+
+    <!-- ===== Styles (Layout, Cart UI, AI Helper) ===== -->
     <style>
+        /* ===== Root Variables ===== */
         :root {
             --border-color: #d0d0d0;
             --bg-light: #f9f9f9;
@@ -13,6 +19,7 @@
             --text-main: #333;
         }
 
+        /* ===== Base Layout ===== */
         body {
             margin: 0;
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -23,7 +30,7 @@
             height: 100vh;
         }
 
-        /* --- Navigation Bar --- */
+        /* ===== Navbar ===== */
         nav {
             display: flex;
             align-items: center;
@@ -35,22 +42,22 @@
         .logo { height: 45px; margin-right: 50px; }
         .nav-links { display: flex; list-style: none; margin: 0; padding: 0; flex-grow: 1; gap: 45px; }
         .nav-links li { font-size: 18px; cursor: pointer; color: #333; }
-        
-        .nav-right { display: flex; align-items: center; gap: 20px; }
-        .profile-icon { width: 40px; height: 40px; background: #eee; border-radius: 50%; border: 1px solid #ddd; }
-
-        /* --- Main Content --- */
-        .content-wrapper {
-            flex-grow: 1;
-            padding: 20px 8%;
-            position: relative;
-            padding-bottom: 100px; /* Space for sticky footer */
-        }
         .nav-links li.active { font-weight: 600; }
         .nav-links a {
             text-decoration: none;
             color: #333;
         }        
+
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .profile-icon { width: 40px; height: 40px; background: #eee; border-radius: 50%; border: 1px solid #ddd; }
+
+        /* ===== Main Content ===== */
+        .content-wrapper {
+            flex-grow: 1;
+            padding: 20px 8%;
+            position: relative;
+            padding-bottom: 100px;
+        }
 
         .back-circle {
             width: 45px;
@@ -67,7 +74,7 @@
             color: #ccc;
         }
 
-        /* --- Cart Card --- */
+        /* ===== Cart Card ===== */
         .cart-card {
             background: white;
             border-radius: 15px;
@@ -95,7 +102,7 @@
         }
         .cart-item:last-child { border-bottom: none; }
 
-        /* Custom Checkbox */
+        /* ===== Checkbox ===== */
         .checkbox-container {
             width: 35px;
             height: 35px;
@@ -111,6 +118,7 @@
             font-size: 20px;
         }
 
+        /* ===== Product Display ===== */
         .product-img {
             width: 100px;
             height: 100px;
@@ -121,29 +129,10 @@
         .item-details { flex-grow: 1; }
         .item-name { font-size: 24px; margin: 0 0 5px 0; font-weight: 500; }
         .stock-info { font-size: 14px; color: #666; }
-        .stock-bar {
-            background: #f0f0f0;
-            width: 250px;
-            height: 25px;
-            border-radius: 5px;
-            margin-top: 5px;
-            position: relative;
-            overflow: hidden;
-        }
-        .stock-bar-fill {
-            width: 100%; height: 100%;
-            background: #ffebeb;
-            color: var(--accent-red);
-            font-size: 13px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
 
         .due-date { margin-top: 15px; font-size: 15px; }
 
-        /* Quantity controls on the right */
+        /* ===== Quantity Controls ===== */
         .item-right-panel {
             text-align: right;
             display: flex;
@@ -156,7 +145,7 @@
         .qty-btn { width: 35px; height: 35px; border: none; background: white; font-size: 18px; cursor: pointer; color: #ccc; }
         .qty-input { width: 45px; text-align: center; border-left: 1px solid #ddd; border-right: 1px solid #ddd; line-height: 35px; font-size: 15px; }
 
-        /* --- Sticky Footer --- */
+        /* ===== Footer (Checkout) ===== */
         .cart-footer {
             position: fixed;
             bottom: 20px;
@@ -191,7 +180,8 @@
             font-weight: 500;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
+
+        /* ===== Gemini AI Helper ===== */
         .gemini-btn {
             position: fixed;
             bottom: 20px;
@@ -218,6 +208,7 @@
             margin-right: 8px;
             font-size: 18px;
         }
+
         .ai-modal {
             position: fixed;
             bottom: 80px;
@@ -234,7 +225,7 @@
         }
 
         .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
+            background: #1a3a8a;
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -274,6 +265,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -281,11 +273,12 @@
             font-size: 20px;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
     </style>
 </head>
+
 <body>
 
+    <!-- ===== Navbar ===== -->
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="Logo" class="logo">
         <ul class="nav-links">
@@ -294,31 +287,36 @@
             <li><a href="/student/rent">Rent</a></li>
             <li><a href="/student/team">Team Page</a></li>
         </ul>
+
+        <!-- Profile & Notification -->
         <div class="nav-right">
             <img src="https://i.postimg.cc/sgJMCVtT/Doorbell.png" style="height: 25px; cursor: pointer; margin-left: 15px;">
             
             <div class="profile-nav-wrapper" style="position: relative; display: flex; align-items: center; margin-left: 15px;">
-                
                 <div style="width: 35px; height: 35px; background-color: #e0e0e0; border-radius: 50%; border: 1px solid #ccc; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
                     <img src="https://i.postimg.cc/wjsC2LfL/Male-User.png" style="width: 35px; height: 30px">
                 </div>
+
                 <span class="dropdown-arrow" onclick="toggleDropdown()" style="cursor: pointer; margin-left: 8px; color: #666; font-size: 12px; transition: 0.2s;">▼</span>
 
                 <div id="profile-dropdown" style="display: none; position: absolute; top: 45px; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; min-width: 140px; padding: 5px 0;">
-                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none; font-size: 14px; transition: background 0.2s;">Profile</a>
-                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; font-size: 14px; transition: background 0.2s; border-top: 1px solid #eee;">Log Out</a>
+                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none; font-size: 14px;">Profile</a>
+                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; font-size: 14px; border-top: 1px solid #eee;">Log Out</a>
                 </div>
             </div>
         </div>
     </nav>
 
+    <!-- ===== Main Content ===== -->
     <main class="content-wrapper">
-        <div class="back-circle" onclick="history.back()" style="cursor: pointer;">⟨</div>
+        <div class="back-circle" onclick="history.back()">⟨</div>
 
+        <!-- Cart Items Container -->
         <div id="cart-container">
             <div style="text-align: center; padding: 50px; color: #666;">Your cart is empty.</div>
         </div>
 
+        <!-- Checkout Footer -->
         <footer class="cart-footer">
             <div class="rent-all-box">
                 <div class="checkbox-large" id="select-all" onclick="toggleSelectAll()"></div>
@@ -327,7 +325,8 @@
             <button class="btn-rent-final" id="checkout-btn" onclick="goToCheckout()">Rent (0)</button>
         </footer>
     </main>
-    <!-- GEMINI HELPER -->
+
+    <!-- ===== Gemini AI Helper ===== -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
@@ -348,13 +347,15 @@
         </div>
     </footer>
 
-
+    <!-- ===== Scripts (UI, Cart Logic, AI) ===== -->
     <script>
+        // Toggle AI assistant
         function toggleAI() {
             const win = document.getElementById('ai-window');
             win.style.display = win.style.display === 'none' ? 'flex' : 'none';
         }
 
+        // Send message to AI
         async function sendToAI() {
             const input = document.getElementById('ai-input');
             const area = document.getElementById('ai-response-area');
@@ -362,7 +363,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {
@@ -377,6 +378,8 @@
                 area.innerHTML = "Failed to connect to AI.";
             }
         }
+
+        // Toggle profile dropdown
         function toggleDropdown() {
             const dropdown = document.getElementById('profile-dropdown');
             const arrow = document.querySelector('.dropdown-arrow');
@@ -390,7 +393,7 @@
             }
         }
 
-        // Close dropdown if user clicks anywhere else on the screen
+        // Close dropdown on outside click
         window.onclick = function(event) {
             if (!event.target.matches('.dropdown-arrow')) {
                 const dropdown = document.getElementById('profile-dropdown');
@@ -402,10 +405,12 @@
             }
         }
 
+        // Initialize cart on load
         document.addEventListener('DOMContentLoaded', () => {
             renderCart();
         });
 
+        // Render cart items
         function renderCart() {
             const container = document.getElementById('cart-container');
             const checkoutBtn = document.getElementById('checkout-btn');
@@ -418,7 +423,6 @@
                 return;
             }
 
-            // Group items by category (Optional, but looks professional)
             const grouped = cart.reduce((acc, item) => {
                 const cat = item.category || 'Other';
                 if (!acc[cat]) acc[cat] = [];
@@ -458,6 +462,7 @@
             checkoutBtn.disabled = false;
         }
 
+        // Update quantity
         function updateCartQty(modelId, change) {
             let cart = JSON.parse(localStorage.getItem('student_cart')) || [];
             const item = cart.find(i => i.model_id === modelId);
@@ -468,26 +473,19 @@
             }
         }
 
+        // Remove item from cart
         function removeFromCart(modelId) {
-            // 1. Get current cart (force it to string to avoid reference issues)
             let cart = JSON.parse(localStorage.getItem('student_cart')) || [];
-            
-            // 2. Filter out the item. 
-            // IMPORTANT: Ensure modelId is compared as the same type (String vs Number)
             cart = cart.filter(i => String(i.model_id) !== String(modelId));
-            
-            // 3. Save it back
             localStorage.setItem('student_cart', JSON.stringify(cart));
-            
-            // 4. Immediately update the UI
             renderCart();
         }
 
+        // Redirect to checkout
         function goToCheckout() {
-            // Before moving to justification, you might want to save 
-            // exactly what is being checked out (if user unchecked some items)
             window.location.href = '/student/justification';
         }
     </script>
+
 </body>
 </html>

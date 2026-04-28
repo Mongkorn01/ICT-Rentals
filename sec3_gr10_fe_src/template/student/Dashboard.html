@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== META & TITLE ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICT-RENTALS - Student Dashboard</title>
+
+    <!-- ===== STYLES ===== -->
     <style>
+        /* --- Root Variables --- */
         :root {
             --border-gray: #e0e0e0;
             --text-light: #888;
             --card-bg: #ffffff;
         }
 
+        /* --- Global Layout --- */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -18,7 +23,7 @@
             color: #0a0505;
         }
 
-        /* --- Student Navbar --- */
+        /* --- Navbar --- */
         nav {
             display: flex;
             align-items: center;
@@ -46,6 +51,7 @@
         }
 
         .nav-links li.active { font-weight: 600; }
+
         .nav-links a {
             text-decoration: none;
             color: #333;
@@ -57,6 +63,7 @@
             gap: 20px;
         }
 
+        /* --- Profile Section --- */
         .profile-section {
             display: flex;
             align-items: center;
@@ -72,7 +79,7 @@
             border: 1px solid #ddd;
         }
 
-        /* --- Dashboard Content --- */
+        /* --- Dashboard Layout --- */
         .container {
             max-width: 900px;
             margin: 40px auto;
@@ -85,7 +92,7 @@
             font-weight: 600;
         }
 
-        /* --- Card Styles --- */
+        /* --- Cards --- */
         .dashboard-card {
             background: var(--card-bg);
             border: 1px solid var(--border-gray);
@@ -108,7 +115,7 @@
             font-weight: 600;
         }
 
-        /* --- Duedate Table --- */
+        /* --- Due Table --- */
         .due-table {
             width: 100%;
             border-collapse: collapse;
@@ -133,7 +140,7 @@
 
         .due-table tr:last-child td { border-bottom: none; }
 
-        /* --- Calendar Section --- */
+        /* --- Calendar --- */
         .search-box {
             width: 200px;
             height: 30px;
@@ -154,9 +161,7 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            /* 1. Remove or set gap to 0 to eliminate space between cells */
-            gap: 0; 
-            /* 2. Optional: Add a border to the whole grid to act as a frame */
+            gap: 0;
             border-top: 1px solid #eee;
             border-left: 1px solid #eee;
         }
@@ -189,7 +194,7 @@
             cursor: pointer;
         }
 
-        /* Help Floating Button */
+        /* --- Floating Help Button --- */
         .help-btn {
             position: fixed;
             bottom: 30px;
@@ -207,7 +212,8 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             cursor: pointer;
         }
-        /* GEMINI HELPER */
+
+        /* --- AI Assistant Button --- */
         .gemini-btn {
             position: fixed;
             bottom: 20px;
@@ -234,6 +240,8 @@
             margin-right: 8px;
             font-size: 18px;
         }
+
+        /* --- AI Modal --- */
         .ai-modal {
             position: fixed;
             bottom: 80px;
@@ -250,7 +258,7 @@
         }
 
         .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
+            background: #1a3a8a;
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -290,6 +298,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -297,11 +306,12 @@
             font-size: 20px;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
     </style>
 </head>
+
 <body>
 
+    <!-- ===== NAVIGATION BAR ===== -->
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="Logo" class="logo">
         <ul class="nav-links">
@@ -310,9 +320,11 @@
             <li><a href="/student/rent">Rent</a></li>
             <li><a href="/student/team">Team Page</a></li>
         </ul>
+
         <div class="nav-right">
             <img src="https://i.postimg.cc/sgJMCVtT/Doorbell.png" style="height: 25px; cursor: pointer; margin-left: 15px;">
             
+            <!-- --- Profile Dropdown --- -->
             <div class="profile-nav-wrapper" style="position: relative; display: flex; align-items: center; margin-left: 15px;">
                 
                 <div style="width: 35px; height: 35px; background-color: #e0e0e0; border-radius: 50%; border: 1px solid #ccc; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
@@ -322,16 +334,19 @@
                 <span class="dropdown-arrow" onclick="toggleDropdown()" style="cursor: pointer; margin-left: 8px; color: #666; font-size: 12px; transition: 0.2s;">▼</span>
 
                 <div id="profile-dropdown" style="display: none; position: absolute; top: 45px; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; min-width: 140px; padding: 5px 0;">
-                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none; font-size: 14px; transition: background 0.2s;">Profile</a>
-                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; font-size: 14px; transition: background 0.2s; border-top: 1px solid #eee;">Log Out</a>
+                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none; font-size: 14px;">Profile</a>
+                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; font-size: 14px; border-top: 1px solid #eee;">Log Out</a>
                 </div>
             </div>
         </div>
     </nav>
+
+    <!-- ===== MAIN DASHBOARD ===== -->
     <main>
         <div class="container">
             <h1 class="main-title">Dashboard</h1>
 
+            <!-- --- Due Date Card --- -->
             <div class="dashboard-card">
                 <div class="card-header">
                     <h2>Duedate</h2>
@@ -346,16 +361,21 @@
                             <th width="25%">Due</th>
                         </tr>
                     </thead>
+
+                    <!-- --- No Data Row --- -->
                     <tbody>
                         <tr id="no-data" style="display: none;">
                             <td colspan="4" style="text-align: center;">No active rentals found.</td>
                         </tr>
                     </tbody>
+
+                    <!-- --- Dynamic Data --- -->
                     <tbody id="rental-data-body">
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
 
+            <!-- --- Calendar Card --- -->
             <div class="dashboard-card">
                 <h2>Calendar</h2>
                 <div class="calendar-header">
@@ -367,14 +387,13 @@
                         <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
                     </div>
                     <div class="calendar-grid" id="calendar-days">
-                        </div>
+                    </div>
                 </div>
             </div>
         </div>        
     </main>
 
-
-    <!-- GEMINI HELPER -->
+    <!-- ===== AI ASSISTANT UI ===== -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
@@ -395,8 +414,9 @@
         </div>
     </footer>
 
-
+    <!-- ===== JAVASCRIPT LOGIC ===== -->
     <script>
+        /* --- AI Controls --- */
         function toggleAI() {
             const win = document.getElementById('ai-window');
             win.style.display = win.style.display === 'none' ? 'flex' : 'none';
@@ -409,7 +429,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {
@@ -424,6 +444,8 @@
                 area.innerHTML = "Failed to connect to AI.";
             }
         }
+
+        /* --- Profile Dropdown --- */
         function toggleDropdown() {
             const dropdown = document.getElementById('profile-dropdown');
             const arrow = document.querySelector('.dropdown-arrow');
@@ -437,7 +459,6 @@
             }
         }
 
-        // Close dropdown if user clicks anywhere else on the screen
         window.onclick = function(event) {
             if (!event.target.matches('.dropdown-arrow')) {
                 const dropdown = document.getElementById('profile-dropdown');
@@ -448,14 +469,13 @@
                 }
             }
         }
-        // Dynamic dashboard
+
+        /* --- Dashboard Data Fetch --- */
         document.addEventListener('DOMContentLoaded', async () => {
-            // 1. Get student ID from localStorage (saved during login)
-            // If you don't have this, ensure your login-student.html saves it!
             const studentData = JSON.parse(localStorage.getItem('studentData'));
             
             if (!studentData || !studentData.student_id) {
-                window.location.href = '/login-student'; // Redirect if not logged in
+                window.location.href = '/login-student';
                 return;
             }
 
@@ -463,12 +483,10 @@
             const tableBody = document.getElementById('rental-data-body');
             const monthTitle = document.getElementById('calendar-month');
 
-            // Set current month for the calendar title
             const now = new Date();
             monthTitle.innerText = now.toLocaleString('default', { month: 'long', year: 'numeric' });
 
             try {
-                // 2. Fetch data from the proxy route
                 const response = await fetch(`/api/student/dashboard/${studentId}`);
                 const result = await response.json();
 
@@ -480,15 +498,14 @@
                         return;
                     }
 
-                    // 3. Map through results and create rows
                     tableBody.innerHTML = rentals.map(item => {
-                        // Format the date to be readable (DD/MM/YYYY)
                         const dueDate = new Date(item.due_date).toLocaleDateString('en-GB');
                         
                         return `
                             <tr>
                                 <td>${item.equipment_name}</td>
-                                <td>1</td> <td>${item.serial_number || 'N/A'}</td>
+                                <td>1</td>
+                                <td>${item.serial_number || 'N/A'}</td>
                                 <td>${dueDate}</td>
                             </tr>
                         `;
@@ -501,37 +518,33 @@
                 console.error("Failed to fetch dashboard data:", err);
             }
         });
-        // Dynamic Calendar
+
+        /* --- Calendar Rendering --- */
         function renderCalendar() {
             const grid = document.getElementById('calendar-days');
             const monthTitle = document.getElementById('calendar-month');
             
-            const now = new Date(); // April 28, 2026
+            const now = new Date();
             const year = now.getFullYear();
             const month = now.getMonth();
 
             monthTitle.innerText = now.toLocaleString('default', { month: 'long', year: 'numeric' });
 
-            // First day of the month (0 = Sunday, 1 = Monday, etc.)
             const firstDay = new Date(year, month, 1).getDay();
-            // Days in current month
             const daysInMonth = new Date(year, month + 1, 0).getDate();
 
             grid.innerHTML = '';
 
-            // 1. Add empty slots for days of the previous month
             for (let i = 0; i < firstDay; i++) {
                 const emptyDiv = document.createElement('div');
                 grid.appendChild(emptyDiv);
             }
 
-            // 2. Add actual days
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayDiv = document.createElement('div');
                 dayDiv.classList.add('calendar-day');
                 dayDiv.innerText = day;
 
-                // Highlight Today (April 28)
                 if (day === now.getDate()) {
                     dayDiv.classList.add('today');
                 }
@@ -540,8 +553,8 @@
             }
         }
 
-        // Call this inside your DOMContentLoaded listener
         renderCalendar();
     </script>
+
 </body>
 </html>

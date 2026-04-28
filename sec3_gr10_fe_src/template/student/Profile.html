@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== META & PAGE SETUP ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICT-RENTALS - Student Profile</title>
+
     <style>
+        /* ===== ROOT VARIABLES ===== */
         :root {
             --nav-border: #e0e0e0;
             --box-border: #dcdcdc;
@@ -12,18 +15,22 @@
             --label-color: #555;
         }
 
+        /* ===== GLOBAL STYLES ===== */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #ffffff;
             color: var(--text-color);
         }
+
+        /* ===== NAVBAR LINK STYLES ===== */
         .nav-links li.active { font-weight: 600; }
         .nav-links a {
             text-decoration: none;
             color: #333;
         }
-        /* --- Navigation Bar --- */
+
+        /* ===== NAVIGATION BAR ===== */
         nav {
             display: flex;
             align-items: center;
@@ -31,16 +38,50 @@
             border-bottom: 1px solid var(--nav-border);
             height: 60px;
         }
-        .logo { height: 40px; margin-right: 60px; }
-        .nav-links { display: flex; list-style: none; gap: 60px; flex-grow: 1; margin: 0; padding: 0; }
-        .nav-links li { cursor: pointer; font-size: 18px; }
-        
-        .nav-right { display: flex; align-items: center; gap: 20px; }
-        .profile-trigger { display: flex; align-items: center; gap: 8px; cursor: pointer; }
-        .profile-circle { width: 35px; height: 35px; border-radius: 50%; background: #eee; border: 1px solid #ccc; }
-        .dropdown-arrow { font-size: 12px; color: #888; }
 
-        /* --- Main Content --- */
+        .logo { height: 40px; margin-right: 60px; }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 60px;
+            flex-grow: 1;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li {
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-trigger {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .profile-circle {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #eee;
+            border: 1px solid #ccc;
+        }
+
+        .dropdown-arrow {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* ===== MAIN CONTENT LAYOUT ===== */
         .container {
             max-width: 1000px;
             margin: 80px auto;
@@ -56,13 +97,14 @@
             align-items: flex-start;
         }
 
-        /* Left Side: Avatar */
+        /* ===== AVATAR SECTION ===== */
         .avatar-container {
             flex-shrink: 0;
             width: 180px;
             display: flex;
             justify-content: center;
         }
+
         .avatar-placeholder {
             width: 150px;
             height: 150px;
@@ -71,13 +113,14 @@
             align-items: center;
             justify-content: center;
         }
+
         .avatar-placeholder svg {
             width: 100px;
             height: 100px;
             fill: #999;
         }
 
-        /* Right Side: Info Fields */
+        /* ===== PROFILE INFO SECTION ===== */
         .info-container {
             flex-grow: 1;
         }
@@ -105,7 +148,8 @@
             font-weight: 400;
             min-height: 24px;
         }
-        /* GEMINI HELPER */
+
+        /* ===== GEMINI HELPER UI ===== */
         .gemini-btn {
             position: fixed;
             bottom: 20px;
@@ -132,6 +176,7 @@
             margin-right: 8px;
             font-size: 18px;
         }
+
         .ai-modal {
             position: fixed;
             bottom: 80px;
@@ -148,7 +193,7 @@
         }
 
         .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
+            background: #1a3a8a;
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -188,6 +233,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -195,22 +241,27 @@
             font-size: 20px;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
+        /* ===== END GEMINI HELPER ===== */
     </style>
 </head>
+
 <body>
 
+    <!-- ===== NAVBAR ===== -->
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="Logo" class="logo">
+
         <ul class="nav-links">
             <li><a href="/student/dashboard">Dashboard</a></li>
             <li><a href="/student/search">Search</a></li>
             <li><a href="/student/rent">Rent</a></li>
             <li><a href="/student/team">Team Page</a></li>
         </ul>
+
         <div class="nav-right">
             <img src="https://i.postimg.cc/sgJMCVtT/Doorbell.png" style="height: 25px; cursor: pointer; margin-left: 15px;">
             
+            <!-- Profile Dropdown -->
             <div class="profile-nav-wrapper" style="position: relative; display: flex; align-items: center; margin-left: 15px;">
                 
                 <div style="width: 35px; height: 35px; background-color: #e0e0e0; border-radius: 50%; border: 1px solid #ccc; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
@@ -220,15 +271,18 @@
                 <span class="dropdown-arrow" onclick="toggleDropdown()" style="cursor: pointer; margin-left: 8px; color: #666; font-size: 12px; transition: 0.2s;">▼</span>
 
                 <div id="profile-dropdown" style="display: none; position: absolute; top: 45px; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; min-width: 140px; padding: 5px 0;">
-                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none; font-size: 14px; transition: background 0.2s;">Profile</a>
-                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; font-size: 14px; transition: background 0.2s; border-top: 1px solid #eee;">Log Out</a>
+                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none; font-size: 14px;">Profile</a>
+                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; font-size: 14px; border-top: 1px solid #eee;">Log Out</a>
                 </div>
             </div>
         </div>
     </nav>
 
+    <!-- ===== PROFILE CONTENT ===== -->
     <main class="container">
         <div class="profile-box">
+
+            <!-- Avatar -->
             <div class="avatar-container">
                 <div class="avatar-placeholder">
                     <svg viewBox="0 0 24 24">
@@ -237,6 +291,7 @@
                 </div>
             </div>
 
+            <!-- Profile Info -->
             <div class="info-container">
                 <div class="info-row">
                     <div class="label">ID:</div>
@@ -258,7 +313,7 @@
         </div>
     </main>
 
-    <!-- GEMINI HELPER -->
+    <!-- ===== GEMINI HELPER ===== -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
@@ -279,13 +334,16 @@
         </div>
     </footer>
 
-
+    <!-- ===== JAVASCRIPT LOGIC ===== -->
     <script>
+
+        /* --- Toggle AI Assistant --- */
         function toggleAI() {
             const win = document.getElementById('ai-window');
             win.style.display = win.style.display === 'none' ? 'flex' : 'none';
         }
 
+        /* --- Send Prompt to AI API --- */
         async function sendToAI() {
             const input = document.getElementById('ai-input');
             const area = document.getElementById('ai-response-area');
@@ -293,7 +351,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {
@@ -301,17 +359,19 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: `[Context: ${window.location.pathname}] ${prompt}` }),
                 });
-                
+
                 const data = await response.json();
                 area.innerHTML = data.success ? data.text : "Error: " + data.error;
-            } catch (err) {
+            } catch {
                 area.innerHTML = "Failed to connect to AI.";
             }
         }
+
+        /* --- Toggle Profile Dropdown --- */
         function toggleDropdown() {
             const dropdown = document.getElementById('profile-dropdown');
             const arrow = document.querySelector('.dropdown-arrow');
-            
+
             if (dropdown.style.display === 'none') {
                 dropdown.style.display = 'block';
                 arrow.textContent = '▲';
@@ -321,7 +381,7 @@
             }
         }
 
-        // Close dropdown if user clicks anywhere else on the screen
+        /* --- Close Dropdown on Outside Click --- */
         window.onclick = function(event) {
             if (!event.target.matches('.dropdown-arrow')) {
                 const dropdown = document.getElementById('profile-dropdown');
@@ -331,12 +391,12 @@
                     arrow.textContent = '▼';
                 }
             }
-        }
+        };
 
-        /* API */
+        /* --- Fetch Student Profile Data --- */
         document.addEventListener('DOMContentLoaded', async () => {
             const studentData = JSON.parse(localStorage.getItem('studentData'));
-            
+
             if (!studentData || !studentData.student_id) {
                 window.location.href = '/login-student';
                 return;
@@ -345,10 +405,7 @@
             const studentId = studentData.student_id;
 
             try {
-                // ADDED /api/ TO THE START OF THE URL
                 const response = await fetch(`/api/student/profile/${studentId}`);
-                
-                // This is where it was crashing because 'response' was HTML, not JSON
                 const result = await response.json();
 
                 if (!result.error) {
@@ -362,6 +419,7 @@
                 console.error("Failed to sync profile with database:", error);
             }
         });
+
     </script>
 </body>
 </html>

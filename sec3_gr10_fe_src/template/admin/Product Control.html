@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== META & TITLE ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICT-RENTALS Product List</title>
+
+    <!-- ===== STYLES ===== -->
     <style>
+        /* --- Global Layout --- */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -12,7 +16,7 @@
             color: #333;
         }
 
-        /* --- Navbar (Consistent with previous screens) --- */
+        /* --- Navbar --- */
         .nav-links li.active { font-weight: 600; }
         .nav-links a {
             text-decoration: none;
@@ -102,7 +106,7 @@
 
         .text-left { text-align: left; padding-left: 20px; }
 
-        /* Toggle Switch Styling */
+        /* --- Toggle Switch --- */
         .switch {
             position: relative;
             display: inline-block;
@@ -116,7 +120,7 @@
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #ccc; /* Use a lighter grey for better contrast */
+            background-color: #ccc;
             transition: .4s;
             border-radius: 24px;
         }
@@ -139,7 +143,7 @@
             transform: translateX(26px);
         }
 
-        /* Action Icons */
+        /* --- Action Buttons --- */
         .icon-btn {
             background: none;
             border: none;
@@ -149,7 +153,7 @@
             margin: 0 5px;
         }
     
-        /* GEMINI HELPER */
+        /* --- AI Assistant Button --- */
         .gemini-btn {
             position: fixed;
             bottom: 20px;
@@ -176,6 +180,8 @@
             margin-right: 8px;
             font-size: 18px;
         }
+
+        /* --- AI Assistant Modal --- */
         .ai-modal {
             position: fixed;
             bottom: 80px;
@@ -192,7 +198,7 @@
         }
 
         .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
+            background: #1a3a8a;
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -232,6 +238,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -239,17 +246,17 @@
             font-size: 20px;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
     </style>
 </head>
+
 <body>
+
+    <!-- ===== NAVIGATION BAR ===== -->
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="ICT Rentals" class="logo">
         <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
             <li><a href="/admin/dashboard">Dashboard</a></li>
-            
             <li><a href="/admin/product-control">Product Control</a></li>
-
             <li><a href="/admin/penalty">Penalty Page</a></li>
             <li><a href="/admin/team">Team Page</a></li> 
         </ul>
@@ -259,8 +266,10 @@
         </div>
     </nav>
 
+    <!-- ===== MAIN CONTENT ===== -->
     <main>
         <div class="container">
+            <!-- --- Header & Controls --- -->
             <div class="header-row">
                 <div>
                     <h1>Product List</h1>
@@ -276,6 +285,7 @@
                 <button class="btn-add" onclick="window.location.href='/admin/add-product'">Add product</button> 
             </div>
 
+            <!-- --- Product Table --- -->
             <table>
                 <thead>
                     <tr>
@@ -290,12 +300,12 @@
                     </tr>
                 </thead>
                 <tbody id="product-table-body">
-                    </tbody>
+                </tbody>
             </table>
         </div>
     </main>
 
-    <!-- GEMINI HELPER -->
+    <!-- ===== AI ASSISTANT UI ===== -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
@@ -316,8 +326,9 @@
         </div>
     </footer>
 
-
+    <!-- ===== JAVASCRIPT LOGIC ===== -->
     <script>
+        /* --- AI Controls --- */
         function toggleAI() {
             const win = document.getElementById('ai-window');
             win.style.display = win.style.display === 'none' ? 'flex' : 'none';
@@ -330,7 +341,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {
@@ -346,14 +357,15 @@
             }
         }
 
-        /*-- API --*/
+        /* --- Initial Load --- */
         document.addEventListener('DOMContentLoaded', () => {
             fetchProducts();
         });
 
-        // Mock admin ID - Replace this with your actual logged-in admin session data
+        /* --- Constants --- */
         const CURRENT_ADMIN_ID = 1; 
 
+        /* --- Fetch Products --- */
         async function fetchProducts() {
             const tableBody = document.getElementById('product-table-body');
             
@@ -370,15 +382,13 @@
             }
         }
 
-        // Inside your renderProducts function loop:
+        /* --- Render Table --- */
         function renderProducts(products) {
             const tableBody = document.getElementById('product-table-body');
             tableBody.innerHTML = '';
 
             products.forEach((item, index) => {
                 const tr = document.createElement('tr');
-                
-                // Convert 1/0 from DB to checked attribute
                 const isChecked = item.visible === 1 ? 'checked' : '';
 
                 tr.innerHTML = `
@@ -405,7 +415,7 @@
             });
         }
 
-        // Function to handle the API update
+        /* --- Update Visibility --- */
         async function toggleVisibility(id, isVisible, name, brand, category) {
             const status = isVisible ? 1 : 0;
             
@@ -418,7 +428,7 @@
                         brand: brand,
                         category: category,
                         visible: status,
-                        admin_id: 1 // Replace with actual admin session ID
+                        admin_id: 1
                     })
                 });
 
@@ -426,7 +436,6 @@
 
                 if (result.error) {
                     alert("Failed to update visibility: " + result.message);
-                    // Optional: refresh page to reset toggle state if it failed
                     fetchProducts(); 
                 } else {
                     console.log(`Product ${id} visibility set to: ${status}`);
@@ -437,11 +446,12 @@
             }
         }
 
+        /* --- Edit Product --- */
         function editProduct(id) {
-            // Pass the ID via query string so the edit page knows which product to load
             window.location.href = `/admin/edit-product?id=${id}`;
         }
 
+        /* --- Delete Product --- */
         async function deleteProduct(id, name) {
             if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
 
@@ -455,11 +465,10 @@
                 const result = await response.json();
 
                 if (result.error) {
-                    // This will likely trigger if items are still linked to this model (Foreign Key error)
                     alert("Error: " + result.message);
                 } else {
                     alert("Product deleted successfully.");
-                    fetchProducts(); // Refresh list
+                    fetchProducts();
                 }
             } catch (error) {
                 console.error("Delete Error:", error);

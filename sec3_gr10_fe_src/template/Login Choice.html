@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICT-RENTALS Login</title>
+
+    <link rel="stylesheet" href="style.css">
+
     <style>
-        /* Base styles to match 1920x1080 aspect */
+        /* --- Global Layout --- */
         body, html {
             margin: 0;
             padding: 0;
@@ -17,7 +20,7 @@
             align-items: center;
         }
 
-        /* The white card container */
+        /* --- Login Card --- */
         .login-card {
             background-color: #ffffff;
             width: 450px;
@@ -27,7 +30,7 @@
             text-align: center;
         }
 
-        /* Header Logo Section */
+        /* --- Logo Section --- */
         .logo-container {
             display: flex;
             align-items: center;
@@ -35,33 +38,14 @@
             margin-bottom: 20px;
         }
 
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            background-color: #1a3a8a; /* Dark blue from logo */
-            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-            display: inline-block;
-            margin-right: 10px;
-        }
-
-        .logo-text {
-            font-size: 32px;
-            font-weight: bold;
-            color: #1a3a8a;
-        }
-
-        .logo-text span {
-            color: #5c78b5;
-            font-weight: 300;
-            margin-left: 5px;
-        }
-
+        /* --- Divider --- */
         hr {
             border: 0;
             border-top: 1px solid #ddd;
             margin: 25px 0;
         }
 
+        /* --- Headings --- */
         h2 {
             font-size: 20px;
             color: #333;
@@ -69,42 +53,12 @@
             font-weight: 600;
         }
 
-        /* Buttons */
+        /* --- Buttons --- */
         .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 12px;
             margin-bottom: 15px;
-            border: none;
-            border-radius: 25px;
-            font-size: 15px;
-            cursor: pointer;
-            transition: opacity 0.2s;
-            text-decoration: none;
         }
 
-        .btn:hover {
-            opacity: 0.9;
-        }
-
-        .btn-mahidol {
-            background-color: #7d97e2;
-            color: white;
-        }
-
-        .btn-admin {
-            background-color: #ffecd1;
-            color: #8a7a60;
-        }
-
-        .icon {
-            margin-right: 10px;
-            font-size: 18px;
-        }
-
-        /* Footer Section */
+        /* --- Footer Text --- */
         .footer-text h3 {
             font-size: 18px;
             color: #333;
@@ -117,119 +71,23 @@
             line-height: 1.5;
             margin: 5px 0;
         }
-
-        .blue-link {
-            color: #3a7ebf;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .example-text {
-            font-weight: normal;
-        }
-
-        /* GEMINI HELPER */
-        .gemini-btn {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: linear-gradient(135deg, #4285f4, #9b72cb);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 20px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-            z-index: 1000;
-            transition: transform 0.2s;
-        }
-
-        .gemini-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .gemini-icon {
-            margin-right: 8px;
-            font-size: 18px;
-        }
-        .ai-modal {
-            position: fixed;
-            bottom: 80px;
-            left: 20px;
-            width: 350px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            border: 1px solid #e0e0e0;
-            z-index: 1001;
-        }
-
-        .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
-            color: white;
-            padding: 15px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .ai-content {
-            padding: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #333;
-        }
-
-        .ai-footer {
-            padding: 10px;
-            border-top: 1px solid #eee;
-            display: flex;
-        }
-
-        #ai-input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            outline: none;
-        }
-
-        .ai-footer button {
-            background: #7d97e2;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            margin-left: 5px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .close-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        /* GEMINI HELPER */
     </style>
 </head>
+
 <body>
+
+    <!-- ===== MAIN LOGIN SECTION ===== -->
     <main>
         <div class="login-card">
+
+            <!-- --- Logo --- -->
             <div class="logo-container">
-                 <img src="https://i.postimg.cc/BvYTBQ6S/long-logo.png" alt="ICT Rentals" style="height: 50px;">
+                <img src="https://i.postimg.cc/BvYTBQ6S/long-logo.png" alt="ICT Rentals" style="height: 50px;">
             </div>
 
             <hr>
 
+            <!-- --- Login Options --- -->
             <h2>Log in using your account on:</h2>
 
             <a href="login-student" class="btn btn-mahidol">
@@ -242,6 +100,7 @@
 
             <hr>
 
+            <!-- --- Help / Info Section --- -->
             <div class="footer-text">
                 <h3>Is this your first time here?</h3>
                 <p><a href="#" class="blue-link">Use your MU internet account for login</a></p>
@@ -250,10 +109,11 @@
                     pxxxx.xxx (for teacher)
                 </p>
             </div>
+
         </div>  
     </main>
     
-    <!-- GEMINI HELPER -->
+    <!-- ===== AI ASSISTANT UI ===== -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
@@ -274,8 +134,9 @@
         </div>
     </footer>
     
-
+    <!-- ===== JAVASCRIPT LOGIC ===== -->
     <script>
+        /* --- AI Controls --- */
         function toggleAI() {
             const win = document.getElementById('ai-window');
             win.style.display = win.style.display === 'none' ? 'flex' : 'none';
@@ -288,7 +149,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {
@@ -304,6 +165,6 @@
             }
         }
     </script>
-    <!-- GEMINI HELPER -->
+
 </body>
 </html>

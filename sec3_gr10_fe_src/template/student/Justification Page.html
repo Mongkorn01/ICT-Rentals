@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== Meta & Page Setup ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICT-RENTALS - Confirm Borrow</title>
+
+    <!-- ===== Styles (Layout, Components, UI) ===== -->
     <style>
+        /* ===== Root Variables ===== */
         :root {
             --bg-color: #f5f5f5;
             --nav-border: #e0e0e0;
@@ -14,6 +18,7 @@
             --btn-bg: #e0e0e0;
         }
 
+        /* ===== Base Styles ===== */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -21,7 +26,7 @@
             color: var(--text-color);
         }
 
-        /* --- Navigation Bar --- */
+        /* ===== Navigation Bar ===== */
         nav {
             display: flex;
             align-items: center;
@@ -32,10 +37,13 @@
         .logo { height: 40px; margin-right: 60px; }
         .nav-links { display: flex; list-style: none; gap: 60px; flex-grow: 1; margin: 0; padding: 0; }
         .nav-links li { cursor: pointer; font-size: 18px; }
-        .nav-icons { display: flex; align-items: center; gap: 20px; }
-        .profile-circle { width: 35px; height: 35px; border-radius: 50%; background: #eee; border: 1px solid #ccc; }
+        .nav-links li.active { font-weight: 600; }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+        }
 
-        /* --- Main Content --- */
+        /* ===== Main Layout ===== */
         .container {
             max-width: 900px;
             margin: 40px auto;
@@ -48,12 +56,8 @@
             font-size: 22px;
             margin-bottom: 30px;
         }
-        .nav-links li.active { font-weight: 600; }
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-        }
-        /* --- Form Rows --- */
+
+        /* ===== Form Rows ===== */
         .form-row {
             display: flex;
             align-items: center;
@@ -81,7 +85,7 @@
             font-size: 18px;
         }
 
-        /* --- Location Specifics --- */
+        /* ===== Location Selection ===== */
         .location-options {
             display: flex;
             align-items: center;
@@ -89,7 +93,6 @@
             flex-grow: 1;
         }
 
-        /* Unchecked State: A clean, empty square box */
         .custom-check {
             flex-shrink: 0;         
             margin-top: 4px;       
@@ -101,16 +104,13 @@
             cursor: pointer;
         }
 
-        /* Checked State: Becomes a solid blue box with a glow outline */
         .check-item.active .custom-check,
         .agreement-section.active .custom-check {
             background-color: #007bff;
             border-color: #007bff;
-            /* This creates the blue outline/glow effect around the box */
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3); 
         }
 
-        /* Make text blue when active */
         .check-item.active span {
             color: #007bff;
             font-weight: bold;
@@ -124,7 +124,7 @@
             padding: 0 10px;
         }
 
-        /* --- Agreement Section --- */
+        /* ===== Agreement Section ===== */
         .agreement-section {
             display: flex;
             align-items: flex-start;
@@ -141,7 +141,7 @@
             user-select: none;      
         }
 
-        /* --- Buttons --- */
+        /* ===== Buttons ===== */
         .button-group {
             display: flex;
             justify-content: center;
@@ -159,7 +159,7 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        /* --- Help Icon --- */
+        /* ===== Help Button ===== */
         .help-fab {
             position: fixed;
             bottom: 30px;
@@ -177,7 +177,8 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             cursor: pointer;
         }
-        /* GEMINI HELPER */
+
+        /* ===== Gemini Assistant UI ===== */
         .gemini-btn {
             position: fixed;
             bottom: 20px;
@@ -196,14 +197,13 @@
             transition: transform 0.2s;
         }
 
-        .gemini-btn:hover {
-            transform: scale(1.05);
-        }
+        .gemini-btn:hover { transform: scale(1.05); }
 
         .gemini-icon {
             margin-right: 8px;
             font-size: 18px;
         }
+
         .ai-modal {
             position: fixed;
             bottom: 80px;
@@ -220,7 +220,7 @@
         }
 
         .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
+            background: #1a3a8a;
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -260,6 +260,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -267,11 +268,12 @@
             font-size: 20px;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
     </style>
 </head>
+
 <body>
 
+    <!-- ===== Navigation Bar ===== -->
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="Logo" class="logo">
         <ul class="nav-links">
@@ -280,11 +282,12 @@
             <li><a href="/student/rent">Rent</a></li>
             <li><a href="/student/team">Team Page</a></li>
         </ul>
+
+        <!-- Profile Dropdown -->
         <div class="nav-right" style="display: flex; align-items: center;">
             <img src="https://i.postimg.cc/sgJMCVtT/Doorbell.png" style="height: 25px; cursor: pointer; margin-left: 15px;">
             
             <div class="profile-nav-wrapper" style="position: relative; display: flex; align-items: center; margin-left: 15px;">
-                
                 <div style="width: 35px; height: 35px; background-color: #e0e0e0; border-radius: 50%; border: 1px solid #ccc; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
                     <img src="https://i.postimg.cc/wjsC2LfL/Male-User.png" style="width: 35px; height: 30px">
                 </div>
@@ -292,19 +295,21 @@
                 <span class="dropdown-arrow" onclick="toggleDropdown()" style="cursor: pointer; margin-left: 8px; color: #666; font-size: 12px; transition: 0.2s;">▼</span>
 
                 <div id="profile-dropdown" style="display: none; position: absolute; top: 45px; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; min-width: 140px; padding: 5px 0;">
-                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none; font-size: 14px; transition: background 0.2s;">Profile</a>
-                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; font-size: 14px; transition: background 0.2s; border-top: 1px solid #eee;">Log Out</a>
+                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none; font-size: 14px;">Profile</a>
+                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; font-size: 14px; border-top: 1px solid #eee;">Log Out</a>
                 </div>
             </div>
         </div>
     </nav>
 
+    <!-- ===== Main Content ===== -->
     <main class="container">
         <div class="date-header">
             <span>Event Date: 20/02/2026 19:18</span>
             <span>Due Date: 27/02/2026 19:18</span>
         </div>
 
+        <!-- Form Fields -->
         <div class="form-row">
             <div class="label-box">Event Name</div>
             <input type="text" class="input-field">
@@ -315,6 +320,7 @@
             <input type="text" class="input-field">
         </div>
 
+        <!-- Location Selection -->
         <div class="form-row">
             <div class="label-box">Location</div>
             <div class="location-options" style="display: flex; align-items: center; gap: 20px;">
@@ -331,6 +337,7 @@
             </div>
         </div>
 
+        <!-- Agreement -->
         <div class="agreement-section">
             <div class="custom-check agreement-trigger" style="flex-shrink: 0; margin-top: 5px;"></div>
             <p class="agreement-text agreement-trigger">
@@ -340,13 +347,14 @@
             </p>
         </div>
 
+        <!-- Actions -->
         <div class="button-group">
             <button class="btn">Submit</button>
             <button class="btn">Clear</button>
         </div>
     </main>
 
-    <!-- GEMINI HELPER -->
+    <!-- ===== Gemini Assistant ===== -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
@@ -366,9 +374,10 @@
             </div>
         </div>
     </footer>
-    
 
+    <!-- ===== Script (UI + API Logic) ===== -->
     <script>
+        /* ===== AI Assistant ===== */
         function toggleAI() {
             const win = document.getElementById('ai-window');
             win.style.display = win.style.display === 'none' ? 'flex' : 'none';
@@ -381,7 +390,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {
@@ -396,6 +405,8 @@
                 area.innerHTML = "Failed to connect to AI.";
             }
         }
+
+        /* ===== Profile Dropdown ===== */
         function toggleDropdown() {
             const dropdown = document.getElementById('profile-dropdown');
             const arrow = document.querySelector('.dropdown-arrow');
@@ -409,7 +420,6 @@
             }
         }
 
-        // Close dropdown if user clicks anywhere else on the screen
         window.onclick = function(event) {
             if (!event.target.matches('.dropdown-arrow')) {
                 const dropdown = document.getElementById('profile-dropdown');
@@ -421,9 +431,8 @@
             }
         }
 
-        /*API*/
+        /* ===== Borrow Logic ===== */
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Element Selectors
             const eventInput = document.querySelectorAll('.input-field')[0];
             const reasonInput = document.querySelectorAll('.input-field')[1];
             const outsideInput = document.querySelector('.outside-input');
@@ -432,7 +441,6 @@
             const [submitBtn, clearBtn] = document.querySelectorAll('.btn');
             const dateSpans = document.querySelectorAll('.date-header span');
 
-            // --- Data Sources ---
             const savedData = JSON.parse(localStorage.getItem('borrow_payload'));
             const studentData = JSON.parse(localStorage.getItem('studentData'));
             const directRent = JSON.parse(localStorage.getItem('direct_rent'));
@@ -440,7 +448,6 @@
 
             let selectedLocation = 'ICT'; 
 
-            // Helper: format SQL datetime
             const formatSQL = (d) => {
                 return d.getFullYear() + '-' +
                     String(d.getMonth() + 1).padStart(2, '0') + '-' +
@@ -450,7 +457,7 @@
                     String(d.getSeconds()).padStart(2, '0');
             };
 
-            // --- Initialization: UI State ---
+            /* ===== Initialization ===== */
             if (savedData) {
                 eventInput.value = savedData.event_name || '';
                 reasonInput.value = savedData.reason || '';
@@ -468,14 +475,13 @@
                 }
             } else {
                 locationItems[0].classList.add('active');
-                // Default dates if no payload exists
                 const now = new Date();
                 const due = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
                 dateSpans[0].textContent = `Event Date: ${now.toLocaleDateString('en-GB')}`;
                 dateSpans[1].textContent = `Due Date: ${due.toLocaleDateString('en-GB')}`;
             }
 
-            // 2. Location Selection Logic
+            /* ===== Location Selection ===== */
             locationItems.forEach(item => {
                 item.addEventListener('click', (e) => {
                     if (e.target.classList.contains('outside-input')) return;
@@ -491,15 +497,14 @@
                 });
             });
 
-            // 3. Agreement Toggle
+            /* ===== Agreement Toggle ===== */
             agreementSection.addEventListener('click', (e) => {
                 if (e.target.classList.contains('btn')) return;
                 agreementSection.classList.toggle('active');
             });
 
-            // 4. Submit Logic
+            /* ===== Submit ===== */
             submitBtn.onclick = async () => {
-                // Validation
                 const student_id = studentData ? studentData.student_id : null;
                 if (!student_id) {
                     alert("Error: Student session not found. Please log in again.");
@@ -516,7 +521,6 @@
                     return;
                 }
 
-                // Logic for gathering item_ids (Direct Rent takes priority over Cart)
                 const itemIds = directRent 
                     ? [directRent.item_id || directRent.model_id] 
                     : cart.map(i => i.item_id || i.model_id);
@@ -531,7 +535,7 @@
 
                 const payload = {
                     student_id: student_id,
-                    admin_id: 1, // Default processing admin
+                    admin_id: 1,
                     event_name: eventInput.value.trim(),
                     reason: reasonInput.value.trim(),
                     where_event: selectedLocation,
@@ -551,11 +555,9 @@
                     const result = await response.json();
 
                     if (!result.error) {
-                        // Success: Clean up localStorage and redirect
                         localStorage.removeItem('direct_rent');
                         localStorage.removeItem('cart');
                         localStorage.removeItem('borrow_payload'); 
-                        
                         window.location.href = '/student/dashboard';
                     } else {
                         alert("Submission error: " + result.message);
@@ -566,7 +568,7 @@
                 }
             };
 
-            // 5. Clear Logic
+            /* ===== Clear ===== */
             clearBtn.onclick = () => {
                 eventInput.value = '';
                 reasonInput.value = '';

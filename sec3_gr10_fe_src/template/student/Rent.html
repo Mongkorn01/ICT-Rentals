@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== META & TITLE ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICT-RENTALS - Product Selection</title>
+
+    <!-- ===== STYLES ===== -->
     <style>
+        /* ===== ROOT VARIABLES ===== */
         :root {
             --nav-border: #e0e0e0;
             --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
             --gray-text: #666;
         }
 
+        /* ===== BASE LAYOUT ===== */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -18,7 +23,7 @@
             color: #333;
         }
 
-        /* --- Student Navbar --- */
+        /* ===== NAVBAR ===== */
         nav {
             display: flex;
             align-items: center;
@@ -27,22 +32,55 @@
             border-bottom: 1px solid var(--nav-border);
             height: 60px;
         }
+
         .nav-links li.active { font-weight: 600; }
+
         .nav-links a {
             text-decoration: none;
             color: #333;
         }
                 
         .logo { height: 40px; margin-right: 50px; }
-        .nav-links { display: flex; list-style: none; margin: 0; padding: 0; flex-grow: 1; gap: 40px; }
-        .nav-links li { font-size: 18px; cursor: pointer; color: #333; }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex-grow: 1;
+            gap: 40px;
+        }
+
+        .nav-links li {
+            font-size: 18px;
+            cursor: pointer;
+            color: #333;
+        }
+
         .nav-links li.active { font-weight: 600; }
         
-        .nav-right { display: flex; align-items: center; gap: 20px; }
-        .profile-section { display: flex; align-items: center; gap: 8px; cursor: pointer; }
-        .profile-icon { width: 35px; height: 35px; background: #eee; border-radius: 50%; border: 1px solid #ddd; }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
-        /* --- Hero Carousel Section --- */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            width: 35px;
+            height: 35px;
+            background: #eee;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+        }
+
+        /* ===== HERO CAROUSEL ===== */
         .hero-section {
             display: flex;
             align-items: center;
@@ -50,7 +88,12 @@
             padding: 40px 20px;
             position: relative;
         }
-        .hero-logo { width: 400px; height: auto; }
+
+        .hero-logo {
+            width: 400px;
+            height: auto;
+        }
+
         .arrow {
             width: 45px;
             height: 45px;
@@ -64,6 +107,7 @@
             font-size: 24px;
             position: absolute;
         }
+
         .arrow-left { left: 10%; }
         .arrow-right { right: 10%; }
 
@@ -74,16 +118,24 @@
             margin-top: -20px;
             margin-bottom: 40px;
         }
-        .indicator { width: 45px; height: 8px; background: #eee; border-radius: 4px; }
+
+        .indicator {
+            width: 45px;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+        }
+
         .indicator.active { background: #d9d9d9; }
 
-        /* --- Shopping Cart UI --- */
+        /* ===== CART DISPLAY ===== */
         .cart-status {
             position: absolute;
             right: 40px;
             top: 80px;
             text-align: center;
         }
+
         .cart-circle {
             width: 50px;
             height: 50px;
@@ -97,16 +149,18 @@
             cursor: pointer;
         }
 
-        /* --- Category Section --- */
+        /* ===== PRODUCT CATEGORY SECTION ===== */
         .category-container {
             padding: 20px 5%;
         }
+
         .category-title {
             font-size: 24px;
             font-weight: 500;
             margin-bottom: 30px;
             font-style: italic;
         }
+
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -114,6 +168,7 @@
             padding: 20px;
         }
 
+        /* ===== PRODUCT CARD ===== */
         .product-card {
             background: white;
             border-radius: 8px;
@@ -150,7 +205,8 @@
             font-size: 13px;
             color: #28a745;
         }
-        /* GEMINI HELPER */
+
+        /* ===== GEMINI HELPER BUTTON ===== */
         .gemini-btn {
             position: fixed;
             bottom: 20px;
@@ -177,6 +233,8 @@
             margin-right: 8px;
             font-size: 18px;
         }
+
+        /* ===== GEMINI MODAL ===== */
         .ai-modal {
             position: fixed;
             bottom: 80px;
@@ -193,7 +251,7 @@
         }
 
         .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
+            background: #1a3a8a;
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -233,6 +291,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -240,11 +299,12 @@
             font-size: 20px;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
     </style>
 </head>
+
 <body>
 
+    <!-- ===== NAVBAR ===== -->
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="Logo" class="logo">
         <ul class="nav-links">
@@ -253,36 +313,43 @@
             <li><a href="/student/rent">Rent</a></li>
             <li><a href="/student/team">Team Page</a></li>
         </ul>
+
+        <!-- ===== PROFILE SECTION ===== -->
         <div class="nav-right">
             <img src="https://i.postimg.cc/sgJMCVtT/Doorbell.png" style="height: 25px; cursor: pointer; margin-left: 15px;">
             
             <div class="profile-nav-wrapper" style="position: relative; display: flex; align-items: center; margin-left: 15px;">
-                
                 <div style="width: 35px; height: 35px; background-color: #e0e0e0; border-radius: 50%; border: 1px solid #ccc; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
                     <img src="https://i.postimg.cc/wjsC2LfL/Male-User.png" style="width: 35px; height: 30px">
                 </div>
-                <span class="dropdown-arrow" onclick="toggleDropdown()" style="cursor: pointer; margin-left: 8px; color: #666; font-size: 12px; transition: 0.2s;">▼</span>
+
+                <span class="dropdown-arrow" onclick="toggleDropdown()" style="cursor: pointer; margin-left: 8px; color: #666; font-size: 12px;">▼</span>
 
                 <div id="profile-dropdown" style="display: none; position: absolute; top: 45px; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; min-width: 140px; padding: 5px 0;">
-                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none; font-size: 14px; transition: background 0.2s;">Profile</a>
-                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; font-size: 14px; transition: background 0.2s; border-top: 1px solid #eee;">Log Out</a>
+                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;">Profile</a>
+                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; border-top: 1px solid #eee;">Log Out</a>
                 </div>
             </div>
         </div>
     </nav>
 
+    <!-- ===== MAIN CONTENT ===== -->
     <main>
-        <div class="cart-status" onclick="location.href='/student/cart'" style="cursor: pointer; z-index: 999;">
+
+        <!-- ===== CART STATUS ===== -->
+        <div class="cart-status" onclick="location.href='/student/cart'">
             <div class="cart-circle" style="pointer-events: none;">🛒</div>
-            <div id="cart-count-display" style="font-size: 14px; font-weight: 500;">In cart: 0</div>
+            <div id="cart-count-display">In cart: 0</div>
         </div>
 
+        <!-- ===== HERO BANNER ===== -->
         <div class="hero-section">
             <div class="arrow arrow-left">⟨</div>
             <img src="https://i.postimg.cc/pd02t0qn/Announce-banner.png" alt="Rental Banner" class="hero-logo">
             <div class="arrow arrow-right">⟩</div>
         </div>
 
+        <!-- ===== CAROUSEL INDICATORS ===== -->
         <div class="carousel-indicators">
             <div class="indicator active"></div>
             <div class="indicator"></div>
@@ -291,15 +358,15 @@
             <div class="indicator"></div>
         </div>
 
+        <!-- ===== PRODUCT AREA ===== -->
         <div id="main-product-area">
             <p style="text-align: center; padding: 20px;">Loading equipment catalog...</p>
         </div>
-    </main>
-    
 
- 
+    </main>
+
+    <!-- ===== GEMINI HELPER ===== -->
     <footer>
-        <!-- GEMINI HELPER -->
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
         </button>
@@ -309,9 +376,11 @@
                 <span>✨ Gemini Assistant</span>
                 <button onclick="toggleAI()" class="close-btn">&times;</button>
             </div>
+
             <div id="ai-response-area" class="ai-content">
                 Hi! How can I help you navigate ICT-RENTALS?
             </div>
+
             <div class="ai-footer">
                 <input type="text" id="ai-input" placeholder="Type your question...">
                 <button onclick="sendToAI()">Send</button>
@@ -319,12 +388,16 @@
         </div>
     </footer>
 
+    <!-- ===== JAVASCRIPT ===== -->
     <script>
+
+        /* ===== GEMINI TOGGLE ===== */
         function toggleAI() {
             const win = document.getElementById('ai-window');
             win.style.display = win.style.display === 'none' ? 'flex' : 'none';
         }
 
+        /* ===== GEMINI API REQUEST ===== */
         async function sendToAI() {
             const input = document.getElementById('ai-input');
             const area = document.getElementById('ai-response-area');
@@ -332,7 +405,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {
@@ -340,17 +413,19 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: `[Context: ${window.location.pathname}] ${prompt}` }),
                 });
-                
+
                 const data = await response.json();
                 area.innerHTML = data.success ? data.text : "Error: " + data.error;
-            } catch (err) {
+            } catch {
                 area.innerHTML = "Failed to connect to AI.";
             }
         }
+
+        /* ===== DROPDOWN TOGGLE ===== */
         function toggleDropdown() {
             const dropdown = document.getElementById('profile-dropdown');
             const arrow = document.querySelector('.dropdown-arrow');
-            
+
             if (dropdown.style.display === 'none') {
                 dropdown.style.display = 'block';
                 arrow.textContent = '▲';
@@ -360,11 +435,12 @@
             }
         }
 
-        // Close dropdown if user clicks anywhere else on the screen
+        /* ===== CLOSE DROPDOWN ON OUTSIDE CLICK ===== */
         window.onclick = function(event) {
             if (!event.target.matches('.dropdown-arrow')) {
                 const dropdown = document.getElementById('profile-dropdown');
                 const arrow = document.querySelector('.dropdown-arrow');
+
                 if (dropdown.style.display === 'block') {
                     dropdown.style.display = 'none';
                     arrow.textContent = '▼';
@@ -372,14 +448,13 @@
             }
         }
 
-        /*Load products & Catagory*/
+        /* ===== LOAD PRODUCTS & GROUP BY CATEGORY ===== */
         document.addEventListener('DOMContentLoaded', async () => {
             updateCartDisplay();
             const mainArea = document.getElementById('main-product-area');
 
             try {
-                // 1. Fetch all products from your new route
-                const response = await fetch('/api/student/rent'); // Adjust path if your route is prefixed
+                const response = await fetch('/api/student/rent');
                 const result = await response.json();
 
                 if (result.error || result.data.length === 0) {
@@ -387,7 +462,6 @@
                     return;
                 }
 
-                // 2. Group products by Category
                 const productsByCategory = result.data.reduce((acc, product) => {
                     const cat = product.category || "Uncategorized";
                     if (!acc[cat]) acc[cat] = [];
@@ -395,7 +469,6 @@
                     return acc;
                 }, {});
 
-                // 3. Generate HTML for each category
                 mainArea.innerHTML = Object.keys(productsByCategory).map(category => `
                     <div class="category-container">
                         <h2 class="category-title">“${category}”</h2>
@@ -417,12 +490,14 @@
             }
         });
 
+        /* ===== UPDATE CART COUNT ===== */
         function updateCartDisplay() {
             const cart = JSON.parse(localStorage.getItem('student_cart')) || [];
             const count = cart.reduce((sum, item) => sum + item.quantity, 0);
             const display = document.getElementById('cart-count-display');
             if (display) display.innerText = `In cart: ${count}`;
         }
+
     </script>
 </body>
 </html>

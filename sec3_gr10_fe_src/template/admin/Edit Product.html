@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== Meta & Page Setup ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICT-RENTALS - Edit Product</title>
+
+    <!-- ===== Styles (Layout, Components, UI) ===== -->
     <style>
+        /* ===== Base Styles ===== */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -12,7 +16,7 @@
             color: #333;
         }
 
-        /* --- Navbar --- */
+        /* ===== Navbar ===== */
         .nav-links li.active { font-weight: 600; }
         .nav-links a {
             text-decoration: none;
@@ -31,12 +35,10 @@
         .nav-links li { margin: 0 20px; font-size: 18px; cursor: pointer; color: #444; }
         .nav-links li.active { font-weight: 500; background-color: #f8f8f8; padding: 10px 15px; margin: -10px 5px; }
         .dropdown::after {font-size: 10px; color: #888; }
-        .nav-links li.active {
-            font-weight: 600;
-        }                
+        .nav-links li.active { font-weight: 600; }                
         .nav-right { display: flex; align-items: center; gap: 20px; }
 
-        /* --- Main Content Layout --- */
+        /* ===== Main Layout ===== */
         .container {
             padding: 30px 10%;
             max-width: 1200px;
@@ -63,7 +65,7 @@
 
         h1 { text-align: center; font-size: 28px; margin-bottom: 30px; }
 
-        /* --- Form Card --- */
+        /* ===== Form Card ===== */
         .form-card {
             background: white;
             border-radius: 15px;
@@ -92,7 +94,7 @@
             font-size: 16px;
         }
 
-        /* --- Picture Section --- */
+        /* ===== Image Preview ===== */
         .pic-container {
             display: flex;
             gap: 20px;
@@ -120,7 +122,7 @@
 
         .pic-box img { max-width: 90%; max-height: 90%; }
 
-        /* --- Rich Text Editor Mockup --- */
+        /* ===== Editor ===== */
         .editor-container {
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -163,7 +165,7 @@
             border-top: 1px solid #ddd;
         }
 
-        /* --- Footer Actions --- */
+        /* ===== Form Footer ===== */
         .form-footer {
             margin-top: 30px;
             display: flex;
@@ -179,7 +181,7 @@
             font-size: 18px;
         }
 
-        /* Switch Toggle */
+        /* ===== Toggle Switch ===== */
         .switch {
             position: relative;
             display: inline-block;
@@ -207,6 +209,7 @@
         input:checked + .slider { background-color: #4CAF50; }
         input:checked + .slider:before { transform: translateX(26px); }
 
+        /* ===== Buttons ===== */
         .action-group {
             display: flex;
             gap: 20px;
@@ -232,7 +235,7 @@
             border: 1px solid #d9534f;
         }
 
-        /* GEMINI HELPER */
+        /* ===== Gemini Assistant UI ===== */
         .gemini-btn {
             position: fixed;
             bottom: 20px;
@@ -251,14 +254,13 @@
             transition: transform 0.2s;
         }
 
-        .gemini-btn:hover {
-            transform: scale(1.05);
-        }
+        .gemini-btn:hover { transform: scale(1.05); }
 
         .gemini-icon {
             margin-right: 8px;
             font-size: 18px;
         }
+
         .ai-modal {
             position: fixed;
             bottom: 80px;
@@ -275,7 +277,7 @@
         }
 
         .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
+            background: #1a3a8a;
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -288,8 +290,6 @@
             max-height: 300px;
             overflow-y: auto;
             font-size: 14px;
-            line-height: 1.5;
-            color: #333;
         }
 
         .ai-footer {
@@ -315,6 +315,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -322,33 +323,35 @@
             font-size: 20px;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
     </style>
 </head>
+
 <body>
 
+    <!-- ===== Navigation Bar ===== -->
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="ICT Rentals" class="logo">
         <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
             <li><a href="/admin/dashboard">Dashboard</a></li>
-            
             <li><a href="/admin/product-control">Product Control</a></li>
-
             <li><a href="/admin/penalty">Penalty Page</a></li>
             <li><a href="/admin/team">Team Page</a></li> 
         </ul>
         <div class="nav-right">
-            <a href="/" style="text-decoration: none; color: inherit; cursor: pointer;">Log Out</a>
+            <a href="/">Log Out</a>
             <img src="https://i.postimg.cc/sgJMCVtT/Doorbell.png" style="height: 30px; cursor: pointer; margin-left: 15px;">
         </div>
     </nav>
 
+    <!-- ===== Main Content ===== -->
     <main>
         <div class="container">
             <button class="back-btn" onclick="window.location.href='/admin/product-control'">❮</button>
             <h1>Edit Product</h1>
 
+            <!-- ===== Product Form ===== -->
             <div class="form-card">
+                <!-- Form Fields -->
                 <div class="form-row">
                     <label>Category :</label>
                     <select id="editCategory">
@@ -373,6 +376,7 @@
                     <input type="text" id="editImgUrl" oninput="updatePreview(this.value)">
                 </div>
 
+                <!-- Image Preview -->
                 <div class="form-row" style="align-items: flex-start;">
                     <label>Preview :</label>
                     <div class="pic-container">
@@ -382,6 +386,7 @@
                     </div>
                 </div>
 
+                <!-- Specifications -->
                 <div class="form-row" style="align-items: flex-start;">
                     <label>Product Specification :</label>
                     <div class="editor-container">
@@ -389,6 +394,7 @@
                     </div>
                 </div>
 
+                <!-- Footer Actions -->
                 <div class="form-footer">
                     <div class="toggle-row">
                         <span>Open visible :</span>
@@ -406,7 +412,7 @@
         </div>
     </main>
 
-    <!-- GEMINI HELPER -->
+    <!-- ===== Gemini Assistant ===== -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
@@ -427,8 +433,9 @@
         </div>
     </footer>
 
-
+    <!-- ===== Script (Logic & API Handling) ===== -->
     <script>
+        /* ===== AI Assistant ===== */
         function toggleAI() {
             const win = document.getElementById('ai-window');
             win.style.display = win.style.display === 'none' ? 'flex' : 'none';
@@ -441,7 +448,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {
@@ -457,9 +464,10 @@
             }
         }
 
+        /* ===== Initialization ===== */
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
-        const CURRENT_ADMIN_ID = 1; // Replace with actual session ID
+        const CURRENT_ADMIN_ID = 1;
 
         document.addEventListener('DOMContentLoaded', async () => {
             if (!productId) {
@@ -469,35 +477,29 @@
             await loadProductData();
         });
 
+        /* ===== Image Preview Handler ===== */
         function updatePreview(url) {
             const preview = document.getElementById('editPreviewImg');
             
-            // Reset the error handler so it can fire again for a new URL
             preview.onerror = function() {
-                // IMPORTANT: Set onerror to null immediately to stop the infinite loop
                 this.onerror = null; 
-                
-                // Use a local fallback image or a reliable one
                 this.src = 'https://placehold.co/150?text=Error'; 
-                
                 console.error("The image at " + url + " could not be loaded.");
             };
 
-            // If url is "null" (as a string) or actually null, use placeholder immediately
             if (!url || url === "null") {
                 preview.src = 'https://placehold.co/150?text=No+URL';
             } else {
                 preview.src = url;
             }
-}
+        }
 
-        // 1. Fetch current data and fill the form
+        /* ===== Load Product Data ===== */
         async function loadProductData() {
             try {
-                const response = await fetch('/api/admin/product-control'); // Or a specific GET /id if you have one
+                const response = await fetch('/api/admin/product-control');
                 const result = await response.json();
                 
-                // Find the specific product from the list
                 const product = result.data.find(p => p.model_id == productId);
 
                 if (product) {
@@ -513,7 +515,7 @@
             }
         }
 
-        // 2. Handle Save Changes
+        /* ===== Save Changes ===== */
         document.getElementById('saveEditBtn').addEventListener('click', async () => {
             const updatedData = {
                 name: document.getElementById('editName').value,
@@ -542,7 +544,7 @@
             }
         });
 
-        // 3. Handle Delete (Reuse existing delete logic)
+        /* ===== Delete Product ===== */
         document.getElementById('deleteProductBtn').addEventListener('click', async () => {
             if (!confirm("Are you sure you want to delete this product?")) return;
 

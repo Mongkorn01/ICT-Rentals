@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ==================== META & PAGE SETUP ==================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICT-RENTALS - iPhone 13 Detail</title>
+
     <style>
+        /* ==================== ROOT VARIABLES ==================== */
         :root {
             --nav-border: #e0e0e0;
             --bg-light: #f9f9f9;
@@ -15,6 +18,7 @@
             --text-muted: #666;
         }
 
+        /* ==================== BASE LAYOUT ==================== */
         body {
             margin: 0;
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -25,7 +29,7 @@
             height: 100vh;
         }
 
-        /* --- Navigation Bar --- */
+        /* ==================== NAVIGATION BAR ==================== */
         nav {
             display: flex;
             align-items: center;
@@ -44,7 +48,12 @@
         .profile-section { display: flex; align-items: center; gap: 5px; cursor: pointer; }
         .profile-icon { width: 40px; height: 40px; background: #eee; border-radius: 50%; border: 1px solid #ddd; }
 
-        /* --- Main Content Layout --- */
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        /* ==================== MAIN CONTENT LAYOUT ==================== */
         .content-wrapper {
             flex-grow: 1;
             padding: 20px 5%;
@@ -52,11 +61,6 @@
             flex-direction: column;
             align-items: center;
             position: relative;
-        }
-        .nav-links li.active { font-weight: 600; }
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
         }
         
         .top-action-bar {
@@ -82,6 +86,7 @@
             color: #ccc;
         }
 
+        /* ==================== CART STATUS ==================== */
         .cart-status { text-align: center; }
         .cart-icon-circle {
             width: 50px;
@@ -95,7 +100,7 @@
             margin-bottom: 4px;
         }
 
-        /* --- Single Product Card --- */
+        /* ==================== PRODUCT CARD ==================== */
         .product-card {
             background: white;
             width: 100%;
@@ -108,23 +113,24 @@
 
         .product-main { display: flex; gap: 40px; }
 
-        /* Left Side: Image & Tags */
+        /* --- LEFT: PRODUCT VISUALS --- */
         .product-visuals { width: 320px; position: relative; }
         .tag-row { display: flex; gap: 10px; margin-bottom: 20px; }
         .tag { background: var(--label-bg); padding: 5px 18px; border-radius: 4px; font-size: 14px; font-weight: 500; }
         .product-image { width: 100%; height: auto; object-fit: contain; }
 
-        /* Right Side: Info */
+        /* --- RIGHT: PRODUCT INFO --- */
         .product-info { flex-grow: 1; }
         .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
         .product-title { font-size: 32px; font-weight: 500; margin: 0; }
         
+        /* --- STOCK BAR --- */
         .stock-container { width: 280px; }
         .stock-label { font-size: 14px; margin-bottom: 5px; display: block; }
         .stock-bar-bg { width: 100%; height: 24px; background: #f0f0f0; border-radius: 12px; overflow: hidden; }
         .stock-bar-fill {
-            white-space: nowrap; /* Prevents text from wrapping */
-            min-width: fit-content; /* Ensures the bar is at least as wide as the text */
+            white-space: nowrap;
+            min-width: fit-content;
             text-align: center;
             display: flex;
             justify-content: center;
@@ -132,13 +138,14 @@
             color: var(--accent-red);
         }
 
+        /* --- DESCRIPTION & SPECS --- */
         .description-box { margin: 25px 0; line-height: 1.6; }
         .description-title { font-weight: bold; font-size: 16px; display: block; margin-bottom: 8px; }
         .description-content { color: var(--text-muted); font-size: 15px; }
 
         .specs-toggle { color: #333; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; }
 
-        /* --- Footer Actions --- */
+        /* ==================== FOOTER ACTIONS ==================== */
         .card-footer {
             margin-top: 40px;
             padding-top: 25px;
@@ -160,7 +167,8 @@
         .btn-cart { background: var(--btn-gray); color: #333; }
         .btn-rent { background: var(--btn-gray); color: #333; }
         .btn:hover { opacity: 0.8; }
-        /* GEMINI HELPER */
+
+        /* ==================== GEMINI HELPER ==================== */
         .gemini-btn {
             position: fixed;
             bottom: 20px;
@@ -179,14 +187,10 @@
             transition: transform 0.2s;
         }
 
-        .gemini-btn:hover {
-            transform: scale(1.05);
-        }
+        .gemini-btn:hover { transform: scale(1.05); }
 
-        .gemini-icon {
-            margin-right: 8px;
-            font-size: 18px;
-        }
+        .gemini-icon { margin-right: 8px; font-size: 18px; }
+
         .ai-modal {
             position: fixed;
             bottom: 80px;
@@ -203,7 +207,7 @@
         }
 
         .ai-header {
-            background: #1a3a8a; /* Matches your logo blue */
+            background: #1a3a8a;
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -243,6 +247,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -250,10 +255,11 @@
             font-size: 20px;
             cursor: pointer;
         }
-        /* GEMINI HELPER */
     </style>
 </head>
+
 <body>
+    <!-- ==================== NAVBAR ==================== -->
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="Logo" class="logo">
         <ul class="nav-links">
@@ -262,37 +268,42 @@
             <li><a href="/student/rent">Rent</a></li>
             <li><a href="/student/team">Team Page</a></li>
         </ul>
-        <div class="nav-right">
+
+        <!-- ==================== PROFILE DROPDOWN ==================== -->
         <div class="nav-right">
             <img src="https://i.postimg.cc/sgJMCVtT/Doorbell.png" style="height: 25px; cursor: pointer; margin-left: 15px;">
             
             <div class="profile-nav-wrapper" style="position: relative; display: flex; align-items: center; margin-left: 15px;">
-                
                 <div style="width: 35px; height: 35px; background-color: #e0e0e0; border-radius: 50%; border: 1px solid #ccc; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
                     <img src="https://i.postimg.cc/wjsC2LfL/Male-User.png" style="width: 35px; height: 30px">
                 </div>
                 
-                <span class="dropdown-arrow" onclick="toggleDropdown()" style="cursor: pointer; margin-left: 8px; color: #666; font-size: 12px; transition: 0.2s;">▼</span>
+                <span class="dropdown-arrow" onclick="toggleDropdown()" style="cursor: pointer; margin-left: 8px; color: #666; font-size: 12px;">▼</span>
 
                 <div id="profile-dropdown" style="display: none; position: absolute; top: 45px; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; min-width: 140px; padding: 5px 0;">
-                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none; font-size: 14px; transition: background 0.2s;">Profile</a>
-                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; font-size: 14px; transition: background 0.2s; border-top: 1px solid #eee;">Log Out</a>
+                    <a href="/student/profile" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;">Profile</a>
+                    <a href="/" style="display: block; padding: 10px 20px; color: #d9534f; text-decoration: none; border-top: 1px solid #eee;">Log Out</a>
                 </div>
             </div>
         </div>
     </nav>
 
+    <!-- ==================== MAIN CONTENT ==================== -->
     <main class="content-wrapper">
         <div class="top-action-bar">
-            <div class="back-circle" onclick="history.back()" style="cursor: pointer;">⟨</div>
-            <div class="cart-status" onclick="location.href='/student/cart'" style="cursor: pointer;">
+            <div class="back-circle" onclick="history.back()">⟨</div>
+
+            <div class="cart-status" onclick="location.href='/student/cart'">
                 <div class="cart-icon-circle">🛒</div>
-                <div id="cart-count" style="font-size: 14px; font-weight: 500;">In cart: 0</div>
+                <div id="cart-count">In cart: 0</div>
             </div>
         </div>
 
+        <!-- ==================== PRODUCT DISPLAY ==================== -->
         <div class="product-card">
             <div class="product-main">
+
+                <!-- LEFT: IMAGE + TAGS -->
                 <div class="product-visuals">
                     <div class="tag-row">
                         <span class="tag" id="display-category">Category</span>
@@ -301,9 +312,12 @@
                     <img src="" alt="" id="display-img" class="product-image">
                 </div>
 
+                <!-- RIGHT: PRODUCT INFO -->
                 <div class="product-info">
                     <div class="header-row">
                         <h1 class="product-title" id="display-name">Loading...</h1>
+
+                        <!-- STOCK BAR -->
                         <div class="stock-container">
                             <span class="stock-label">left in stock</span>
                             <div class="stock-bar-bg">
@@ -312,34 +326,39 @@
                         </div>
                     </div>
 
+                    <!-- DESCRIPTION -->
                     <div class="description-box">
                         <span class="description-title">Detail</span>
-                        <p class="description-content" id="display-details">
-                            Fetching details...
-                        </p>
+                        <p class="description-content" id="display-details">Fetching details...</p>
                     </div>
 
-                    <div class="specs-toggle" onclick="toggleSpecs()" style="cursor: pointer;">▼ Specifications</div>
-                    <div id="display-specs" style="display: none; padding: 10px; font-size: 14px; color: #555;"></div>
+                    <!-- SPECIFICATIONS -->
+                    <div class="specs-toggle" onclick="toggleSpecs()">▼ Specifications</div>
+                    <div id="display-specs" style="display: none; padding: 10px;"></div>
                 </div>
             </div>
 
+            <!-- ==================== ACTION FOOTER ==================== -->
             <div class="card-footer">
                 <div class="due-date">Due date: 22/02/2026</div>
+
                 <div class="interaction-group">
                     <span class="qty-label">Quantity</span>
+
                     <div class="qty-selector">
                         <button class="qty-btn" onclick="changeQty(-1)">−</button>
                         <div class="qty-input" id="qty-val">1</div>
                         <button class="qty-btn" onclick="changeQty(1)">+</button>
                     </div>
+
                     <button class="btn btn-cart" id="add-btn">Add to cart</button>
                     <button class="btn btn-rent" id="rent-btn">Rent now</button>  
                 </div>
             </div>
         </div>
     </main>
-    <!-- GEMINI HELPER -->
+
+    <!-- ==================== GEMINI HELPER UI ==================== -->
     <footer>
         <button class="gemini-btn" onclick="toggleAI()">
             <span class="gemini-icon">✨</span> Ask Gemini
@@ -360,8 +379,9 @@
         </div>
     </footer>
 
-
+    <!-- ==================== SCRIPT SECTION ==================== -->
     <script>
+        /* --- GEMINI HELPER LOGIC --- */
         function toggleAI() {
             const win = document.getElementById('ai-window');
             win.style.display = win.style.display === 'none' ? 'flex' : 'none';
@@ -374,7 +394,7 @@
             if (!prompt) return;
 
             area.innerHTML = "<em>Thinking...</em>";
-            input.value = ""; // Clear input
+            input.value = "";
 
             try {
                 const response = await fetch('/api/ai-assist', {
@@ -389,6 +409,8 @@
                 area.innerHTML = "Failed to connect to AI.";
             }
         }
+
+        /* --- PROFILE DROPDOWN LOGIC --- */
         function toggleDropdown() {
             const dropdown = document.getElementById('profile-dropdown');
             const arrow = document.querySelector('.dropdown-arrow');
@@ -402,7 +424,6 @@
             }
         }
 
-        // Close dropdown if user clicks anywhere else on the screen
         window.onclick = function(event) {
             if (!event.target.matches('.dropdown-arrow')) {
                 const dropdown = document.getElementById('profile-dropdown');
@@ -414,6 +435,7 @@
             }
         }
 
+        /* --- PRODUCT DATA FETCHING --- */
         let maxAvailable = 0; 
 
         document.addEventListener('DOMContentLoaded', async () => {
@@ -436,13 +458,11 @@
 
                 const product = result.data;
 
-                // 1. Calculations
                 maxAvailable = product.quantity_available || 0;
                 const total = product.quantity_total || 0;
                 const stockPercent = total > 0 ? (maxAvailable / total) * 100 : 0;
                 const isOutOfStock = maxAvailable <= 0;
 
-                // 2. Update UI text and tags
                 document.getElementById('display-name').innerText = product.name;
                 document.getElementById('display-category').innerText = product.category;
                 document.getElementById('display-brand').innerText = product.brand;
@@ -453,21 +473,16 @@
                 img.src = product.img_url;
                 img.alt = product.name;
 
-                // 3. Handle Stock Bar (The Layered Fix)
                 const barContainer = document.getElementById('display-stock-bar').parentElement;
-                
-                // We overwrite the innerHTML of the container to ensure the layered structure
                 barContainer.innerHTML = `
-                    <div class="stock-bar" style="position: relative; width: 100%; background: #eee; height: 24px; border-radius: 12px; overflow: hidden; display: flex; align-items: center;">
-                        <div id="display-stock-fill" style="position: absolute; left: 0; top: 0; height: 100%; width: ${stockPercent}%; background: #ffebeb; transition: width 0.3s ease;"></div>
-                        
-                        <div id="display-stock-bar" style="position: relative; width: 100%; text-align: center; color: #ff4d4f; font-size: 13px; font-weight: 600; z-index: 1; white-space: nowrap;">
+                    <div class="stock-bar" style="position: relative; width: 100%; height: 24px;">
+                        <div style="position: absolute; width: ${stockPercent}%; background: #ffebeb; height: 100%;"></div>
+                        <div style="position: relative; text-align: center; z-index: 1;">
                             ${maxAvailable} out of ${total}
                         </div>
                     </div>
                 `;
 
-                // 4. Handle Button States
                 const addBtn = document.getElementById('add-btn');
                 const rentBtn = document.getElementById('rent-btn');
                 const qtyDisplay = document.getElementById('qty-val');
@@ -476,18 +491,11 @@
                     addBtn.disabled = true;
                     rentBtn.disabled = true;
                     addBtn.innerText = "Out of Stock";
-                    addBtn.style.opacity = "0.5";
-                    addBtn.style.pointerEvents = "none";
-                    rentBtn.style.opacity = "0.5";
-                    rentBtn.style.pointerEvents = "none";
                     qtyDisplay.innerText = "0";
-                } else {
-                    qtyDisplay.innerText = "1";
                 }
 
-                // 5. Setup Button Actions
                 addBtn.onclick = (e) => addToCart(product.model_id, e.target);
-               
+
                 rentBtn.onclick = () => {
                     const currentQty = parseInt(qtyDisplay.innerText);
                     if (currentQty > 0) {
@@ -507,7 +515,7 @@
             }
         });
 
-        // Helper: Toggle specs view
+        /* --- UI INTERACTIONS --- */
         function toggleSpecs() {
             const specs = document.getElementById('display-specs');
             specs.style.display = specs.style.display === 'none' ? 'block' : 'none';
@@ -516,86 +524,54 @@
         function changeQty(val) {
             const qtyElem = document.getElementById('qty-val');
             let current = parseInt(qtyElem.innerText);
-            
-            // If out of stock, keep it at 0
+
             if (maxAvailable <= 0) return;
 
             let nextValue = current + val;
-
             if (nextValue < 1) nextValue = 1;
-            if (nextValue > maxAvailable) {
-                nextValue = maxAvailable;
-                // Optional: show a small toast or tooltip instead of alert for better UX
-            }
+            if (nextValue > maxAvailable) nextValue = maxAvailable;
 
             qtyElem.innerText = nextValue;
         }
 
-        // Function to handle adding the current product to the cart
+        /* --- CART LOGIC --- */
         function addToCart(modelId, btnElement) {
-            // 1. Get quantity from the specific ID used on this page
             const qtyElem = document.getElementById('qty-val');
             const quantityToAdd = parseInt(qtyElem.innerText);
             const productName = document.getElementById('display-name').innerText;
             const productImg = document.getElementById('display-img').src;
-            
-            // maxAvailable is already a global variable updated during fetch
+
             if (quantityToAdd <= 0) return;
 
-            // 2. Retrieve existing cart
             let cart = JSON.parse(localStorage.getItem('student_cart')) || [];
-
-            // 3. Check current total for this item in the cart
             const existingItem = cart.find(item => item.model_id === modelId);
             const currentInCart = existingItem ? existingItem.quantity : 0;
 
-            // 4. VALIDATION: Use the global maxAvailable variable
             if (currentInCart + quantityToAdd > maxAvailable) {
-                alert(`❌ Cannot add more. Only ${maxAvailable} units available in total, and you already have ${currentInCart} in your cart.`);
+                alert(`❌ Cannot add more. Only ${maxAvailable} available.`);
                 return; 
             }
 
-            // 5. Update or Add to cart
             if (existingItem) {
                 existingItem.quantity += quantityToAdd;
             } else {
-                cart.push({
-                    model_id: modelId,
-                    name: productName,
-                    quantity: quantityToAdd,
-                    img: productImg
-                });
+                cart.push({ model_id: modelId, name: productName, quantity: quantityToAdd, img: productImg });
             }
 
-            // 6. Save back to localStorage
             localStorage.setItem('student_cart', JSON.stringify(cart));
-            
-            // 7. FEEDBACK
-            updateCartCount(); // Fixed the function name to match your code
-            
+            updateCartCount();
+
             const originalText = btnElement.innerText;
             btnElement.innerText = "✅ Added!";
-            btnElement.style.background = "#4CAF50"; 
-            btnElement.style.color = "white";
-
-            setTimeout(() => {
-                btnElement.innerText = originalText;
-                btnElement.style.background = ""; 
-                btnElement.style.color = "";
-            }, 2000);
+            setTimeout(() => btnElement.innerText = originalText, 2000);
         }
 
-        // Function to update the top-right counter
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('student_cart')) || [];
             const totalQty = cart.reduce((total, item) => total + item.quantity, 0);
             const counterDisplay = document.getElementById('cart-count');
-            
-            if (counterDisplay) {
-                counterDisplay.innerText = `In cart: ${totalQty}`;
-            }
+            if (counterDisplay) counterDisplay.innerText = `In cart: ${totalQty}`;
         }
-
     </script>
 </body>
 </html>
