@@ -13,6 +13,12 @@
         }
 
         /* --- Navbar (Consistent with previous screens) --- */
+        .nav-links li.active { font-weight: 600; }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+        }
+
         nav {
             display: flex;
             align-items: center;
@@ -231,9 +237,9 @@
 <body>
 
     <nav>
-        <img src="https://via.placeholder.com/50x50?text=Logo" alt="ICT Rentals" class="logo">
+        <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="ICT Rentals" class="logo">
         <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
-            <li class="active"><a href="/admin/dashboard">Dashboard</a></li>
+            <li><a href="/admin/dashboard">Dashboard</a></li>
             
             <li class="dropdown" style="position: relative; cursor: pointer;">
                 <div onclick="toggleManagement(event)" style="display: flex; align-items: center;">
@@ -257,7 +263,7 @@
         </ul>
         <div class="nav-right">
             <a href="/" style="text-decoration: none; color: inherit; cursor: pointer;">Log Out</a>
-            <span class="notification-bell" style="cursor: pointer; margin-left: 15px;">🔔</span>
+            <img src="https://i.postimg.cc/sgJMCVtT/Doorbell.png" style="height: 30px; cursor: pointer; margin-left: 15px;">
         </div>
     </nav>
 
@@ -275,7 +281,7 @@
                         Product
                     </div>
                 </div>
-                <button class="btn-add" onclick="window.location.href='Add Product.html'">Add product</button> 
+                <button class="btn-add" onclick="window.location.href='/admin/add-product'">Add product</button> 
             </div>
 
             <table>
@@ -304,7 +310,7 @@
                                 <span class="slider"></span>
                             </label>
                         </td>
-                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
                         <td><button class="icon-btn">🗑️</button></td>
                     </tr>
                     <tr>
@@ -319,7 +325,7 @@
                                 <span class="slider"></span>
                             </label>
                         </td>
-                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
                         <td><button class="icon-btn">🗑️</button></td>
                     </tr>
                     <tr>
@@ -334,7 +340,7 @@
                                 <span class="slider"></span>
                             </label>
                         </td>
-                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
                         <td><button class="icon-btn">🗑️</button></td>
                     </tr>
                     <tr>
@@ -349,7 +355,7 @@
                                 <span class="slider"></span>
                             </label>
                         </td>
-                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
                         <td><button class="icon-btn">🗑️</button></td>
                     </tr>
                                     <tr>
@@ -364,7 +370,7 @@
                                 <span class="slider"></span>
                             </label>
                         </td>
-                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
                         <td><button class="icon-btn">🗑️</button></td>
                     </tr>
                                     <tr>
@@ -379,7 +385,7 @@
                                 <span class="slider"></span>
                             </label>
                         </td>
-                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
                         <td><button class="icon-btn">🗑️</button></td>
                     </tr>
                                     <tr>
@@ -394,7 +400,7 @@
                                 <span class="slider"></span>
                             </label>
                         </td>
-                        <td><button class="icon-btn" onclick="window.location.href='Edit Product.html'">📝</button></td>
+                        <td><button class="icon-btn" onclick="window.location.href='/admin/edit-product'">📝</button></td>
                         <td><button class="icon-btn">🗑️</button></td>
                     </tr>
                 </tbody>

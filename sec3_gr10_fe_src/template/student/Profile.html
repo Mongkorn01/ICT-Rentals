@@ -18,7 +18,11 @@
             background-color: #ffffff;
             color: var(--text-color);
         }
-
+        .nav-links li.active { font-weight: 600; }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+        }
         /* --- Navigation Bar --- */
         nav {
             display: flex;
@@ -205,11 +209,13 @@
             <li><a href="/student/team">Team Page</a></li>
         </ul>
         <div class="nav-right">
-            <span style="font-size: 24px; color: #999; cursor: pointer;">🔔</span>
+            <img src="https://i.postimg.cc/sgJMCVtT/Doorbell.png" style="height: 25px; cursor: pointer; margin-left: 15px;">
             
             <div class="profile-nav-wrapper" style="position: relative; display: flex; align-items: center; margin-left: 15px;">
                 
-                <div class="profile-circle" style="width: 35px; height: 35px; background-color: #e0e0e0; border-radius: 50%; border: 1px solid #ccc;"></div>
+                <div style="width: 35px; height: 35px; background-color: #e0e0e0; border-radius: 50%; border: 1px solid #ccc; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
+                    <img src="https://i.postimg.cc/wjsC2LfL/Male-User.png" style="width: 35px; height: 30px">
+                </div>
                 
                 <span class="dropdown-arrow" onclick="toggleDropdown()" style="cursor: pointer; margin-left: 8px; color: #666; font-size: 12px; transition: 0.2s;">▼</span>
 
