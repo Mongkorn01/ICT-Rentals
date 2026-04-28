@@ -115,8 +115,7 @@ CREATE TABLE Rental_Items (
 
 CREATE TABLE Admin_Activity_Logs (
     log_id               INT  NOT NULL AUTO_INCREMENT,
-    action_type          ENUM('Login','Logout','Add Model','Add Item','Edit Model',
-                              'Edit Item','Delete Model','Delete Item','Approve Loan') NOT NULL,
+    action_type          VARCHAR(100) NOT NULL,
     action_details       TEXT,
     action_time          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     admin_id             INT  NOT NULL,

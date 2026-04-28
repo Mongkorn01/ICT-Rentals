@@ -258,7 +258,7 @@
 
             <form id="adminLoginForm">
                 <div class="form-group">
-                    <input type="text" id="email" name="email" placeholder="Username (Email)" required>
+                    <input type="text" id="identifier" name="identifier" placeholder="Username or work Email" required>
                 </div>
                 <div class="form-group">
                     <input type="password" id="password" name="password" placeholder="Password" required>
@@ -349,7 +349,7 @@
         document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const email = document.getElementById('email').value;
+            const identifier = document.getElementById('identifier').value;
             const password = document.getElementById('password').value;
             const warningBox = document.getElementById('auth-warning');
             const loginBtn = document.getElementById('loginBtn');
@@ -364,7 +364,7 @@
                 const response = await fetch('/api/login-admin', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({ identifier, password })
                 });
 
                 const result = await response.json();

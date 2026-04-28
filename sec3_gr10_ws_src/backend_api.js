@@ -94,28 +94,33 @@ router.post('/login-student', (req, res) => {
 });
 
 router.post('/login-admin', (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password)
-        return res.status(400).json({ error: true, message: 'Please provide email and password.' });
+    const { identifier, password } = req.body;  // 'identifier' = email or username
+    if (!identifier || !password)
+        return res.status(400).json({ error: true, message: 'Please provide email/username and password.' });
 
-    dbConn.query('SELECT * FROM Administrators WHERE email = ?', [email], async (err, results) => {
-        if (err) return res.status(500).json({ error: true, message: err.message });
-        if (results.length === 0)
-            return res.status(401).json({ error: true, message: 'Invalid email or password.' });
+    // Check both email and username in one query
+    dbConn.query(
+        'SELECT * FROM Administrators WHERE email = ? OR username = ?',
+        [identifier, identifier],
+        async (err, results) => {
+            if (err) return res.status(500).json({ error: true, message: err.message });
+            if (results.length === 0)
+                return res.status(401).json({ error: true, message: 'Invalid credentials.' });
 
-        const admin = results[0];
-        const match = await bcrypt.compare(password, admin.password);
-        if (!match)
-            return res.status(401).json({ error: true, message: 'Invalid email or password.' });
+            const admin = results[0];
+            const match = await bcrypt.compare(password, admin.password);
+            if (!match)
+                return res.status(401).json({ error: true, message: 'Invalid credentials.' });
 
-        dbConn.query(
-            'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
-            ['Login', `Admin logged in: ${admin.email}`, admin.admin_id]
-        );
+            dbConn.query(
+                'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
+                ['Login', `Admin logged in: ${admin.email}`, admin.admin_id]
+            );
 
-        const { password: _, ...adminData } = admin;
-        return res.json({ error: false, message: 'Login successful.', data: adminData });
-    });
+            const { password: _, ...adminData } = admin;
+            return res.json({ error: false, message: 'Login successful.', data: adminData });
+        }
+    );
 });
 
 /* --- ADMIN; /admin/dashboard --- */
@@ -156,7 +161,13 @@ router.get('/admin/brand-control', (req, res) => {
 router.post('/admin/add-brand', (req, res) => {
     const { brand } = req.body;
     if (!brand) return res.status(400).json({ error: true, message: 'brand name is required.' });
+
     dbConn.query('SELECT DISTINCT brand FROM Equipments_Models WHERE brand = ?', [brand], (err, results) => {
+        dbConn.query(
+            'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
+            ['Add Brand', `Checked brand: ${brand}`, null]
+        );
+
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.length > 0) return res.status(409).json({ error: true, message: 'Brand already exists.' });
         return res.json({ error: false, message: `Brand "${brand}" is ready to use.` });
@@ -166,7 +177,14 @@ router.post('/admin/add-brand', (req, res) => {
 router.put('/admin/edit-brand/:brand', (req, res) => {
     const { new_brand } = req.body;
     if (!new_brand) return res.status(400).json({ error: true, message: 'new_brand is required.' });
+    
     dbConn.query('UPDATE Equipments_Models SET brand = ? WHERE brand = ?', [new_brand, req.params.brand], (err, results) => {
+
+        dbConn.query(
+            'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
+            ['Edit Brand', `Updated brand from ${req.params.brand} to ${new_brand}`, null]
+        );
+
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Brand not found.' });
         return res.json({ error: false, data: results.affectedRows, message: 'Brand updated successfully.' });
@@ -175,6 +193,12 @@ router.put('/admin/edit-brand/:brand', (req, res) => {
 
 router.delete('/admin/brand-control/:brand', (req, res) => {
     dbConn.query('DELETE FROM Equipments_Models WHERE brand = ?', [req.params.brand], (err, results) => {
+        
+        dbConn.query(
+            'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
+            ['Delete Brand', `Deleted brand: ${req.params.brand}`, null]
+        );
+
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Brand not found.' });
         return res.json({ error: false, data: results.affectedRows, message: 'Brand deleted successfully.' });
@@ -190,10 +214,16 @@ router.get('/admin/category-control', (req, res) => {
     });
 });
 
-router.post('/add-category', (req, res) => {
+router.post('/admin/add-category', (req, res) => {
     const { category } = req.body;
     if (!category) return res.status(400).json({ error: true, message: 'category name is required.' });
+
     dbConn.query('SELECT DISTINCT category FROM Equipments_Models WHERE category = ?', [category], (err, results) => {
+        dbConn.query(
+            'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
+            ['Add Category', `Checked category: ${category}`, null]
+        );
+
         if (err) return res.status(500).json({ error: true, message: err.message });
         if (results.length > 0) return res.status(409).json({ error: true, message: 'Category already exists.' });
         return res.json({ error: false, message: `Category "${category}" is ready to use.` });
