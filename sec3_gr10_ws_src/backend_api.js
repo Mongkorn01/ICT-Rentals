@@ -207,16 +207,49 @@ router.put('/admin/edit-product/:id', (req, res) => {
 
 router.delete('/admin/product-control/:id', (req, res) => {
     const { admin_id } = req.body;
-    dbConn.query('DELETE FROM Equipments_Models WHERE model_id = ?', [req.params.id], (err, results) => {
+    const model_id = req.params.id;
+
+    // Step 1: Get all item_ids belonging to this model
+    dbConn.query('SELECT item_id FROM Equipments_Items WHERE model_id = ?', [model_id], (err, items) => {
         if (err) return res.status(500).json({ error: true, message: err.message });
-        if (results.affectedRows === 0) return res.status(404).json({ error: true, message: 'Product not found.' });
-        if (admin_id) {
-            dbConn.query(
-                'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
-                ['Delete Model', `Deleted model_id=${req.params.id}`, admin_id]
+
+        const item_ids = items.map(i => i.item_id);
+
+        const doDelete = () => {
+            // Step 3: Delete the items
+            const deleteItems = () => dbConn.query(
+                'DELETE FROM Equipments_Items WHERE model_id = ?', [model_id], (err) => {
+                    if (err) return res.status(500).json({ error: true, message: err.message });
+
+                    // Step 4: Delete the model
+                    dbConn.query('DELETE FROM Equipments_Models WHERE model_id = ?', [model_id], (err, results) => {
+                        if (err) return res.status(500).json({ error: true, message: err.message });
+                        if (results.affectedRows === 0)
+                            return res.status(404).json({ error: true, message: 'Product not found.' });
+
+                        if (admin_id) {
+                            dbConn.query(
+                                'INSERT INTO Admin_Activity_Logs (action_type, action_details, admin_id) VALUES (?, ?, ?)',
+                                ['Delete Model', `Deleted model_id=${model_id}`, admin_id]
+                            );
+                        }
+                        return res.json({ error: false, message: 'Product deleted successfully.' });
+                    });
+                }
             );
-        }
-        return res.json({ error: false, data: results.affectedRows, message: 'Product deleted successfully.' });
+
+            if (item_ids.length > 0) {
+                // Step 2: Delete Rental_Items that reference these items
+                dbConn.query('DELETE FROM Rental_Items WHERE item_id IN (?)', [item_ids], (err) => {
+                    if (err) return res.status(500).json({ error: true, message: err.message });
+                    deleteItems();
+                });
+            } else {
+                deleteItems();
+            }
+        };
+
+        doDelete();
     });
 });
 
