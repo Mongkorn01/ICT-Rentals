@@ -13,6 +13,12 @@
         }
 
         /* --- Navbar (Consistent with previous screens) --- */
+        .nav-links li.active { font-weight: 600; }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+        }
+
         nav {
             display: flex;
             align-items: center;
@@ -308,7 +314,7 @@
     <nav>
         <img src="https://i.postimg.cc/N0Y1nx0g/mu-ict-logo.png" alt="ICT Rentals" class="logo">
         <ul class="nav-links" style="display: flex; align-items: center; list-style: none;">
-            <li class="active"><a href="/admin/dashboard">Dashboard</a></li>
+            <li><a href="/admin/dashboard">Dashboard</a></li>
             
             <li class="dropdown" style="position: relative; cursor: pointer;">
                 <div onclick="toggleManagement(event)" style="display: flex; align-items: center;">
@@ -332,7 +338,7 @@
         </ul>
         <div class="nav-right">
             <a href="/" style="text-decoration: none; color: inherit; cursor: pointer;">Log Out</a>
-            <span class="notification-bell" style="cursor: pointer; margin-left: 15px;">🔔</span>
+            <img src="https://i.postimg.cc/sgJMCVtT/Doorbell.png" style="height: 30px; cursor: pointer; margin-left: 15px;">
         </div>
     </nav>
 
